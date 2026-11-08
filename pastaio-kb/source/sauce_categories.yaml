@@ -77,7 +77,7 @@
     Liguria.
 
 - sauce_category_id: legume_based
-  name: Legume-based
+  canonical_name: Legume-based
   description: >
     Sauces and dressings built on cooked legumes — chickpeas,
     cannellini, borlotti, lentils, fava beans — typically simmered
@@ -87,7 +87,7 @@
     cucina povera.
     
 - sauce_category_id: vegetable_based
-  name: Vegetable-based
+  canonical_name: Vegetable-based
   description: >
     Sauces built on cooked vegetables — bitter greens, cooked
     tomatoes, onions, eggplant — as the primary flavor base,

@@ -18,6 +18,7 @@
  */
 import * as SQLite from 'expo-sqlite';
 import type { StateStorage } from 'zustand/middleware';
+import { Platform } from 'react-native';
 
 const DB_NAME = 'pastaio-memory.db';
 
@@ -39,7 +40,14 @@ function getDb(): Promise<SQLite.SQLiteDatabase> {
 }
 
 /** zustand StateStorage implementation. */
-export const sqliteStorage: StateStorage = {
+// Web (README capture): expo-sqlite web worker races with the KB open; use localStorage.
+const webStorage: StateStorage = {
+  getItem: (k) => globalThis.localStorage?.getItem(k) ?? null,
+  setItem: (k, v) => void globalThis.localStorage?.setItem(k, v),
+  removeItem: (k) => void globalThis.localStorage?.removeItem(k),
+};
+
+const nativeStorage: StateStorage = {
   getItem: async (key) => {
     try {
       const db = await getDb();
@@ -74,6 +82,7 @@ export const sqliteStorage: StateStorage = {
   },
 };
 
+export const sqliteStorage: StateStorage = Platform.OS === 'web' ? webStorage : nativeStorage;
 /**
  * Wipe ALL persisted data. Used by resetAll in the memory store and by
  * any future "clear data" UI affordance.

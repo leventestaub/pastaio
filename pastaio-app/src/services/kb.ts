@@ -12,6 +12,7 @@
  */
 import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
+import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -179,8 +180,26 @@ async function dumpDiagnostics(db: SQLite.SQLiteDatabase): Promise<void> {
 export function openKb(): Promise<SQLite.SQLiteDatabase> {
   if (dbPromise) return dbPromise;
   dbPromise = (async () => {
-    await ensureDbCopied();
-    const db = await SQLite.openDatabaseAsync(DB_NAME);
+    let db: SQLite.SQLiteDatabase;
+    if (Platform.OS === 'web') {
+      // Web (README capture): no filesystem; load the bundled db into memory.
+      const asset = Asset.fromModule(require('../../assets/pastaio-kb.db'));
+      const buf = await (await fetch(asset.uri)).arrayBuffer();
+      // expo-sqlite web worker can reject while its VFS is still initialising; retry.
+      for (let i = 0; ; i++) {
+        try {
+          db = await SQLite.deserializeDatabaseAsync(new Uint8Array(buf));
+          await db.execAsync('PRAGMA foreign_keys = ON');
+          break;
+        } catch (e) {
+          if (i >= 5) throw e;
+          await new Promise((r) => setTimeout(r, 400));
+        }
+      }
+    } else {
+      await ensureDbCopied();
+      db = await SQLite.openDatabaseAsync(DB_NAME);
+    }
     await db.execAsync('PRAGMA foreign_keys = ON');
     await dumpDiagnostics(db);
     return db;

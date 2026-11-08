@@ -17,4 +17,9 @@ config.server.enhanceMiddleware = (middleware) => (req, res, next) => {
   return middleware(req, res, next);
 };
 
+
+// Web capture only: avoid ESM builds (import.meta) of zustand etc. in the classic-script web bundle.
+if (process.env.PASTAIO_WEB_CAPTURE) {
+  config.resolver.unstable_enablePackageExports = false;
+}
 module.exports = config;

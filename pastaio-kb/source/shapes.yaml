@@ -156,7 +156,7 @@
     - walnut_based
 
 - shape_id: orecchiette
-  name: Orecchiette
+  canonical_name: Orecchiette
   description: >
     Small, dome-shaped pasta with a concave interior and a
     rough exterior, traditionally made by dragging a piece of
@@ -166,7 +166,7 @@
     Most strongly associated with Puglia, particularly Bari.
 
 - shape_id: cavatelli
-  name: Cavatelli
+  canonical_name: Cavatelli
   description: >
     Small, rolled semolina pasta with a single longitudinal
     depression, formed by dragging a small piece of dough
@@ -175,7 +175,7 @@
     with regional variations in size.
 
 - shape_id: strascinati
-  name: Strascinati
+  canonical_name: Strascinati
   description: >
     Open, flat semolina pasta formed by the same dragging
     gesture as orecchiette but left flat rather than inverted
@@ -185,7 +185,7 @@
     both Puglia and Basilicata, with crossover into Calabria.
 
 - shape_id: tria
-  name: Tria
+  canonical_name: Tria
   description: >
     Long, flat semolina ribbons hand-cut on a board, traditional
     to the Salento peninsula in southern Puglia. The name

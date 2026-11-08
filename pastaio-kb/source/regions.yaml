@@ -108,7 +108,7 @@
     - meat_based
 
 - region_id: puglia
-  name: Puglia
+  canonical_name: Puglia
   description: >
     The heel of Italy's boot, with the longest coastline of any
     mainland Italian region. Pugliese pasta tradition is built on

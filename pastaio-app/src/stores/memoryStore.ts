@@ -14,6 +14,7 @@
  * - First reads after app start may briefly return defaults before
  *   hydration completes. Use `useMemoryHydrated()` to gate UI on it.
  */
+import React from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type {
@@ -201,9 +202,12 @@ export const useMemoryStore = create<MemoryState>()(
  * empty defaults during the brief hydration window.
  */
 export function useMemoryHydrated(): boolean {
-  // Cast through unknown because zustand's persist API attaches this as
-  // a non-typed property on the store. It's stable across versions.
-  return (useMemoryStore as unknown as {
-    persist: { hasHydrated: () => boolean };
-  }).persist.hasHydrated();
+  // Reactive: subscribe to hydration so late hydration re-renders consumers.
+  const p = (useMemoryStore as unknown as {
+    persist: {
+      hasHydrated: () => boolean;
+      onFinishHydration: (fn: () => void) => () => void;
+    };
+  }).persist;
+  return React.useSyncExternalStore(p.onFinishHydration, p.hasHydrated, p.hasHydrated);
 }

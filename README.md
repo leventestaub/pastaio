@@ -1,10 +1,26 @@
-# Pastaio
+<p align="center"><img src="docs/media/splash-animation.gif" width="240" alt="Pastaio splash animation"></p>
 
-**An Italian pasta-cooking app with an LLM agent that acts through the same tools as the buttons.**
+<h1 align="center">Pastaio</h1>
+
+<p align="center"><b>An Italian pasta-cooking app with an LLM agent that acts through the same tools as the buttons.</b></p>
+
+<p align="center">
+  <img src="docs/media/01-home.png" width="200" alt="Home: tonight's recipe, Ask Pastaio, identify a shape">
+  <img src="docs/media/03-recipe-detail.png" width="200" alt="Recipe detail with sourced notes per ingredient">
+  <img src="docs/media/04-cooking-step.png" width="200" alt="Cooking mode, one step at a time">
+  <img src="docs/media/06a-ask-pastaio-open.png" width="200" alt="Ask Pastaio while cooking">
+</p>
 
 Browse recipes, identify a pasta shape from a photo, and cook step by step. From any screen, "Ask Pastaio" hands the request to an agent that can open recipes, apply ingredient substitutions, set timers and save to the cookbook. It acts on the same app state the buttons drive, and it answers from a curated recipe knowledge base with sources, not from the model's memory.
 
 Principle: *reasoning in the cloud, state and action on the device.*
+
+<details>
+<summary>Walk-through (17 s GIF): splash, home, discover, a recipe, cooking steps</summary>
+<p align="center"><img src="docs/media/walkthrough.gif" width="300" alt="Walk-through of the app"></p>
+</details>
+
+*Captured from the web build with the offline stub backend; the app targets iOS and Android through Expo.*
 
 ## Architecture
 ```mermaid
@@ -45,6 +61,8 @@ cd pastaio-app && npm install && npx expo start
 ```
 
 The app reads the backend URL from `extra.backendUrl` in `pastaio-app/app.json`. `localhost` works for the web build and emulators; for Expo Go on a phone, set it to your computer's LAN IP.
+
+Media: `docs/media/capture-scripts/` re-records the screenshots and GIFs with Playwright against the web build (`PASTAIO_WEB_CAPTURE=1 npx expo start --web`).
 
 Tests: `cd pastaio-backend && pytest` (the Ollama integration test needs a running Ollama).
 Eval: `cd pastaio-eval && pip install -e . && python run_eval.py --backend http://localhost:8000` (needs `GROQ_API_KEY`).
