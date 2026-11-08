@@ -1,0 +1,4 @@
+# Substitution rules. Empty for now — substitutions are deferred to
+# a dedicated research run after recipe clusters complete.
+# Format documented in build.py SubstitutionYaml.
+[]

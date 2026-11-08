@@ -1,0 +1,126 @@
+recipe_id: strascinati-con-mollica
+title: Strascinati con Mollica
+shape_id: strascinati
+region_id: puglia
+sauce_category_id: vegetable_based
+description: >
+  A pan-Southern Italian cucina povera dish, common across the
+  Puglia–Basilicata border. Strascinati pasta is tossed with
+  toasted breadcrumbs, garlic, anchovy, and chili — the
+  breadcrumbs serving in place of grated cheese, a substitution
+  born of agrarian poverty where cheese was a luxury reserved
+  for sale rather than household consumption.
+cook_time_minutes: 20
+serves: 4
+
+ingredients:
+  - name: strascinati
+    amount: 400
+    unit: g
+    notes: >
+      Fresh handmade strascinati is traditional. The shape is
+      open and flat, made by dragging dough across a wooden
+      board with three or four fingers.
+  - name: mollica_di_pane_raffermo
+    amount: 150
+    unit: g
+    notes: >
+      Coarsely grated stale durum-wheat bread. Industrial fine
+      breadcrumbs scorch and turn pasty; rustic bread is
+      essential.
+  - name: acciuga_salata
+    amount: 3
+    unit: fillets
+  - name: aglio
+    amount: 2
+    unit: cloves
+  - name: peperoncino
+    unit: q.b.
+  - name: olio_extravergine_di_oliva
+    unit: q.b.
+  - name: sale_grosso
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Bring a large pot of water to a boil and add coarse salt.
+  - order: 2
+    text: >
+      In a dry, heavy-bottomed skillet, toast the grated stale
+      breadcrumbs over medium-low heat, stirring constantly,
+      until golden and fragrant. Transfer to a bowl and set
+      aside.
+  - order: 3
+    text: >
+      In the same skillet, warm a generous amount of olive oil
+      with the crushed garlic cloves and chili. Add the anchovy
+      fillets and stir until they melt into the oil. Remove the
+      garlic.
+  - order: 4
+    text: >
+      Boil the strascinati until al dente, then drain, reserving
+      a little of the cooking water.
+  - order: 5
+    text: >
+      Transfer the pasta to the skillet with the anchovy oil.
+      Toss over low heat, adding about half the toasted
+      breadcrumbs along with a splash of cooking water if
+      needed, until the crumbs coat the pasta.
+  - order: 6
+    text: >
+      Serve immediately, finishing each plate with the remaining
+      toasted breadcrumbs scattered on top for textural
+      contrast.
+
+tags: [puglia, basilicata, cucina_povera, breadcrumbs, anchovy]
+
+traditional_notes: >
+  The toasted breadcrumb sauce is a defining element of cucina
+  povera across the Puglia–Basilicata border, sometimes called
+  "formaggio dei poveri" (poor man's cheese) because the crumbs
+  substituted for grated pecorino in households that could not
+  afford it. The dish does not have formal codification; it is a
+  household tradition that crosses regional lines. The
+  Accademia Italiana della Cucina's most prominent published
+  reference to strascinati con mollica places the dish in
+  Basilicata (with peperoni cruschi and Aglianico del Vulture
+  wine), though it is equally established in Puglia. Strascinati
+  itself is a sibling shape to orecchiette: per Luigi Sada's
+  reference work on Pugliese cuisine, "if the small piece is
+  left open after being dragged, it becomes the strascinato" —
+  the same dough and gesture as orecchiette, but flatter and
+  more open. The success of the dish depends on naturally
+  leavened, stale durum-wheat bread; industrial breadcrumbs
+  absorb oil instead of crisping.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Civiltà della Tavola No. 296
+    source_url: https://www.accademiaitalianadellacucina.it/sites/default/files/allegati/296_set_2017_ITA.pdf
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      ...strascinati con mollica di pane e peperoni cruschi;
+      lombatina di agnello al pane aromatizzato; tiramisù al
+      limoncello. I vini in tavola: Aglianico del Vulture.
+    excerpt_translation: >
+      ...strascinati with breadcrumbs and cruschi peppers; lamb
+      loin with flavored bread; limoncello tiramisu. The wines
+      on the table: Aglianico del Vulture.
+    accessed_date: 2026-05-05
+  - source_name: Scatti di Gusto — Cavatelli pugliesi, ricetta originale (citing Luigi Sada, "La cucina pugliese")
+    source_url: https://www.scattidigusto.it/cavatelli-pugliesi-ricetta-originale
+    source_type: cookbook_excerpt_via_citation
+    source_tier: 3
+    quoted_excerpt: >
+      Come si fanno le orecchiette, Sada lo spiega alla pagina
+      53: "Se si lascia il pezzetto aperto dopo averlo
+      strascinato si avrà lo strascinato".
+    excerpt_translation: >
+      Sada explains on page 53 how orecchiette are made: "If the
+      small piece is left open after being dragged, it becomes
+      the strascinato."
+    accessed_date: 2026-05-05

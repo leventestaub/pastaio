@@ -1,0 +1,44 @@
+case_id: coherence__save_it_pronoun
+category: coherence
+description: |
+  Tests app-side reference resolution + dispatcher fuzzy match working
+  together. User finds a recipe, opens it (active_recipe_id is set), then
+  says "save it" with no recipe name. The active recipe id in ChatContext
+  should let the model emit save_to_cookbook(recipe_id="trofie-al-pesto"),
+  or a literal that fuzzy-resolves to it.
+
+initial_state:
+  current_screen: discover
+  cookbook: []
+
+turns:
+  - user_input: "Find me something with trofie"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: subset
+          expected_args:
+            shape: trofie
+
+  - user_input: "Open the pesto one"
+    asserts:
+      expect_tool_calls:
+        - tool: open_recipe
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      expect_state:
+        active_recipe_id: trofie-al-pesto
+        current_screen: recipe
+
+  - user_input: "Save it"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      expect_state:
+        cookbook: [trofie-al-pesto]
+
+tags: [multi_turn, pronoun, reference_resolution]

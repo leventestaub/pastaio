@@ -1,0 +1,158 @@
+recipe_id: ciceri-e-tria
+title: Ciceri e Tria
+shape_id: tria
+region_id: puglia
+sauce_category_id: legume_based
+description: >
+  A traditional dish of the Salento peninsula in southern Puglia,
+  combining simmered chickpeas with hand-cut tria pasta. The
+  defining feature is that roughly a third of the pasta is fried
+  in olive oil to a crisp (locally called frizzuli) while the
+  rest is boiled; the two are combined at service for a
+  contrast of crisp and tender textures in the same dish.
+cook_time_minutes: 180
+serves: 4
+
+ingredients:
+  - name: ceci_secchi
+    amount: 300
+    unit: g
+    notes: >
+      Dried chickpeas, soaked overnight. Canned chickpeas are
+      not suitable for this preparation.
+  - name: tria
+    amount: 400
+    unit: g
+    notes: >
+      Fresh hand-cut semolina ribbons, traditionally rolled and
+      cut on a board.
+  - name: cipolla
+    amount: 1
+    unit: whole
+  - name: sedano
+    amount: 1
+    unit: stalk
+  - name: carota
+    amount: 1
+    unit: whole
+  - name: aglio
+    amount: 2
+    unit: cloves
+  - name: alloro
+    amount: 2
+    unit: leaves
+  - name: olio_extravergine_di_oliva
+    unit: q.b.
+    notes: >
+      Generous quantity needed for shallow-frying part of the
+      pasta.
+  - name: sale
+    unit: q.b.
+  - name: pepe_nero
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Drain the soaked chickpeas. Place in a large pot with
+      fresh water, the onion, celery, carrot, and bay leaves.
+      Bring to a gentle simmer and cook for 2–3 hours until
+      tender. Salt only at the end of cooking to keep the skins
+      from toughening.
+    timer_seconds: 7200
+  - order: 2
+    text: >
+      Remove the aromatics. Mash a small ladleful of chickpeas
+      and stir back into the pot to lightly thicken the broth.
+      Keep at a low simmer.
+  - order: 3
+    text: >
+      Separate the raw tria. Set aside roughly one-third for
+      frying; the remaining two-thirds will be boiled.
+  - order: 4
+    text: >
+      Heat a generous layer of olive oil in a skillet with two
+      crushed garlic cloves until hot, then remove the garlic.
+      Carefully add the reserved third of the tria and fry until
+      blistered, golden, and rigid. Drain on paper towels. These
+      crisp pieces are called frizzuli.
+  - order: 5
+    text: >
+      Bring a separate pot of salted water to a boil. Boil the
+      remaining tria until al dente.
+  - order: 6
+    text: >
+      Drain the boiled tria and add it to the pot of simmering
+      chickpeas. Stir gently so the pasta absorbs the legume
+      broth.
+  - order: 7
+    text: >
+      Serve in shallow bowls, topping each portion with the
+      fried frizzuli, a grind of black pepper, and a final
+      drizzle of raw olive oil.
+
+tags: [puglia, salento, cucina_povera, legumes, vegetarian]
+
+traditional_notes: >
+  Ciceri e tria is the heritage primo of the Salento. The
+  dish's defining technique — frying a portion of the pasta and
+  combining it with the boiled remainder — is recognized by the
+  Accademia Italiana della Cucina, which describes the dish as
+  "transformed into a duo of hand-drawn pasta, partly boiled
+  and partly fried." The etymology of "tria" is contested.
+  Salentine dialect documentation traces it to the Arabic
+  itriyya (a thin, dried noodle), reflecting the Mediterranean
+  cultural exchange that brought dried-pasta techniques into
+  Southern Italy through Sicily and Calabria. A competing
+  Hellenic etymology derives the term from the Greek itrion (a
+  thin unleavened cake). The dialect dictionary of Scorrano
+  records the local form as "cìciri e ṭṭria," preserving both
+  the Salentine pronunciation and the Arabic-rooted term. The
+  dish has no formal Accademia codification or municipal
+  disciplinare; it is documented in Accademia magazine articles
+  and in the Accademia recipe index, and is widely recognized
+  as the Salento's flagship pasta tradition.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Civiltà della Tavola No. 307
+    source_url: https://www.accademiaitalianadellacucina.it/sites/default/files/allegati/307_SET_2018_ITA.pdf
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      ...ciceri e tria trasformati in un duo di pasta trafilata
+      a mano, in parte bollita e in parte fritta.
+    excerpt_translation: >
+      ...ciceri and tria transformed into a duo of hand-drawn
+      pasta, partly boiled and partly fried.
+    accessed_date: 2026-05-05
+  - source_name: Accademia Italiana della Cucina — Indice Ricette
+    source_url: https://www.accademiaitalianadellacucina.it/it/ricette?page=5
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      Nome, Regioni, Categoria. CICERCHIATA, Abruzzo, Dolci e
+      liquori. CICERI E TRIA, Puglia, Pasta, riso e polenta.
+    excerpt_translation: >
+      Name, Regions, Category. CICERCHIATA, Abruzzo, Sweets and
+      liqueurs. CICERI E TRIA, Puglia, Pasta, rice and polenta.
+    accessed_date: 2026-05-05
+  - source_name: Il dialetto salentino come si parla a Scorrano — voce "tria"
+    source_url: https://www.dialettosalentino.it/tria.html
+    source_type: italian_wikipedia_with_citations
+    source_tier: 3
+    quoted_excerpt: >
+      cìciri e ṭṭria: piatto caratteristico del basso Salento,
+      preparato con i ceci e le tagliatelle fatte in casa,
+      alcune delle quali vengono fritte ed aggiunte a fine
+      cottura. Gli studiosi propendono a collegare il termine
+      salentino direttamente a quello arabo.
+    excerpt_translation: >
+      cìciri e ṭṭria: characteristic dish of the lower Salento,
+      prepared with chickpeas and homemade tagliatelle, some of
+      which are fried and added at the end of cooking. Scholars
+      lean toward connecting the Salentine term directly to the
+      Arabic one.
+    accessed_date: 2026-05-05

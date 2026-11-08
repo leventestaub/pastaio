@@ -1,0 +1,39 @@
+# coherence/that_recipe_two_turns_back.yaml
+case_id: coherence__that_recipe_two_turns_back
+category: coherence
+description: |
+  Reference to a recipe two turns back, with intervening unrelated
+  turn. User opens recipe A, asks a recipe-question (read tool), then
+  says "save that one". The pronoun "that one" refers to the open
+  recipe in active_recipe_id, but the more recent turn's content was
+  about ingredients — testing whether the model gets distracted.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Open rigatoni alla gricia"
+    asserts:
+      expect_state:
+        active_recipe_id: rigatoni-alla-gricia
+        current_screen: recipe
+
+  - user_input: "What ingredients does it need?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_recipe_details
+          args_match: subset
+          expected_args:
+            recipe_id: rigatoni-alla-gricia
+
+  - user_input: "Save that one for later"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: rigatoni-alla-gricia
+      expect_state:
+        cookbook: [rigatoni-alla-gricia]
+
+tags: [pronoun, three_turn, distance]

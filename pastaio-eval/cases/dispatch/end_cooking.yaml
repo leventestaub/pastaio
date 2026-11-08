@@ -1,0 +1,27 @@
+# dispatch/end_cooking.yaml
+case_id: dispatch__end_cooking
+category: dispatch
+description: |
+  User mid-cook says they're done. Should call end_cooking. Tests
+  no-args nav dispatch with explicit precondition (cooking_active).
+
+initial_state:
+  current_screen: cooking
+  active_recipe_id: trofie-al-pesto
+  cooking_active: true
+  cooking_recipe_id: trofie-al-pesto
+  cooking_step_index: 5
+
+turns:
+  - user_input: "I'm done cooking"
+    asserts:
+      expect_tool_calls:
+        - tool: end_cooking
+          args_match: exact
+          expected_args: {}
+      forbid_extra_tools: true
+      expect_state:
+        cooking_active: false
+        cooking_recipe_id: null
+
+tags: [single_turn, navigation, no_args, cooking_mode_exit]

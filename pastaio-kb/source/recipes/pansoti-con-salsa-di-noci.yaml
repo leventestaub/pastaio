@@ -1,0 +1,147 @@
+recipe_id: pansoti-con-salsa-di-noci
+title: Pansoti con salsa di noci
+shape_id: pansoti
+region_id: liguria
+sauce_category_id: walnut_based
+description: >
+  Triangular Ligurian stuffed pasta filled with a wild-herb mixture
+  (preboggion) and dressed with an unheated walnut sauce stabilized
+  with milk-soaked breadcrumbs. Historically tied to Lenten fasting
+  and the Feast of San Giuseppe.
+cook_time_minutes: 40
+serves: 4
+
+ingredients:
+  - name: pansoti
+    amount: 400
+    unit: g
+    notes: >
+      Fresh triangular ravioli filled with preboggion (a Ligurian wild-herb
+      mix — borage, wild chard, dandelion, nettle, etc.) and traditionally
+      bound with prescinsêua, a slightly acidic Ligurian fresh cheese
+      (ricotta is a common substitute outside Liguria).
+  - name: noci
+    amount: 160
+    unit: g
+    notes: >
+      Shelled walnut kernels. Per the Accademia recipe, blanched briefly
+      and peeled to remove the bitter pellicle.
+  - name: aglio
+    amount: 1
+    unit: piece
+  - name: latte_intero
+    amount: 160
+    unit: ml
+  - name: mollica_di_pane
+    amount: 30
+    unit: g
+    notes: >
+      Stale bread crumb (crust removed). Acts as the emulsifier binding
+      the walnut oils and milk into a stable cream.
+  - name: parmigiano_reggiano
+    amount: 30
+    unit: g
+    notes: >
+      The Civiltà della Tavola recipe specifies grana padano; Parmigiano
+      Reggiano is a near-equivalent and commonly used.
+  - name: olio_extravergine_di_oliva
+    amount: 70
+    unit: ml
+  - name: pinoli
+    amount: 20
+    unit: g
+  - name: sale_grosso
+    unit: q.b.
+  - name: pepe_nero
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Bring a small pot of water to a boil. Submerge the shelled
+      walnuts and let them boil for 5 minutes.
+    timer_seconds: 300
+  - order: 2
+    text: >
+      Drain the walnuts thoroughly and peel away the thin outer
+      pellicle from the kernels. Lay them on a cloth to cool and dry.
+  - order: 3
+    text: >
+      Place the bread crumb in a bowl and pour over the milk; let
+      soak until fully softened.
+  - order: 4
+    text: >
+      In a blender (or mortar), combine the peeled walnuts, soaked
+      bread (lightly squeezed, reserving the milk), pine nuts, garlic,
+      and grated cheese. Blend, slowly adding the olive oil and
+      reserved milk as needed for a creamy consistency. Season with
+      salt and pepper.
+  - order: 5
+    text: >
+      Boil the fresh pansoti in a large pot of salted water until
+      they float and the edges are tender.
+  - order: 6
+    text: >
+      Drain gently and toss with the raw walnut sauce, thinning with
+      a few spoons of pasta cooking water if needed.
+
+tags: [liguria, vegetarian, stuffed_pasta, walnuts, lenten]
+
+traditional_notes: >
+  Pansoti (from Genoese 'pancia,' belly) is a traditional Ligurian
+  stuffed pasta historically associated with Lenten fasting and the
+  Feast of San Giuseppe — the filling contains no meat. The
+  characteristic filling is preboggion, a mixture of wild Ligurian
+  herbs traditionally including borage, wild chard, dandelion, nettle,
+  sow thistle (grespigno), rampion (raperonzolo), and silene; the
+  exact composition varies by season. The traditional fresh cheese
+  binding the filling is prescinsêua, a slightly acidic Ligurian
+  cow's-milk product comparable in texture to yogurt; outside Liguria
+  ricotta is the common substitute. Both pesto Genovese and salsa di
+  noci are recognized PAT (Prodotti Agroalimentari Tradizionali) of
+  Liguria. The Accademia Italiana della Cucina, in Civiltà della
+  Tavola n.319 (October 2019), publishes a recipe for salsa di noci
+  with specified ratios; the recipe is suggested for "spaghetti,
+  tagliatelle o trenette" but the same sauce is the canonical pairing
+  for pansoti per multiple Ligurian sources including Slow Food and
+  Wikipedia.
+
+evidence_strength: slow_food_presidia
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Civiltà della Tavola n.319 (Ottobre 2019), Accademia Italiana della Cucina — "Salsa alle noci" (in Roberto Robazza, "La frutta a guscio sempre più presente a tavola e in cucina")
+    source_url: https://www.accademiaitalianadellacucina.it/sites/default/files/allegati/CDT_319_Ott_2019.pdf
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      SALSA ALLE NOCI. Ingredienti (per condire spaghetti, tagliatelle
+      o trenette per 4 persone): 160 g di gherigli di noce, 1 spicchio
+      d'aglio, 30 g di grana padano, 70 g di olio extravergine d'oliva,
+      20 g di pinoli, 160 g di latte intero, 30 g di mollica di pane
+      raffermo, sale, pepe.
+    excerpt_translation: >
+      WALNUT SAUCE. Ingredients (to dress spaghetti, tagliatelle or
+      trenette for 4 people): 160g walnut kernels, 1 garlic clove, 30g
+      Grana Padano, 70g extra-virgin olive oil, 20g pine nuts, 160g
+      whole milk, 30g stale bread crumb, salt, pepper.
+    accessed_date: 2026-05-05
+
+  - source_name: Mipaaf — Elenco dei Prodotti Agroalimentari Tradizionali (PAT) della Liguria
+    source_url: https://www.agriligurianet.it/it/impresa/marchi-e-disciplinari/riconoscimento-di-nuovi-prodotti-tradizionali.html
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: >
+      Si chiamano tradizionali quei prodotti agroalimentari i cui
+      metodi di lavorazione e conservazione risultano consolidati nel
+      tempo, omogenei per tutto il territorio interessato, secondo
+      regole tradizionali, per un periodo non inferiore ai venticinque
+      anni (ai sensi del D.Lgs. n.173/1998 e D.M. n.350/1999).
+    excerpt_translation: >
+      Traditional agroalimentary products are those whose processing
+      and conservation methods have been consolidated over time,
+      homogeneous throughout the territory concerned, according to
+      traditional rules, for a period of not less than twenty-five
+      years (per Legislative Decree 173/1998 and Ministerial Decree
+      350/1999).
+    accessed_date: 2026-05-05

@@ -1,0 +1,95 @@
+# Sauce categories. Coarse buckets used for recipe categorization
+# and substitution scoping. Cluster 2 adds oil_based and seafood_based.
+
+- sauce_category_id: tomato_based
+  canonical_name: Tomato-based
+  description: >
+    Sauces built around tomato — passata, peeled tomatoes, fresh
+    tomatoes, or tomato concentrate. Includes long-cooked sugo,
+    quick fresh-tomato sauces, and tomato-with-cured-pork preparations
+    like amatriciana.
+
+- sauce_category_id: cheese_based
+  canonical_name: Cheese-based
+  description: >
+    Sauces whose body is an emulsion of grated hard cheese (typically
+    Pecorino Romano or Parmigiano Reggiano) with starchy pasta water
+    and fat. Cacio e pepe is the canonical example. Distinguished from
+    cream-based by the absence of dairy cream.
+
+- sauce_category_id: egg_based
+  canonical_name: Egg-based
+  description: >
+    Sauces built on raw egg (yolks or whole eggs) emulsified with
+    cheese, fat, and residual heat from the pasta. Carbonara is the
+    canonical example. Eggs are never cooked into a scramble; the
+    sauce sets through residual heat alone.
+
+- sauce_category_id: meat_based
+  canonical_name: Meat-based
+  description: >
+    Sauces whose primary flavor is rendered or braised meat. Includes
+    cured-pork-and-cheese preparations like gricia (where guanciale
+    fat is the medium) and long-cooked ragù preparations.
+
+- sauce_category_id: oil_based
+  canonical_name: Oil-based
+  description: >
+    Sauces built on extra-virgin olive oil as the primary medium,
+    combined with garlic, chili, and herbs. These preparations rely
+    on tossing the hot infused oil with pasta and starchy cooking
+    water to create a bound sauce. Aglio e olio is the canonical
+    example. Distinguished from cheese-based and tomato-based by
+    the absence of those primary ingredients.
+
+- sauce_category_id: seafood_based
+  canonical_name: Seafood-based
+  description: >
+    Sauces built around the juices of shellfish, mollusks, or
+    crustaceans, typically suspended in an oil-and-wine base.
+    Includes both 'in bianco' (white, no tomato — relying on the
+    bivalve liquor and oil) and 'in rosso' (with tomato)
+    preparations; both are traditional in Campania.
+
+- sauce_category_id: pesto_based
+  canonical_name: Pesto-based
+  description: >
+    Sauces built around a raw paste of fresh herbs (most prominently
+    basil), nuts, garlic, hard cheese, and olive oil, traditionally
+    pestled in a marble mortar. The canonical example is pesto
+    Genovese, codified by the Consorzio del Pesto Genovese with
+    seven ingredients: Basilico Genovese DOP, extra-virgin olive
+    oil (preferably Riviera Ligure DOP), Parmigiano Reggiano DOP
+    (with Grana Padano variant permitted), Pecorino DOP (Fiore
+    Sardo), pine nuts, garlic, and coarse salt. Distinct from
+    other oil-based sauces in that the basil-and-nut paste itself
+    is the dominant medium, not the oil.
+
+- sauce_category_id: walnut_based
+  canonical_name: Walnut-based
+  description: >
+    Sauces built around a paste of blanched and peeled walnuts,
+    garlic, milk-soaked breadcrumbs, hard cheese, and olive oil.
+    Pansoti con salsa di noci is the canonical Ligurian example.
+    The milk-soaked bread acts as the emulsifier, binding the
+    walnut oils and dairy into a stable, creamy suspension without
+    eggs or cream. Salsa di noci is a Mipaaf-registered PAT of
+    Liguria.
+
+- sauce_category_id: legume_based
+  name: Legume-based
+  description: >
+    Sauces and dressings built on cooked legumes — chickpeas,
+    cannellini, borlotti, lentils, fava beans — typically simmered
+    with aromatics and combined with pasta to form a one-pot
+    dish where the bean-cooking liquid serves as both broth
+    and emulsifier. Strong tradition across Southern Italian
+    cucina povera.
+    
+- sauce_category_id: vegetable_based
+  name: Vegetable-based
+  description: >
+    Sauces built on cooked vegetables — bitter greens, cooked
+    tomatoes, onions, eggplant — as the primary flavor base,
+    typically extended with olive oil, anchovy, garlic, or
+    breadcrumbs.

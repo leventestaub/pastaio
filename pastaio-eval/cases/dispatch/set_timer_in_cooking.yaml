@@ -1,0 +1,30 @@
+case_id: dispatch__set_timer_in_cooking
+category: dispatch
+description: |
+  User mid-cook says "set a 10-minute timer for the sauce". Model should
+  call set_timer with duration_minutes=10. Label is encouraged but not
+  required by the schema; we allow either via subset match plus a
+  fallback no-label assertion.
+
+  This is the canonical write-tool-with-precondition case: the cooking
+  state is set in initial_state so the prompt's "must be in cooking
+  mode" rule is already satisfied.
+
+initial_state:
+  current_screen: cooking
+  active_recipe_id: spaghetti-alla-carbonara
+  cooking_active: true
+  cooking_recipe_id: spaghetti-alla-carbonara
+  cooking_step_index: 2
+
+turns:
+  - user_input: "Set a 10 minute timer for the sauce"
+    asserts:
+      expect_tool_calls:
+        - tool: set_timer
+          args_match: subset
+          expected_args:
+            duration_minutes: 10
+      forbid_extra_tools: true
+
+tags: [single_turn, write_tool, cooking_mode, set_timer]

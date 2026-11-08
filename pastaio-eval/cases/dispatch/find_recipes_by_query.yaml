@@ -1,0 +1,26 @@
+# dispatch/find_recipes_by_query.yaml
+case_id: dispatch__find_recipes_by_query
+category: dispatch
+description: |
+  User asks for recipes by free-text query, no shape mentioned. Model
+  should call find_recipes with a query arg. Pairs with
+  find_recipes_by_shape — same tool, different arg.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "I want something with anchovies"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: any
+      forbid_extra_tools: true
+      rubric: |
+        Verify the find_recipes call has a query arg containing "anchov"
+        (substring match). Shape arg may or may not be present; either is
+        acceptable since some KB recipes encode anchovy as a shape-bound
+        sauce. Trace inspection only — no automatic assertion since the
+        exact query phrasing varies.
+
+tags: [single_turn, read_tool, free_text_query]

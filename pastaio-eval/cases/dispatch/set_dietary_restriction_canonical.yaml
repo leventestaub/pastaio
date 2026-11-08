@@ -1,0 +1,22 @@
+# dispatch/set_dietary_restriction_canonical.yaml
+case_id: dispatch__set_dietary_restriction_canonical
+category: dispatch
+description: |
+  User states a canonical dietary restriction. Model should call
+  set_dietary_restriction with the matching enum value.
+
+initial_state:
+  current_screen: home
+  dietary_restrictions: []
+
+turns:
+  - user_input: "I'm vegetarian"
+    asserts:
+      expect_tool_calls:
+        - tool: set_dietary_restriction
+          args_match: subset
+          expected_args:
+            restriction: vegetarian
+      forbid_extra_tools: true
+
+tags: [single_turn, write_tool, dietary, canonical_enum]

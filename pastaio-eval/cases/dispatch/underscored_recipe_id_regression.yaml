@@ -1,0 +1,39 @@
+# dispatch/underscored_recipe_id_regression.yaml
+case_id: dispatch__underscored_recipe_id_regression
+category: dispatch
+description: |
+  Regression case for the v7 recipe-id discipline rule. The original
+  finding: model emitted "trofie_with_pesto" instead of
+  "trofie-al-pesto". v7 rule 9 forbids underscores in recipe IDs.
+
+  This case sets up the same conditions: user finds a recipe via
+  find_recipes, then refers to "the pesto one" in a follow-up. We
+  assert the open_recipe call uses the correct hyphenated literal.
+
+  If this fails, v7's recipe-id rule isn't holding — either the rule
+  is too weak or the example-removal weakened it further. Either way,
+  a finding worth surfacing.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Show me trofie recipes"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: subset
+          expected_args:
+            shape: trofie
+
+  - user_input: "Open the pesto one"
+    asserts:
+      expect_tool_calls:
+        - tool: open_recipe
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      expect_state:
+        active_recipe_id: trofie-al-pesto
+
+tags: [multi_turn, regression, recipe_id_discipline, prompt_v7]

@@ -1,0 +1,146 @@
+recipe_id: bucatini-allamatriciana
+title: Bucatini all'Amatriciana
+shape_id: bucatini
+region_id: lazio
+sauce_category_id: tomato_based
+description: >
+  Amatriciana is a tomato-and-cured-pork sauce originating in the
+  comune of Amatrice, on the Monti della Laga between Lazio and
+  Abruzzo, registered as a Specialità Tradizionale Garantita (STG)
+  by EU Regulation 2020/395. Its defining characteristics, fixed by
+  the disciplinare, are guanciale Amatriciano (18-30% by weight),
+  tomato (passata or peeled, 69-81%), Pecorino di Amatrice or
+  Pecorino Romano DOP from Lazio grated over the finished dish,
+  white wine, extra-virgin olive oil, salt, and black pepper or
+  chilli. The dish reached Rome through the seasonal transhumance
+  of Amatrice shepherds; the disciplinare insists its origin is
+  Amatricean, not Roman.
+cook_time_minutes: 30
+serves: 4
+
+ingredients:
+  - name: bucatini
+    amount: 400
+    unit: g
+    notes: >
+      The Roman default. STG also sanctions spaghetti and short pasta
+      (rigatoni, mezze maniche) — all three are formally permitted.
+  - name: guanciale_amatriciano
+    amount: 125
+    unit: g
+    notes: >
+      STG specifies guanciale at 18-30% of total sauce weight; ~125g
+      sits mid-band. Pancetta and bacon are explicitly rejected by
+      the disciplinare.
+  - name: pomodori_pelati
+    amount: 400
+    unit: g
+    notes: Passata or peeled tomatoes in pieces, 69-81% of sauce per disciplinare.
+  - name: pecorino_romano_dop
+    amount: 60
+    unit: g
+    notes: >
+      Grated, added at table over the finished dish. Pecorino di
+      Amatrice or Pecorino Romano DOP del Lazio per disciplinare.
+  - name: vino_bianco_secco
+    amount: 30
+    unit: ml
+  - name: olio_extravergine_di_oliva
+    amount: 5
+    unit: ml
+    notes: 0.5-1% of sauce weight per disciplinare.
+  - name: peperoncino
+    amount: 1
+    unit: piece
+    notes: Fresh or dried; 'and/or pepper' per disciplinare.
+  - name: pepe_nero
+    unit: q.b.
+  - name: sale
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: Bring a large pot of water to a boil; salt moderately (guanciale and pecorino are already very salty).
+  - order: 2
+    text: Remove the rind from the guanciale and cut into strips, about 1 cm thick by 0.5 cm wide.
+  - order: 3
+    text: In a heavy pan (the disciplinare specifies iron), heat the olive oil over low heat; add the chilli and the guanciale strips.
+  - order: 4
+    text: Render slowly until the guanciale is golden but not crisp. Add the white wine and let it evaporate.
+  - order: 5
+    text: Remove the guanciale strips with a slotted spoon and set aside, kept warm so they don't dry out or grow too salty.
+  - order: 6
+    text: Add the passata and chopped peeled tomatoes to the same pan with the rendered fat. Salt and pepper. Bring to a boil and cook over high heat 10-20 minutes until the sauce reaches a creamy consistency.
+    timer_seconds: 900
+  - order: 7
+    text: Return the guanciale to the pan and cook a further 5-10 minutes.
+    timer_seconds: 360
+  - order: 8
+    text: Cook the bucatini al dente; drain and toss in the pan with the sauce.
+  - order: 9
+    text: Plate and finish with grated Pecorino Romano DOP at the table.
+
+tags:
+  - lazio
+  - cured_pork
+
+traditional_notes: >
+  Amatriciana is the only dish in the Roman quartet with formal EU
+  protection: the STG disciplinare (Reg. 2020/395) fixes ingredient
+  percentages and technique. The disciplinare states 'this sauce has
+  always been made with pork jowl, never bacon or pork belly' —
+  pancetta is a defined error, not a substitute. The 'white' version
+  without tomato is officially recognized by the Comune di Amatrice
+  as gricia, the pre-Columbian ancestor; tomato was added at the end
+  of the 18th century. Contested points: (a) onion and garlic — both
+  rejected by the Comune di Amatrice and former mayor Sergio Pirozzi
+  ('garlic in amatriciana, never; and no onion either'); however,
+  Ada Boni's 1927 Talismano della felicità listed onion, and chef
+  Carlo Cracco caused public outcry in 2015 by adding garlic-in-shirt.
+  (b) Pasta shape — Rome defaults to bucatini, but Amatrice itself
+  uses spaghetti, and the STG also sanctions short pasta. (c) Pecorino
+  — Pecorino di Amatrice is preferred, Pecorino Romano DOP from Lazio
+  is permitted.
+
+evidence_strength: stg_dop_protected
+confidence: directly_stated
+
+sources:
+  - source_name: EU Regulation 2019/C 393/12 — Application for STG 'Amatriciana Tradizionale' (full disciplinare)
+    source_url: https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:52019XC1120(02)
+    source_type: eu_regulation
+    source_tier: 1
+    quoted_excerpt: >
+      This sauce has always been made with pork jowl, never bacon or
+      pork belly [pancetta], and it is pork jowl which, due to its
+      greater fat content, gives the sauce its characteristic and
+      distinctive, intense and sapid taste.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: EU Regulation (EU) 2020/395 — formal STG registration
+    source_url: https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=uriserv:OJ.L_.2020.077.01.0001.01.ITA
+    source_type: eu_regulation
+    source_tier: 1
+    quoted_excerpt: La denominazione «Amatriciana Tradizionale» (STG) è registrata.
+    excerpt_translation: The denomination 'Amatriciana Tradizionale' (TSG) is registered.
+    accessed_date: 2026-05-03
+  - source_name: ARSIAL (Lazio Regional Agriculture Agency) — Disciplinare di Produzione Amatriciana Tradizionale STG
+    source_url: https://www.arsial.it/wp-content/uploads/2025/03/DISCIPLINARE-DI-PRODUZIONE-per-Pubblica-Audizione.pdf
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: >
+      Guanciale del tipo Amatriciano [...] rappresenta una quota tra
+      il 18 e il 30% del totale del prodotto.
+    excerpt_translation: >
+      Guanciale of the Amatriciano type [...] represents a share
+      between 18 and 30% of the total product.
+    accessed_date: 2026-05-03
+  - source_name: Comune di Amatrice — Disciplinare De.Co. 'Salsa all'Amatriciana'
+    source_url: https://www.comune.amatrice.rieti.it/wp-content/uploads/2016/07/disciplinare_salsa.pdf
+    source_type: comune_disciplinare
+    source_tier: 1
+    quoted_excerpt: >
+      Canonical pointer; full content mirrored in ARSIAL Italian
+      text and Pastificio Strampelli English translation.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03

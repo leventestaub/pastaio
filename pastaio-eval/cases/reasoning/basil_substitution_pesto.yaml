@@ -1,0 +1,39 @@
+case_id: reasoning__basil_substitution_pesto
+category: reasoning
+description: |
+  User cooking trofie al pesto, no basil. Model should call
+  get_substitution_options or apply_substitution with a substitute that
+  is a defensible pesto choice.
+
+  The structural assertion: a substitution-related tool was called for
+  "basil" on the active recipe.
+
+  The rubric assertion (hand-graded): is the chosen substitute one that a
+  knowledgeable Italian cook would accept? Parsley with pine nuts is
+  defensible; cilantro is not; spinach is bland but not wrong.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+
+turns:
+  - user_input: "I don't have basil. What can I use?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_substitution_options
+          args_match: subset
+          expected_args:
+            missing_ingredient: basil
+      expect_order: false
+      forbid_extra_tools: false
+      rubric: |
+        Hand-grade the assistant's substitution recommendation.
+        PASS if recommendation is one of: parsley, arugula, mint+parsley,
+        spinach (acceptable but bland), wild greens.
+        FAIL if recommendation is: cilantro, dill, basil-flavored anything
+        synthetic, kale alone, or no recommendation given.
+        NOTE: get_substitution_options call is a precursor; the final
+        recommendation appears in the assistant text or apply_substitution
+        replacement arg.
+
+tags: [italian_reasoning, substitution, hand_graded]

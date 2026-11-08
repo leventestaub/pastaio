@@ -1,0 +1,61 @@
+# coherence/multi_turn_substitution_flow.yaml
+case_id: coherence__multi_turn_substitution_flow
+category: coherence
+description: |
+  Full substitution workflow as a coherence test. Four turns:
+  1. User mentions missing ingredient.
+  2. User asks for options (model presents).
+  3. User picks one.
+  4. User asks a follow-up about the substitution result.
+
+  Tests the prompt's substitution flow guidance end-to-end across
+  realistic dialogue, plus the state propagation in turn 4.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+
+turns:
+  - user_input: "I don't have pine nuts"
+    asserts:
+      expect_tool_calls:
+        - tool: get_substitution_options
+          args_match: subset
+          expected_args:
+            missing_ingredient: pine nuts
+
+  - user_input: "Walnuts work?"
+    asserts:
+      rubric: |
+        PASS if model either (a) calls apply_substitution with
+        replacement=walnuts, or (b) confirms walnuts as a viable
+        option in text and apply_substitution comes on the next user
+        confirmation. The KB's get_substitution_options should have
+        returned walnuts as an option.
+        FAIL if model rejects walnuts without KB grounding, or applies
+        a different substitute.
+
+  - user_input: "Yes apply that"
+    asserts:
+      expect_tool_calls:
+        - tool: apply_substitution
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+            original: pine nuts
+            replacement: walnuts
+      expect_state:
+        substitutions.trofie-al-pesto.pine nuts: walnuts
+
+  - user_input: "Will the pesto still taste right?"
+    asserts:
+      expect_no_tools: true
+      rubric: |
+        PASS: model gives a substantive answer drawing on the KB
+        reasoning that returned walnuts as an option. Acknowledges
+        the tradeoffs (nuttier, less buttery, traditional in some
+        Ligurian variants).
+        FAIL: model says it doesn't know, or fabricates reasoning
+        that contradicts what the KB substitution rule said.
+
+tags: [four_turn, workflow, substitution, hand_graded]

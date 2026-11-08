@@ -1,0 +1,35 @@
+# coherence/cookbook_after_save.yaml
+case_id: coherence__cookbook_after_save
+category: coherence
+description: |
+  Cross-turn state propagation, simpler than the substitution case.
+  User saves a recipe, then asks "what's in my cookbook?". Model
+  should answer from Context's cookbook field, not call any tool —
+  the cookbook is already in ChatContext after the save.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: orecchiette-cime-di-rapa
+  cookbook: []
+
+turns:
+  - user_input: "Save this for later"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: orecchiette-cime-di-rapa
+      expect_state:
+        cookbook: [orecchiette-cime-di-rapa]
+
+  - user_input: "What's in my cookbook now?"
+    asserts:
+      expect_no_tools: true
+      rubric: |
+        PASS: model lists orecchiette-cime-di-rapa (or the title) from
+        Context's cookbook field. Zero tool calls.
+        FAIL: model calls open_cookbook (navigation) or find_recipes,
+        or claims the cookbook is empty.
+
+tags: [two_turn, state_propagation, context_read, hand_graded]

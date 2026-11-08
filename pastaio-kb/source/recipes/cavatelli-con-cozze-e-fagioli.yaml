@@ -1,0 +1,140 @@
+recipe_id: cavatelli-con-cozze-e-fagioli
+title: Cavatelli con Cozze e Fagioli
+shape_id: cavatelli
+region_id: puglia
+sauce_category_id: seafood_based
+description: >
+  A Pugliese coastal preparation, particularly associated with
+  the Bari area, pairing fresh cavatelli with mussels and
+  cannellini or borlotti beans. The dish belongs to the
+  Southern Italian "terra e mare" (land and sea) tradition, where
+  marine and terrestrial ingredients combine in a single primo.
+cook_time_minutes: 40
+serves: 4
+
+ingredients:
+  - name: cavatelli
+    amount: 400
+    unit: g
+    notes: >
+      Fresh cavatelli is traditional. Good dried cavatelli or
+      orecchiette is an acceptable substitute.
+  - name: cozze
+    amount: 1000
+    unit: g
+    notes: >
+      Cozze nera tarantine when available; otherwise any
+      good-quality fresh mussels.
+  - name: fagioli_cannellini
+    amount: 250
+    unit: g
+    notes: >
+      Dried beans, soaked overnight and boiled until tender.
+      Borlotti beans are also widely accepted in regional
+      practice.
+  - name: pomodorini
+    amount: 200
+    unit: g
+    notes: >
+      Cherry tomatoes. Some regional variants prepare the dish
+      "in bianco" without tomatoes.
+  - name: aglio
+    amount: 2
+    unit: cloves
+  - name: prezzemolo
+    unit: q.b.
+  - name: peperoncino
+    unit: q.b.
+  - name: olio_extravergine_di_oliva
+    unit: q.b.
+  - name: sale
+    unit: q.b.
+    notes: >
+      Use sparingly; the mussel liquor is highly saline.
+
+steps:
+  - order: 1
+    text: >
+      Scrub and debeard the mussels. In a wide pan with a tight
+      lid, warm a little olive oil with one crushed garlic clove,
+      add the mussels, cover, and cook over medium-high heat
+      until they open. Discard any that remain closed.
+  - order: 2
+    text: >
+      Shell most of the mussels, keeping a few in their shells
+      for serving. Strain the cooking liquor through a fine mesh
+      to remove grit and reserve.
+  - order: 3
+    text: >
+      In a wide skillet, warm fresh olive oil with the second
+      garlic clove and chili. Add the halved cherry tomatoes and
+      cook gently until they break down.
+  - order: 4
+    text: >
+      Add the cooked beans and the strained mussel liquor.
+      Simmer for about 10 minutes so the bean starch thickens
+      the broth.
+  - order: 5
+    text: >
+      Bring a separate pot of water to a boil; salt lightly,
+      accounting for the salty mussel broth. Boil the cavatelli
+      until just shy of al dente.
+  - order: 6
+    text: >
+      Drain the cavatelli and transfer to the skillet with the
+      beans. Add the shelled mussels and a generous handful of
+      chopped parsley. Toss over medium heat for 1–2 minutes so
+      the pasta finishes in the sauce, then serve immediately
+      with the reserved shell-on mussels for garnish.
+
+tags: [puglia, coastal, terra_e_mare, legumes, seafood]
+
+traditional_notes: >
+  The dish belongs to the Pugliese coastal tradition, particularly
+  in the Bari area, where cavatelli are paired with mussels and
+  legumes. Both cannellini and borlotti are used in regional
+  practice. A version "in bianco" (without tomatoes) is also
+  documented; the cherry-tomato variant is the more widespread
+  contemporary form. The Cozza nera di Taranto, the local mussel
+  variety from the Mar Piccolo's brackish waters, became a Slow
+  Food Presidio in 2022 and is also recognized as a Mipaaf
+  Prodotto Agroalimentare Tradizionale; it is the traditional
+  mussel for the dish when available. The recipe itself has no
+  formal codification by the Accademia Italiana della Cucina or
+  by municipal disciplinari, and ratios and tomato treatment
+  vary between household and trattoria practice.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Slow Food Presidio — Cozza nera di Taranto
+    source_url: https://www.fondazioneslowfood.com/it/presidi-slow-food/cozza-nera-di-taranto/
+    source_type: slow_food_documentation
+    source_tier: 2
+    quoted_excerpt: >
+      Oltre a definire le caratteristiche della cozza nera
+      tarantina, il disciplinare indica le procedure sostenibili
+      per la sua coltivazione negli specchi d'acqua del mar
+      Piccolo secondo standard che garantiscono la qualità e la
+      tracciabilità del prodotto.
+    excerpt_translation: >
+      Beyond defining the characteristics of the Taranto black
+      mussel, the disciplinary specifies the sustainable
+      procedures for its cultivation in the waters of the Mar
+      Piccolo, with standards that guarantee product quality and
+      traceability.
+    accessed_date: 2026-05-05
+  - source_name: Regione Puglia — Presentazione del Presidio Slow Food della cozza nera tarantina
+    source_url: https://press.regione.puglia.it/-/presentato-il-presidio-slow-food-della-cozza-nera-tarantina-marchio-di-qualit%C3%A0-e-sostenibilit%C3%A0
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: >
+      La cozza nera tarantina, già riconosciuto come prodotto
+      agroalimentare tradizionale pugliese dal Ministero delle
+      Politiche agricole, è oggi Presidio slow food.
+    excerpt_translation: >
+      The Taranto black mussel, already recognized as a Pugliese
+      traditional agri-food product by the Ministry of
+      Agricultural Policies, is now a Slow Food Presidium.
+    accessed_date: 2026-05-05

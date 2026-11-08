@@ -1,0 +1,29 @@
+# coherence/it_save_after_open.yaml
+case_id: coherence__it_save_after_open
+category: coherence
+description: |
+  "It" reference to active_recipe_id set by prior turn. User opens a
+  recipe, then says "save it". Tests that the model uses Context's
+  active_recipe_id rather than re-searching or asking which recipe.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Open trofie al pesto"
+    asserts:
+      expect_state:
+        active_recipe_id: trofie-al-pesto
+        current_screen: recipe
+
+  - user_input: "Save it"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      expect_state:
+        cookbook: [trofie-al-pesto]
+
+tags: [pronoun, two_turn, active_recipe_id]

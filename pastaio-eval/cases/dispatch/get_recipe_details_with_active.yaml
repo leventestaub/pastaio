@@ -1,0 +1,23 @@
+# dispatch/get_recipe_details_with_active.yaml
+case_id: dispatch__get_recipe_details_with_active
+category: dispatch
+description: |
+  User on recipe screen asks a question requiring full details. Model
+  should call get_recipe_details with the active_recipe_id from Context.
+  Tests that active_recipe_id flows through to tool args correctly.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: pansoti-con-salsa-di-noci
+
+turns:
+  - user_input: "What ingredients do I need?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_recipe_details
+          args_match: subset
+          expected_args:
+            recipe_id: pansoti-con-salsa-di-noci
+      forbid_extra_tools: true
+
+tags: [single_turn, read_tool, active_recipe_id, context_resolution]

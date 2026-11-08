@@ -1,0 +1,22 @@
+case_id: dispatch__open_cookbook_navigation
+category: dispatch
+description: |
+  User on Home asks to see their saved recipes. Model should call
+  open_cookbook with no args. Tests basic nav-tool dispatch.
+
+initial_state:
+  current_screen: home
+  cookbook: [trofie-al-pesto, spaghetti-alla-carbonara]
+
+turns:
+  - user_input: "Show me my saved recipes"
+    asserts:
+      expect_tool_calls:
+        - tool: open_cookbook
+          args_match: exact
+          expected_args: {}
+      forbid_extra_tools: true
+      expect_state:
+        current_screen: cookbook
+
+tags: [single_turn, navigation, no_args]

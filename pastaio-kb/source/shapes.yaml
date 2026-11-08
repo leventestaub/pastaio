@@ -1,0 +1,196 @@
+# Pasta shapes. Cluster 1 added spaghetti, bucatini, rigatoni,
+# tonnarelli for the Roman quartet. Cluster 2 adds linguine.
+
+- shape_id: spaghetti
+  canonical_name: Spaghetti
+  alt_names: [spaghettoni, spaghettini]
+  region_id: null  # pan-Italian, not regional
+  description: >
+    Long, round-section dried pasta of medium thickness (typically
+    1.7-2.0mm). Pan-Italian rather than regional in origin. Holds
+    oil-based and lightly-cheesy sauces well; the canonical default
+    when a Roman-pasta recipe doesn't specify a shape.
+  traditional_sauces:
+    - tomato_based
+    - cheese_based
+    - egg_based
+
+- shape_id: bucatini
+  canonical_name: Bucatini
+  alt_names: [perciatelli]
+  region_id: lazio
+  description: >
+    Long, hollow-tubed dried pasta — like spaghetti pierced through
+    the middle. Thicker than spaghetti (typically 2.5-3mm). The
+    Roman default for amatriciana, where the hollow channel holds
+    the rendered guanciale fat and tomato. Notoriously difficult to
+    eat without splattering sauce.
+  traditional_sauces:
+    - tomato_based
+    - meat_based
+
+- shape_id: rigatoni
+  canonical_name: Rigatoni
+  alt_names: []
+  region_id: lazio
+  description: >
+    Short, wide tubular pasta with deep external ridges (rigato =
+    ridged) and a wide bore. The ridges hold cheese-fat emulsions;
+    the wide bore catches chunks of cured pork. The modern Roman
+    trattoria default for gricia and amatriciana when bucatini
+    isn't on the menu.
+  traditional_sauces:
+    - cheese_based
+    - meat_based
+    - tomato_based
+
+- shape_id: tonnarelli
+  canonical_name: Tonnarelli
+  alt_names: [maccheroni_alla_chitarra, spaghetti_alla_chitarra]
+  region_id: lazio
+  description: >
+    Fresh egg pasta cut into long strands of square cross-section,
+    traditionally produced on a wire-strung wooden frame called a
+    chitarra (guitar). Roman counterpart to Abruzzo's spaghetti alla
+    chitarra. The standard Roman trattoria pasta for cacio e pepe,
+    where the rough cut surface helps the cheese emulsion adhere.
+  traditional_sauces:
+    - cheese_based
+    - egg_based
+
+- shape_id: linguine
+  canonical_name: Linguine
+  alt_names: [bavette, trenette]
+  region_id: liguria
+  description: >
+    A long, extruded pasta shape characterized by a flattened,
+    elliptical cross-section. Origins firmly rooted in Liguria
+    (specifically Genoa), where it traditionally pairs with pesto
+    Genovese. Linguine has been heavily assimilated into Campanian
+    coastal cuisine, where the flattened surface area provides good
+    adhesion for oil-based and seafood-based sauces. Accademia
+    Italiana della Cucina codifies linguine alla puttanesca as the
+    canonical Campanian preparation.
+  traditional_sauces:
+    - oil_based
+    - seafood_based
+
+- shape_id: tagliatelle
+  canonical_name: Tagliatelle
+  alt_names: []
+  region_id: emilia_romagna
+  description: >
+    Fresh egg pasta cut into long flat ribbons. Bolognese tradition specifies a
+    precise width: on April 16, 1972, the Accademia deposited a gold replica at
+    the Bologna Chamber of Commerce dictating the width must measure exactly 8
+    millimeters when cooked (6.5 to 7 millimeters raw). According to a 2022
+    Chamber of Commerce archival document ("La Domenica del Sole"), this
+    dimension was formally calculated to correspond precisely to the 12,270th
+    part of the height of the Torre degli Asinelli.
+  traditional_sauces:
+    - meat_based
+
+- shape_id: tortellini
+  canonical_name: Tortellini
+  alt_names: []
+  region_id: emilia_romagna
+  description: >
+    Small ring-shaped fresh egg pasta hand-folded around a meat filling. The
+    recipe is rigorously governed by the Dotta Confraternita del Tortellino,
+    whose 1974 and 2008 deposits mandate a filling of pork loin, prosciutto
+    crudo, mortadella, Parmigiano Reggiano, egg, and nutmeg. The codification
+    enforces strict dimensions: the pasta must be cut into 3-centimeter squares,
+    and the folded tortellino must weigh exactly 5 grams. Origin contested
+    between Bologna and Modena.
+  traditional_sauces:
+    - meat_based
+
+- shape_id: lasagne
+  canonical_name: Lasagne
+  alt_names: []
+  region_id: emilia_romagna
+  description: >
+    Wide, flat rectangular sheets of fresh egg pasta. In the Bolognese
+    tradition, the canonical version is the 'sfoglia verde'—pasta dough
+    enriched and colored with boiled spinach, as specified by the Accademia
+    Italiana della Cucina.
+  traditional_sauces:
+    - meat_based
+
+- shape_id: trofie
+  canonical_name: Trofie
+  alt_names: []
+  region_id: liguria
+  description: >
+    Short, hand-rolled fresh pasta of Ligurian origin, twisted into
+    a thin tapered spiral roughly 4-5cm long. Originally a Genovese
+    home-cooking tradition; commercial production is centered in
+    Recco. The grooved, irregular surface holds pesto well and is
+    today the most common pairing for pesto Genovese in Liguria and
+    beyond.
+  traditional_sauces:
+    - pesto_based
+
+- shape_id: trenette
+  canonical_name: Trenette
+  alt_names: [bavette]
+  region_id: liguria
+  description: >
+    Long, narrow flat pasta similar to linguine but typically slightly
+    thinner. The historical Genoese pasta for pesto before trofie
+    became dominant in modern usage. Often sold commercially as 'bavette'.
+  traditional_sauces:
+    - pesto_based
+    - oil_based
+
+- shape_id: pansoti
+  canonical_name: Pansoti
+  alt_names: [pansotti]
+  region_id: liguria
+  description: >
+    Triangular fresh-pasta dumplings, traditionally filled with a
+    Ligurian wild-herb mixture (preboggion) bound with prescinsêua,
+    a slightly acidic local fresh cheese. The name derives from
+    'pancia' (belly), referring to the plump, rounded shape.
+  traditional_sauces:
+    - walnut_based
+
+- shape_id: orecchiette
+  name: Orecchiette
+  description: >
+    Small, dome-shaped pasta with a concave interior and a
+    rough exterior, traditionally made by dragging a piece of
+    semolina dough across a wooden board with a thumb or
+    blunt knife and then inverting it over a fingertip. The
+    shape catches vegetable-based sauces in its concavity.
+    Most strongly associated with Puglia, particularly Bari.
+
+- shape_id: cavatelli
+  name: Cavatelli
+  description: >
+    Small, rolled semolina pasta with a single longitudinal
+    depression, formed by dragging a small piece of dough
+    across a wooden board with two or three fingers. Widespread
+    across southern Italy (Puglia, Molise, Basilicata, Campania)
+    with regional variations in size.
+
+- shape_id: strascinati
+  name: Strascinati
+  description: >
+    Open, flat semolina pasta formed by the same dragging
+    gesture as orecchiette but left flat rather than inverted
+    into a cup. Per Luigi Sada's reference work on Pugliese
+    cuisine, "if the small piece is left open after being
+    dragged, it becomes the strascinato." Strong tradition in
+    both Puglia and Basilicata, with crossover into Calabria.
+
+- shape_id: tria
+  name: Tria
+  description: >
+    Long, flat semolina ribbons hand-cut on a board, traditional
+    to the Salento peninsula in southern Puglia. The name
+    derives from either the Arabic itriyya (a thin dried noodle)
+    or the Greek itrion (a thin unleavened cake); both
+    etymologies are recorded in dialectal sources. Most
+    strongly associated with the dish ciceri e tria, in which
+    a portion of the tria is fried.

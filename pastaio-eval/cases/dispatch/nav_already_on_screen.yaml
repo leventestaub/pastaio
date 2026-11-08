@@ -1,0 +1,21 @@
+case_id: dispatch__nav_already_on_screen
+category: dispatch
+description: |
+  User is already on the Cookbook tab and says "open my cookbook". Model
+  should NOT call open_cookbook — prompt rule 7 forbids navigating to
+  the current screen. Should produce zero tool calls.
+
+  Different failure mode from no_tool_for_greeting: the user said
+  something that *looks* like a nav request, and the model has to check
+  current_screen before dispatching.
+
+initial_state:
+  current_screen: cookbook
+  cookbook: [trofie-al-pesto]
+
+turns:
+  - user_input: "Open my cookbook"
+    asserts:
+      expect_no_tools: true
+
+tags: [single_turn, no_tool, prompt_rule_7, redundant_nav]

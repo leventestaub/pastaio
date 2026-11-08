@@ -1,0 +1,123 @@
+recipe_id: spaghetti-alle-vongole
+title: Spaghetti alle vongole
+shape_id: spaghetti
+region_id: campania
+sauce_category_id: seafood_based
+description: >
+  The quintessential Neapolitan seafood pasta, relying on the juices
+  released from fresh bivalves. The clams are steamed open in a base
+  of garlic, oil, and wine, creating a naturally saline sauce that
+  coats the pasta. Two canonical variants — 'in bianco' (no tomato)
+  and 'in rosso' (with tomato) — are both historically grounded in
+  Campanian tradition.
+cook_time_minutes: 25
+serves: 4
+
+ingredients:
+  - name: spaghetti
+    amount: 400
+    unit: g
+  - name: vongole
+    amount: 1000
+    unit: g
+    notes: >
+      Vongole veraci (Mediterranean clams) preferred. Must be purged
+      in saltwater to remove grit before cooking.
+  - name: aglio
+    amount: 2
+    unit: piece
+  - name: olio_extravergine_di_oliva
+    amount: 60
+    unit: ml
+  - name: vino_bianco_secco
+    amount: 100
+    unit: ml
+  - name: pomodorini
+    amount: 150
+    unit: g
+    notes: >
+      Optional. Defines the 'in rosso' variant. Pomodorino del
+      Piennolo del Vesuvio DOP is the traditional Campanian pairing.
+      Omit entirely for the 'in bianco' preparation.
+  - name: prezzemolo
+    unit: q.b.
+  - name: peperoncino
+    amount: 1
+    unit: piece
+
+steps:
+  - order: 1
+    text: >
+      Submerge the clams in cold water heavily seasoned with coarse
+      salt for at least 2 hours to purge internal sand. Rinse
+      thoroughly.
+  - order: 2
+    text: >
+      In a very large skillet, heat the olive oil, whole garlic
+      cloves, chili, and parsley stems. Once the garlic is golden,
+      remove and discard the solids.
+  - order: 3
+    text: >
+      If preparing the 'in rosso' variant, add the halved cherry
+      tomatoes to the hot oil and blister for 3 minutes. For 'in
+      bianco', skip this step.
+  - order: 4
+    text: >
+      Add the purged clams and pour in the white wine. Cover the
+      skillet tightly. Steam for 2 to 4 minutes, just until the
+      shells pop open.
+    timer_seconds: 180
+  - order: 5
+    text: >
+      Remove the opened clams to a bowl. Filter the remaining liquid
+      in the skillet to remove residual sand, then return it to the
+      pan. Shell half the clams, leaving the rest in their shells.
+  - order: 6
+    text: >
+      Boil the spaghetti. Drain three minutes early and add to the
+      skillet with the clam juices. Cook vigorously, tossing well.
+  - order: 7
+    text: >
+      Off the heat, fold the clams back into the pasta along with
+      minced parsley. Serve immediately.
+
+tags: [campania, seafood, bivalves]
+
+traditional_notes: >
+  The dish maintains a bipartite canon: 'in bianco' (oil, garlic,
+  wine) and 'in rosso' (with tomatoes). While minimalist purists
+  advocate strictly for the 'in bianco' method to isolate the
+  marine flavors, the 'in rosso' variant is equally historical.
+  Campanian agricultural authorities explicitly highlight the
+  traditional pairing of the Pomodorino del Piennolo del Vesuvio
+  DOP with spaghetti alle vongole, validating the red variant's
+  deep regional roots.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Regione Campania — Prodotti Tipici (Pomodorino del Piennolo)
+    source_url: https://agricoltura.regione.campania.it/tipici/piennolo.html
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: >
+      Accanto ai tradizionali spaghetti alle vongole e agli altri
+      frutti di mare, gli chef locali si impegnano ad utilizzarlo
+      in tanti altri piatti.
+    excerpt_translation: >
+      Alongside the traditional spaghetti with clams and other
+      seafood, local chefs are committed to using it [the Piennolo
+      tomato] in many other dishes.
+    accessed_date: 2026-05-03
+  - source_name: Il Giornale del Cibo
+    source_url: https://www.ilgiornaledelcibo.it/spaghetti-alle-vongole-storia/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Quindi, è probabile che gli spaghetti alle vongole siano stati
+      "inventati" durante o dopo questo secolo.
+    excerpt_translation: >
+      Therefore, it is likely that spaghetti with clams were
+      "invented" during or after this century.
+    accessed_date: 2026-05-03

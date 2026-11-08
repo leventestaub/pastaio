@@ -1,0 +1,65 @@
+# coherence/five_turn_full_flow.yaml
+case_id: coherence__five_turn_full_flow
+category: coherence
+description: |
+  The headline 5-turn coherence case from PROJECT_SPEC §4. User opens
+  a recipe, asks about it, applies a substitution, starts cooking,
+  sets a timer. Each turn references the recipe established in turn 1.
+
+  This is the case the README's "5-turn dialogues maintain context
+  in ≥90%" claim hangs on.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Open spaghetti alla carbonara"
+    asserts:
+      expect_state:
+        active_recipe_id: spaghetti-alla-carbonara
+        current_screen: recipe
+
+  - user_input: "How long does it take?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_recipe_details
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-alla-carbonara
+
+  - user_input: "I don't have guanciale, what can I substitute?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_substitution_options
+          args_match: subset
+          expected_args:
+            missing_ingredient: guanciale
+
+  - user_input: "Pancetta is fine, apply that and let's start"
+    asserts:
+      expect_tool_calls:
+        - tool: apply_substitution
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-alla-carbonara
+            original: guanciale
+            replacement: pancetta
+        - tool: start_cooking
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-alla-carbonara
+      expect_state:
+        substitutions.spaghetti-alla-carbonara.guanciale: pancetta
+        cooking_active: true
+        current_screen: cooking
+
+  - user_input: "Set a 10 minute timer"
+    asserts:
+      expect_tool_calls:
+        - tool: set_timer
+          args_match: subset
+          expected_args:
+            duration_minutes: 10
+      forbid_extra_tools: true
+
+tags: [five_turn, full_flow, headline_claim]

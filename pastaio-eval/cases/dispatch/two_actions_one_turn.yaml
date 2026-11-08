@@ -1,0 +1,36 @@
+# dispatch/two_actions_one_turn.yaml
+case_id: dispatch__two_actions_one_turn
+category: dispatch
+description: |
+  User issues two actions in one message. Tests whether model emits
+  both tool calls or only one. Prompt rule 4 says call multiple tools
+  in sequence when needed.
+
+  The save+timer combo is realistic — finishing a cook, wants to
+  remember the recipe and set a final timer for resting.
+
+initial_state:
+  current_screen: cooking
+  active_recipe_id: trofie-al-pesto
+  cooking_active: true
+  cooking_recipe_id: trofie-al-pesto
+  cooking_step_index: 6
+
+turns:
+  - user_input: "Save this to my cookbook and set a 5 minute resting timer"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+        - tool: set_timer
+          args_match: subset
+          expected_args:
+            duration_minutes: 5
+      expect_order: false
+      forbid_extra_tools: true
+      expect_state:
+        cookbook: [trofie-al-pesto]
+
+tags: [single_turn, multi_tool, write_chain]

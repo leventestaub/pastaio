@@ -1,0 +1,122 @@
+recipe_id: spaghetti-cacio-e-pepe
+title: Spaghetti Cacio e Pepe
+shape_id: spaghetti
+region_id: lazio
+sauce_category_id: cheese_based
+description: >
+  Cacio e pepe is one of the four canonical pastas of Roman cuisine
+  and the most technically demanding, despite consisting of only three
+  ingredients — pasta, Pecorino Romano, and black pepper. The dish is
+  rooted in the cuisine of Roman shepherds and farmers of the agro
+  romano during the transhumance, when long-keeping ingredients
+  (aged pecorino, peppercorns, dried pasta) could be carried into the
+  mountains. The technique is the dish — starch in the pasta water
+  emulsifies with the cheese fat to form a glossy sauce; failure
+  produces a clumped, 'stracciato' mess.
+cook_time_minutes: 15
+serves: 4
+
+ingredients:
+  - name: spaghetti
+    amount: 400
+    unit: g
+    notes: Tonnarelli is the modern Roman trattoria default; spaghetti is the older convention.
+  - name: pecorino_romano_dop
+    amount: 200
+    unit: g
+    notes: >
+      Range across reputable sources is wide — Turismo Roma uses 100g
+      per 400g pasta, Roman trattorie typically use ~200g per 400g
+      for a richer cream. Medium-aged pecorino melts more cleanly
+      than fully aged.
+  - name: pepe_nero_in_grani
+    unit: q.b.
+    notes: Whole peppercorns, ideally pestled in a mortar so they bloom when toasted. Never pre-ground.
+  - name: sale_grosso
+    unit: q.b.
+    notes: Salt the pasta water lightly — pecorino is very salty.
+
+steps:
+  - order: 1
+    text: Bring a pot of water to a boil; salt lightly. Use slightly less water than usual to enrich the starch concentration.
+  - order: 2
+    text: Crush the whole peppercorns coarsely in a mortar.
+  - order: 3
+    text: In a wide non-stick pan, toast half the cracked pepper over low heat 1-2 minutes until fragrant; don't let it burn.
+    timer_seconds: 90
+  - order: 4
+    text: Add 1-2 ladles of pasta cooking water to the pan with the pepper — the starchy liquid will foam slightly.
+  - order: 5
+    text: Cook the spaghetti very al dente (drain ~2 minutes early).
+  - order: 6
+    text: While the pasta finishes cooking, prepare the cheese cream — in a bowl, whisk grated Pecorino Romano with a small ladle of WARM (not boiling) pasta water until smooth and lump-free.
+  - order: 7
+    text: Drain the pasta into the pepper pan and toss vigorously to finish cooking with the starch water.
+  - order: 8
+    text: Off the heat, fold in the pecorino cream, tossing energetically. Add more pasta water as needed to reach a glossy, coating consistency.
+  - order: 9
+    text: Plate immediately, finish with extra grated pecorino and a fresh crack of black pepper. Serve at once — the emulsion breaks as it cools.
+
+tags:
+  - lazio
+  - vegetarian
+  - quick
+
+traditional_notes: >
+  Like carbonara, cacio e pepe has NO formal codification — no STG,
+  no Accademia deposited recipe, no Comune disciplinare. Authority
+  rests on contemporary convention plus Italian Wikipedia and
+  regional tourism material (Turismo Roma). Three ingredients are
+  agreed — pasta, Pecorino Romano DOP, black pepper. ANY other
+  ingredient (butter, oil, garlic, guanciale, Parmigiano) is rejected
+  by Italian purists. Contested points — (a) Pasta — Italian
+  Wikipedia gives tonnarelli as modern default but lists spaghetti as
+  the original format and the agro-romano shepherd history. Many
+  Italian sources state the dish predates carbonara and amatriciana.
+  (b) Pecorino aging — medium aging is preferred for melt; fully aged
+  makes the emulsion harder. (c) Cheese ratio — varies hugely from
+  25% (Turismo Roma 100g/400g) to 55% (Spaghetti e Mandolino) of
+  pasta weight. (d) Technique — two competing methods, toast-pepper-
+  then-cream-in-pan (riskier, 'more traditional') vs. pre-make-cream-
+  in-bowl-then-toss (Mulargia method, more reliable). The 'ancient
+  Roman' lineage is a popular claim but not historically substantiated.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Turismo Roma (Roma Capitale) — Spaghetti a cacio e pepe
+    source_url: https://www.turismoroma.it/en/1042013-spaghetti-cacio-e-pepe
+    source_type: regional_government
+    source_tier: 2
+    quoted_excerpt: >
+      For a perfect cacio e pepe pasta you must not only season the
+      cooked pasta with the grated cheese, but also mix a little of
+      the water the pasta was cooked in (rich in starch) with the
+      cheese, making it melt until it forms a kind of cream.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: Italian Wikipedia — Pasta cacio e pepe
+    source_url: https://it.wikipedia.org/wiki/Pasta_cacio_e_pepe
+    source_type: italian_wikipedia_with_citations
+    source_tier: 2
+    quoted_excerpt: >
+      Solitamente il tipo di pasta più usato è il tonnarello.
+      [...] Fonda le radici nella cucina di contadini e pastori
+      dell'agro romano.
+    excerpt_translation: >
+      Typically the most used pasta is the tonnarello.
+      [...] It is rooted in the cuisine of farmers and shepherds of
+      the agro romano.
+    accessed_date: 2026-05-03
+  - source_name: La Cucina Italiana (US ed.) — Tonnarelli Cacio e Pepe
+    source_url: https://www.lacucinaitaliana.com/recipe/pasta/tonnarelli-cacio-e-pepe
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Pasta cacio e pepe is one of the simplest dishes in Italian
+      cuisine, but also one of the trickiest to prepare. The trick
+      is finding the perfect balance between the cheese and the
+      moisture of the tonnarelli.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03

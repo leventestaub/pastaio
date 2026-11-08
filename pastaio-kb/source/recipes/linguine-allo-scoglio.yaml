@@ -1,0 +1,135 @@
+recipe_id: linguine-allo-scoglio
+title: Linguine allo scoglio
+shape_id: linguine
+region_id: campania
+sauce_category_id: seafood_based
+description: >
+  A luxurious seafood preparation governed by strict taxonomic
+  rules: it utilizes exclusively rock-dwelling crustaceans, bivalves,
+  and cephalopods, excluding finfish. The combined juices of the
+  seafood are used to coat the flattened linguine.
+cook_time_minutes: 35
+serves: 4
+
+ingredients:
+  - name: linguine
+    amount: 400
+    unit: g
+  - name: cozze
+    amount: 500
+    unit: g
+    notes: Mussels, scrubbed and de-bearded.
+  - name: vongole
+    amount: 500
+    unit: g
+    notes: Clams, purged in saltwater.
+  - name: scampi
+    amount: 300
+    unit: g
+    notes: >
+      Whole scampi or large shrimp (gamberi), with shells intact
+      for flavor extraction.
+  - name: calamari
+    amount: 200
+    unit: g
+    notes: Squid, cleaned and sliced into rings.
+  - name: pomodorini
+    amount: 150
+    unit: g
+    notes: >
+      Optional. Defines the 'in rosso' variant. Omit entirely for
+      'in bianco'.
+  - name: aglio
+    amount: 2
+    unit: piece
+  - name: olio_extravergine_di_oliva
+    amount: 60
+    unit: ml
+  - name: vino_bianco_secco
+    amount: 100
+    unit: ml
+  - name: prezzemolo
+    unit: q.b.
+  - name: peperoncino
+    amount: 1
+    unit: piece
+
+steps:
+  - order: 1
+    text: >
+      In a wide skillet, heat a tablespoon of oil with a crushed
+      garlic clove. Add the scrubbed mussels and purged clams, pour
+      in half the white wine, and cover. Steam for 3 minutes until
+      opened.
+    timer_seconds: 180
+  - order: 2
+    text: >
+      Remove the shellfish, shell half of them, and carefully filter
+      the remaining liquid to remove sand. Set aside.
+  - order: 3
+    text: >
+      In the cleaned skillet, heat the remaining oil with the second
+      garlic clove and chili. Add the sliced squid and sear over
+      high heat for 2 minutes.
+  - order: 4
+    text: >
+      Add the cherry tomatoes to the squid and cook until they begin
+      to break down, approximately 4 minutes.
+  - order: 5
+    text: >
+      Add the whole scampi to the skillet. Deglaze with the remaining
+      white wine. Pour in the filtered mussel and clam liquid. Simmer
+      gently until the crustaceans are cooked.
+  - order: 6
+    text: >
+      Boil the linguine in lightly salted water. Drain early and
+      transfer to the skillet. Toss vigorously over medium-high heat
+      to absorb the sauce.
+  - order: 7
+    text: >
+      Return the shelled and unshelled bivalves to the pan to warm
+      through. Finish with chopped parsley and serve immediately.
+
+tags: [campania, seafood, crustaceans, mollusks]
+
+traditional_notes: >
+  A rigid taxonomic boundary separates 'allo scoglio' from 'alla
+  pescatora'. Contemporary culinary consensus establishes that
+  'allo scoglio' (of the rocks) exclusively utilizes mollusks,
+  cephalopods, and crustaceans, whereas 'pescatora' relies on
+  finfish ('pesce da taglio'). This boundary is not formally
+  codified by Tier 1 or Tier 2 institutions, forcing reliance on
+  contemporary culinary magazines for the modern taxonomic
+  definition. Both 'in bianco' and 'in rosso' variants are
+  documented across Campania.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Food and Wine Italia
+    source_url: https://www.foodandwineitalia.com/pasta-allo-scoglio-alla-pescatora-differenze-origini/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      La differenza sostanziale... risiede nella scelta degli
+      ingredienti principali. A differenza della versione allo
+      scoglio, nella pescatora prevale l'uso del pesce...
+    excerpt_translation: >
+      The substantial difference... lies in the choice of main
+      ingredients. Unlike the allo scoglio version, the use of
+      fish prevails in the pescatora...
+    accessed_date: 2026-05-03
+  - source_name: Cookist
+    source_url: https://www.cookist.it/le-differenze-fra-ricette-allo-scoglio-e-ricette-alla-pescatora-tutti-i-modi-di-gustare-il-mare/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Scoglio: un piatto ricco di molluschi e crostacei... La
+      'pescatora' non prevede l'uso esclusivo di molluschi, ma
+      principalmente di pesci.
+    excerpt_translation: >
+      Scoglio: a dish rich in mollusks and crustaceans... The
+      'pescatora' does not foresee the exclusive use of mollusks,
+      but primarily of fish.
+    accessed_date: 2026-05-03

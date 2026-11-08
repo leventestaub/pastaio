@@ -1,0 +1,31 @@
+case_id: dispatch__open_recipe_partial_title
+category: dispatch
+description: |
+  User says "open the carbonara" without prior conversational context.
+  Realistic flow: model calls find_recipes first to find the recipe,
+  then open_recipe with the resolved ID. Tests the read-then-write
+  chain plus the model's ability to carry a result from one tool call
+  into the next.
+
+  Single-turn from the user's perspective, two tool calls from the
+  model's. The find_recipes return feeds open_recipe's recipe_id arg.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Open the carbonara"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: any
+        - tool: open_recipe
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-alla-carbonara
+      expect_order: true
+      expect_state:
+        active_recipe_id: spaghetti-alla-carbonara
+        current_screen: recipe
+
+tags: [single_turn_user, multi_tool, name_reference, read_then_write]

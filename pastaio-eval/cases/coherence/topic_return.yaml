@@ -1,0 +1,36 @@
+# coherence/topic_return.yaml
+case_id: coherence__topic_return
+category: coherence
+description: |
+  Topic stability across a digression. User opens recipe A, asks an
+  unrelated question, then references recipe A again. Tests whether
+  the model preserves active_recipe_id reference across non-tool turns.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Open tagliatelle al ragù"
+    asserts:
+      expect_state:
+        active_recipe_id: tagliatelle-al-ragu-alla-bolognese
+        current_screen: recipe
+
+  - user_input: "Where is Bologna anyway?"
+    asserts:
+      expect_no_tools: true
+      rubric: |
+        Reasonable answer about Bologna's location in Emilia-Romagna.
+        Zero tool calls.
+
+  - user_input: "Anyway, save the recipe"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: tagliatelle-al-ragu-alla-bolognese
+      expect_state:
+        cookbook: [tagliatelle-al-ragu-alla-bolognese]
+
+tags: [three_turn, topic_stability, digression]

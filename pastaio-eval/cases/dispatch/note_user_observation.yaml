@@ -1,0 +1,30 @@
+# dispatch/note_user_observation.yaml
+case_id: dispatch__note_user_observation
+category: dispatch
+description: |
+  User mentions a clear preference pattern that should be remembered as
+  a soft observation (not a hard restriction). Tests note_user_observation
+  arg shape — observation, category, context all required.
+
+  Note: model may call set_dietary_restriction instead if it misreads
+  "I prefer X" as a hard rule. Prompt rule 14 vs 15 disambiguation.
+
+initial_state:
+  current_screen: discover
+  user_observations: []
+
+turns:
+  - user_input: "I prefer Pugliese cooking over Roman cooking"
+    asserts:
+      expect_tool_calls:
+        - tool: note_user_observation
+          args_match: any
+      forbid_extra_tools: true
+      rubric: |
+        PASS: tool is note_user_observation, observation arg captures
+        "Pugliese over Roman" preference, category is reasonable
+        (regional or food).
+        FAIL: tool is set_dietary_restriction (preference confused with
+        restriction).
+
+tags: [single_turn, write_tool, soft_memory, preference]

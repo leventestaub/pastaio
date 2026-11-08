@@ -1,0 +1,41 @@
+# coherence/restriction_after_set.yaml
+case_id: coherence__restriction_after_set
+category: coherence
+description: |
+  User sets a dietary restriction, then asks for a recipe suggestion.
+  Model should respect the restriction in the find_recipes call (or
+  in filtering the results before presenting).
+
+  This tests whether the model carries the just-set restriction into
+  the next turn's reasoning. The restriction is in ChatContext after
+  set_dietary_restriction fires.
+
+initial_state:
+  current_screen: home
+
+turns:
+  - user_input: "I'm vegetarian"
+    asserts:
+      expect_tool_calls:
+        - tool: set_dietary_restriction
+          args_match: subset
+          expected_args:
+            restriction: vegetarian
+      expect_state:
+        dietary_restrictions: [vegetarian]
+
+  - user_input: "What should I cook tonight?"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: any
+      rubric: |
+        PASS: model calls find_recipes and the eventual suggestion
+        respects the vegetarian restriction (no carbonara/gricia/
+        matriciana etc. with cured pork). Whether the restriction is
+        passed to find_recipes args or applied as post-filtering is
+        acceptable.
+        FAIL: model suggests a recipe that violates the restriction.
+        FAIL: model ignores the restriction entirely in its reply text.
+
+tags: [two_turn, state_propagation, restriction_filter, hand_graded]

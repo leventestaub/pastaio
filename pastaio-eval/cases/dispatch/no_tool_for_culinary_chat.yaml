@@ -1,0 +1,20 @@
+# dispatch/no_tool_for_culinary_chat.yaml
+case_id: dispatch__no_tool_for_culinary_chat
+category: dispatch
+description: |
+  User asks a general cooking question that's not about a specific
+  recipe and not about a substitution. Should answer in text without
+  tool calls — prompt rule 2.
+
+  Distinct from no_tool_for_greeting: this is substantive content the
+  model can answer from priors, but no app action is needed.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "What region is bucatini from?"
+    asserts:
+      expect_no_tools: true
+
+tags: [single_turn, no_tool, knowledge_question]

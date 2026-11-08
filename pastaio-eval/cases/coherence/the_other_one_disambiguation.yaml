@@ -1,0 +1,40 @@
+# coherence/the_other_one_disambiguation.yaml
+case_id: coherence__the_other_one_disambiguation
+category: coherence
+description: |
+  Disambiguating reference. User searches and gets multiple results,
+  opens one, then says "the other one looked good — open that".
+  Tests whether the model can resolve a pronoun that disambiguates
+  against the most recent search results AND active_recipe_id.
+
+  Two acceptable resolutions: (a) opens a different recipe from the
+  search list, (b) asks for clarification. (a) is the better behavior;
+  (b) is acceptable per prompt rule 6.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Find me Lazio recipes"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: any
+
+  - user_input: "Open the carbonara"
+    asserts:
+      expect_state:
+        active_recipe_id: spaghetti-alla-carbonara
+
+  - user_input: "Actually, the gricia one looked interesting — open that"
+    asserts:
+      rubric: |
+        PASS if either:
+        (a) Model calls open_recipe with rigatoni-alla-gricia (or fuzzy
+            resolves to it). End state active_recipe_id should be
+            rigatoni-alla-gricia.
+        (b) Model asks a clarifying question. Zero tool calls.
+        FAIL if model opens a different recipe entirely, or stays on
+        carbonara.
+
+tags: [pronoun, three_turn, disambiguation, hand_graded]

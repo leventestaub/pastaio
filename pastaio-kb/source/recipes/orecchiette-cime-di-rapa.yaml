@@ -1,0 +1,116 @@
+recipe_id: orecchiette-cime-di-rapa
+title: Orecchiette con le Cime di Rapa
+shape_id: orecchiette
+region_id: puglia
+sauce_category_id: vegetable_based
+description: >
+  The flagship pasta dish of Puglia: orecchiette tossed with boiled
+  cime di rapa (turnip greens), garlic, anchovy, and chili. The
+  greens and pasta are cooked in the same water so the bitter
+  vegetable infuses the orecchiette and the pasta starch thickens
+  the greens.
+cook_time_minutes: 25
+serves: 4
+
+ingredients:
+  - name: orecchiette
+    amount: 400
+    unit: g
+    notes: >
+      Fresh handmade orecchiette is traditional. Good dried
+      bronze-die orecchiette is an acceptable substitute.
+  - name: cime_di_rapa
+    amount: 1500
+    unit: g
+    notes: >
+      Raw weight including stalks. After trimming to tender florets
+      and young leaves the usable yield is roughly half.
+  - name: acciuga_salata
+    amount: 4
+    unit: fillets
+  - name: aglio
+    amount: 2
+    unit: cloves
+  - name: peperoncino
+    unit: q.b.
+  - name: olio_extravergine_di_oliva
+    unit: q.b.
+  - name: sale
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Trim the cime di rapa, keeping only the tender tops, florets,
+      and youngest leaves. Wash thoroughly in cold water.
+  - order: 2
+    text: >
+      Bring 5 litres of moderately salted water to a rolling boil.
+  - order: 3
+    text: >
+      Add the cime di rapa to the boiling water. After a few
+      minutes, add the orecchiette to the same pot. If the greens
+      are very tender, reverse the order and add the pasta first to
+      avoid the greens disintegrating before the pasta is cooked.
+  - order: 4
+    text: >
+      In a wide pan, warm the olive oil with the crushed garlic
+      cloves and chili. Add the anchovy fillets (boned, chopped,
+      and crushed to a paste) and stir until they dissolve into
+      the oil.
+  - order: 5
+    text: >
+      Drain the pasta and greens together while the pasta is very
+      al dente, reserving a little of the starchy cooking water.
+  - order: 6
+    text: >
+      Transfer the pasta and greens to the pan with the anchovy
+      oil. Toss thoroughly, adding cooking water as needed to
+      coat. Finish with a drizzle of raw extra virgin olive oil
+      if desired and serve immediately.
+
+tags: [puglia, bitter_greens, anchovy, vegetable_based]
+
+traditional_notes: >
+  The Accademia Italiana della Cucina recipe published in
+  Civiltà della Tavola No. 290 (February 2017) specifies cooking
+  the cime di rapa and orecchiette together in the same pot, with
+  no breadcrumbs. This is the canonical preparation. Toasted
+  breadcrumbs (mollica fritta) are widely added in modern Pugliese
+  households as a textural finish, but the Accademia codification
+  omits them. The Accademia recipe also notes the alternative
+  cooking order (orecchiette first, then greens) as a contingency
+  when the greens are tender enough that simultaneous cooking
+  risks reducing them to a paste before the pasta is done.
+
+evidence_strength: accademia_published
+confidence: directly_stated
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Civiltà della Tavola No. 290
+    source_url: https://www.accademiaitalianadellacucina.it/sites/default/files/allegati/CdT_290_feb_2017_0.pdf
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      ORECCHIETTE CON LE CIME DI RAPA. Ingredienti: 400 g di
+      orecchiette fatte in casa, 1,5 kg di cime di rapa, 4 filetti
+      di acciuga salata, 2 spicchi d'aglio, peperoncino, olio
+      extravergine d'oliva, sale.
+    excerpt_translation: >
+      ORECCHIETTE WITH TURNIP GREENS. Ingredients: 400 g homemade
+      orecchiette, 1.5 kg turnip greens, 4 salted anchovy fillets,
+      2 garlic cloves, chili, extra virgin olive oil, salt.
+    accessed_date: 2026-05-05
+  - source_name: PAT Puglia — Atlante dei Prodotti Agroalimentari Tradizionali pugliesi
+    source_url: https://www.patpuglia.it/
+    source_type: regional_government
+    source_tier: 2
+    quoted_excerpt: >
+      In questo sito abbiamo raccolto in forma di schede, e con
+      una serie originale di notizie, i 365 PAT pugliesi. I PAT
+      sono un'espressione di agrobiodiversità.
+    excerpt_translation: >
+      On this site we have collected, in card form and with a
+      series of original notes, the 365 Pugliese PAT entries.
+      PAT entries are an expression of agrobiodiversity.
+    accessed_date: 2026-05-05

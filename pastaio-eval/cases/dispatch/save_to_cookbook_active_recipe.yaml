@@ -1,0 +1,24 @@
+# dispatch/save_to_cookbook_active_recipe.yaml
+case_id: dispatch__save_to_cookbook_active_recipe
+category: dispatch
+description: |
+  User on recipe screen says "save this". Should call save_to_cookbook
+  with active_recipe_id. State should reflect the saved recipe.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+  cookbook: []
+
+turns:
+  - user_input: "Save this"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      expect_state:
+        cookbook: [trofie-al-pesto]
+
+tags: [single_turn, write_tool, active_recipe_id, pronoun]

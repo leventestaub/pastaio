@@ -1,0 +1,24 @@
+# dispatch/find_recipes_combined_filters.yaml
+case_id: dispatch__find_recipes_combined_filters
+category: dispatch
+description: |
+  User asks for something specific combining shape and free-text terms.
+  Tests find_recipes with both args present.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Find me orecchiette dishes with greens"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: subset
+          expected_args:
+            shape: orecchiette
+      forbid_extra_tools: true
+      rubric: |
+        PASS if shape: orecchiette is present. Query arg may be present
+        with greens-related terms; either way is acceptable.
+
+tags: [single_turn, read_tool, combined_filters]

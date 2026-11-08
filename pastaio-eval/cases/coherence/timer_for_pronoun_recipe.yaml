@@ -1,0 +1,36 @@
+# coherence/timer_for_pronoun_recipe.yaml
+case_id: coherence__timer_for_pronoun_recipe
+category: coherence
+description: |
+  Pronoun reference for a tool with no recipe_id arg. User starts
+  cooking, then says "set a timer for the pasta" — the recipe is in
+  Context, but the timer doesn't take a recipe_id. Tests whether the
+  model correctly understands the pronoun is contextual but the tool
+  call doesn't need explicit recipe_id passing.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: spaghetti-cacio-e-pepe
+
+turns:
+  - user_input: "Let's cook this"
+    asserts:
+      expect_tool_calls:
+        - tool: start_cooking
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-cacio-e-pepe
+      expect_state:
+        cooking_active: true
+        current_screen: cooking
+
+  - user_input: "Set a 9 minute timer for the pasta"
+    asserts:
+      expect_tool_calls:
+        - tool: set_timer
+          args_match: subset
+          expected_args:
+            duration_minutes: 9
+      forbid_extra_tools: true
+
+tags: [two_turn, mid_workflow, multi_tool, cooking_transition]

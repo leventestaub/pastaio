@@ -1,0 +1,131 @@
+# Italian regions. Researched alongside the recipe clusters that
+# need them. Cluster 1 added Lazio. Cluster 2 adds Campania (recipes
+# need it) and Liguria (linguine references it as origin).
+
+- region_id: lazio
+  canonical_name: Lazio
+  description: >
+    Lazio is the central Italian region surrounding Rome, whose
+    pasta tradition rests on a 'quartet' of Roman dishes — carbonara,
+    cacio e pepe, gricia, and amatriciana — all built from a small
+    pantry of sheep cheese (Pecorino Romano DOP), cured pork jowl
+    (guanciale), black pepper, and pasta. The cuisine reflects
+    centuries of pastoral economy in the agro romano and the
+    transhumance routes through the Monti della Laga; ingredients
+    keep well, are cheap, and produce intensely savory dishes from
+    five elements or fewer. Amatriciana, the only Roman pasta with
+    EU STG protection (Reg. 2020/395), is technically Amatricean
+    rather than Roman in origin — Amatrice itself sat in Abruzzo
+    until 1927 and is now a frazione of Rieti.
+  characteristic_ingredients:
+    - guanciale
+    - pecorino_romano_dop
+    - pepe_nero
+    - tomato
+    - pasta_lunga
+  traditional_sauces:
+    - cheese_based
+    - egg_based
+    - meat_based
+    - tomato_based
+
+- region_id: campania
+  canonical_name: Campania
+  description: >
+    Campania's culinary architecture is defined by the convergence
+    of volcanic agriculture and deep maritime traditions along the
+    Gulf of Naples and the Amalfi Coast. The region is the historical
+    epicenter of pasta secca (dried durum wheat pasta), centred on
+    Gragnano, and its flavor profile leans heavily on mineral-rich
+    volcanic cultivars — Pomodoro San Marzano dell'Agro
+    Sarnese-Nocerino DOP and Pomodorino del Piennolo del Vesuvio DOP
+    foremost among them. Coastal preparations privilege purely
+    marine ingredients (frutti di mare, vongole, scampi) over
+    finfish, while the inland pantry tradition produced umami-driven
+    sauces from preserved staples: capers, olives, anchovies, and
+    concentrated tomatoes.
+  characteristic_ingredients:
+    - pomodori_pelati
+    - pomodorino_del_piennolo
+    - frutti_di_mare
+    - aglio
+    - olio_extravergine
+    - peperoncino
+    - capperi
+  traditional_sauces:
+    - tomato_based
+    - seafood_based
+    - oil_based
+
+- region_id: liguria
+  canonical_name: Liguria
+  description: >
+    Crescent-shaped coastal region of northwest Italy, geographically
+    constrained between the Ligurian Sea and the Maritime Alps and
+    Apennines. The narrow belt of arable land and steep terraced
+    'fasce' (dry-stone terraces) shaped a regional cuisine built
+    around aromatic herbs, olive oil, pine nuts, and seafood rather
+    than meat or dairy. Genoa's centuries of maritime trade with
+    Sardinia (effectively a Genoese protectorate during the 12th-14th
+    centuries) explain why Sardinian cheeses — particularly Fiore
+    Sardo — are written into the canonical pesto Genovese recipe.
+    The region is the birthplace of pesto Genovese (Basilico Genovese
+    DOP, pine nuts, garlic, Fiore Sardo, Parmigiano Reggiano, and
+    Riviera Ligure DOP olive oil) and of stuffed pasta traditions
+    like pansoti dressed with salsa di noci.
+  characteristic_ingredients:
+    - basilico_genovese
+    - pinoli
+    - aglio
+    - olio_extravergine_di_oliva
+    - acciughe
+    - noci
+    - fiore_sardo
+  traditional_sauces:
+    - pesto_based
+    - walnut_based
+    - oil_based
+    - seafood_based
+
+- region_id: emilia_romagna
+  canonical_name: Emilia-Romagna
+  description: >
+    The northern Italian region whose pasta tradition rests on rich fresh egg
+    pasta (sfoglia) and slow-simmered meat sauces. Home to Parmigiano Reggiano
+    DOP, Aceto Balsamico Tradizionale di Modena DOP, Prosciutto di Parma DOP,
+    and the only Accademia Italiana della Cucina-deposited pasta dish
+    (Tagliatelle al Ragù, Bologna Chamber of Commerce, 1982/2023). Bologna's
+    'sfogline' tradition of hand-rolled fresh pasta has been nominated for
+    UNESCO intangible heritage status.
+  characteristic_ingredients:
+    - parmigiano_reggiano
+    - prosciutto_crudo
+    - mortadella
+    - burro
+    - carne_bovina
+    - carne_suina
+  traditional_sauces:
+    - meat_based
+
+- region_id: puglia
+  name: Puglia
+  description: >
+    The heel of Italy's boot, with the longest coastline of any
+    mainland Italian region. Pugliese pasta tradition is built on
+    durum wheat semolina rather than soft wheat or eggs: orecchiette,
+    cavatelli, strascinati, and tria are all hand-shaped from
+    semolina dough. The cuisine is shaped by cucina povera —
+    dishes built on bitter greens, legumes, anchovy, breadcrumbs,
+    and seafood from the Adriatic and Ionian coasts.
+  characteristic_ingredients:
+    - cime_di_rapa
+    - olio_extravergine_di_oliva
+    - acciuga_salata
+    - cozze
+    - ceci
+    - fagioli_cannellini
+    - pane_raffermo
+  traditional_sauces:
+    - vegetable_based
+    - seafood_based
+    - legume_based

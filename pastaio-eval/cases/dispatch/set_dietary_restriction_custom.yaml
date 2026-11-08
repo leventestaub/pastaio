@@ -1,0 +1,33 @@
+# dispatch/set_dietary_restriction_custom.yaml
+case_id: dispatch__set_dietary_restriction_custom
+category: dispatch
+description: |
+  User states a non-canonical restriction. Model should call
+  set_dietary_restriction with restriction="custom" and custom_text
+  carrying the user's words.
+
+  Known model failure mode: collapsing custom restrictions onto the
+  closest canonical (e.g. "no sesame" -> "vegan"). This case catches
+  that — assertion requires either restriction=custom OR explicit
+  custom_text. We assert subset on restriction=custom; if the model
+  picks a wrong canonical, this case fails and surfaces the failure.
+
+initial_state:
+  current_screen: home
+  dietary_restrictions: []
+
+turns:
+  - user_input: "I can't eat sesame"
+    asserts:
+      expect_tool_calls:
+        - tool: set_dietary_restriction
+          args_match: subset
+          expected_args:
+            restriction: custom
+      forbid_extra_tools: true
+      rubric: |
+        If the case fails, check whether the model emitted a wrong
+        canonical (vegan, no_pork, etc.) instead of custom. That's a
+        prompt rule failure to log, not a case bug.
+
+tags: [single_turn, write_tool, dietary, custom_restriction, known_hard]

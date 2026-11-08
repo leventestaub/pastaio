@@ -1,0 +1,20 @@
+case_id: dispatch__find_recipes_by_shape
+category: dispatch
+description: |
+  User on Discover asks for recipes for a specific shape. Model should
+  call find_recipes with shape=trofie. No state changes expected.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Show me recipes for trofie"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: subset
+          expected_args:
+            shape: trofie
+      forbid_extra_tools: true
+
+tags: [single_turn, read_tool, shape_filter]

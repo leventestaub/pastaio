@@ -1,0 +1,134 @@
+recipe_id: spaghetti-alla-puttanesca
+title: Spaghetti alla puttanesca
+shape_id: spaghetti
+region_id: campania
+sauce_category_id: tomato_based
+description: >
+  A pungent, umami-driven sauce utilizing the non-perishable staples
+  of the southern Italian pantry. Built upon a base of tomatoes,
+  black olives, capers, and garlic, the dish balances intense
+  salinity with sharp acidity. Originated in Ischia in the 1950s
+  per Annarita Cuomo's research; the Lazian variant adopts anchovies.
+cook_time_minutes: 20
+serves: 4
+
+ingredients:
+  - name: spaghetti
+    amount: 400
+    unit: g
+    notes: >
+      Accademia Italiana della Cucina's deposited Campanian recipe
+      uses linguine; spaghetti is the dominant pan-Italian form.
+  - name: pomodori_pelati
+    amount: 400
+    unit: g
+  - name: olive_di_gaeta
+    amount: 100
+    unit: g
+  - name: capperi
+    amount: 30
+    unit: g
+  - name: aglio
+    amount: 2
+    unit: piece
+  - name: olio_extravergine_di_oliva
+    amount: 50
+    unit: ml
+  - name: peperoncino
+    amount: 1
+    unit: piece
+  - name: acciughe
+    amount: 4
+    unit: piece
+    notes: >
+      Defines the Lazian variant; codified by Accademia Italiana
+      della Cucina's Linguine alla puttanesca recipe. Typically
+      omitted in the orthodox Campanian/Ischian genesis (Petti 1950s).
+
+steps:
+  - order: 1
+    text: >
+      In a wide skillet, heat the olive oil over medium heat. Add
+      the garlic cloves and the chili pepper. If preparing the
+      Lazian variant, add the anchovies now, pressing them until
+      they dissolve into the oil.
+  - order: 2
+    text: >
+      Rinse the capers thoroughly to remove excess salt. Once the
+      garlic is golden, add the capers and the roughly chopped
+      black olives. Sauté for two minutes.
+  - order: 3
+    text: >
+      Add the crushed tomatoes to the skillet. Reduce the heat and
+      simmer for 10 to 15 minutes. Taste carefully before adding
+      salt, as the capers and olives are naturally saline.
+  - order: 4
+    text: >
+      Boil the spaghetti in moderately salted water. Drain the
+      pasta two minutes shy of al dente, reserving pasta water.
+  - order: 5
+    text: >
+      Transfer the pasta into the simmering sauce. Toss vigorously,
+      adding pasta water as needed to bind the sauce to the pasta.
+      Serve immediately.
+
+tags: [campania, pantry_staple, umami]
+
+traditional_notes: >
+  Despite folklore linking the dish to Neapolitan brothels,
+  historical research by Annarita Cuomo attributes the invention
+  to Sandro Petti at the Rancio Fellone restaurant in Ischia in
+  the 1950s, improvised from pantry staples after patrons asked
+  for 'una puttanata qualsiasi'. Three contested points worth
+  surfacing: (a) Anchovies — the orthodox Campanian/Ischian
+  genesis omits them, relying on capers and olives for salinity;
+  the Lazian variant melts anchovies into the soffritto, and
+  Accademia Italiana della Cucina's deposited recipe codifies
+  this anchovy-inclusive version. (b) Pasta shape — Accademia
+  uses linguine, but spaghetti is the dominant pan-Italian
+  form. (c) Olives — Gaeta olives are traditional but other
+  black olive varieties are widely substituted.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Linguine alla puttanesca (Campania)
+    source_url: https://www.accademiaitalianadellacucina.it/it/ricette/ricetta/linguine-alla-puttanesca
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      In una larga padella con l'olio, imbiondire l'aglio e il
+      peperoncino e disfare le acciughe. Togliere l'aglio e
+      aggiungere i pomodori, le olive spezzettate e i capperi.
+    excerpt_translation: >
+      In a wide pan with oil, brown the garlic and chili and break
+      down the anchovies. Remove the garlic and add the tomatoes,
+      chopped olives, and capers.
+    accessed_date: 2026-05-03
+  - source_name: Cibo360 (citing Annarita Cuomo)
+    source_url: https://www.cibo360.it/cucina/mondo/pasta_puttanesca.htm
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Curiosa è la versione di Annarita Cuomo, secondo la quale la
+      pasta alla puttanesca sarebbe nata per caso ad opera di Sandro
+      Petti, co-proprietario del locale "Rancio Fellone" di Ischia.
+    excerpt_translation: >
+      Curious is the version of Annarita Cuomo, according to which
+      pasta alla puttanesca was born by chance by Sandro Petti,
+      co-owner of the venue "Rancio Fellone" in Ischia.
+    accessed_date: 2026-05-03
+  - source_name: Vice Italia
+    source_url: https://www.vice.com/it/article/origini-nome-pasta-alla-puttanesca/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      La giornalista Annarita Cuomo parla con tale Sandro Petti...
+      che rivendica esplicitamente l'origine del nome, affermando
+      che una sera ha pensato di creare una "puttanata qualsiasi".
+    excerpt_translation: >
+      Journalist Annarita Cuomo speaks with Sandro Petti... who
+      explicitly claims the origin of the name, stating that one
+      evening he thought of creating "any old puttanata".
+    accessed_date: 2026-05-03

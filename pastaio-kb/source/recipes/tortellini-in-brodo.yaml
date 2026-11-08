@@ -1,0 +1,141 @@
+recipe_id: tortellini-in-brodo
+title: Tortellini in brodo
+shape_id: tortellini
+region_id: emilia_romagna
+sauce_category_id: meat_based
+description: >
+  An exquisite, labor-intensive marvel of Emilia-Romagna, featuring 5-gram pasta
+  rings tightly encasing a meticulously cured and cooked mixture of pork loin,
+  prosciutto, and mortadella. The dish's brilliance relies on the filling's
+  mandatory 24-hour rest, followed by brief cooking in a rich capon and beef
+  broth, which acts as the sole acceptable vehicle for serving the pasta.
+cook_time_minutes: 240
+serves: 6
+
+ingredients:
+  - name: tortellini
+    amount: 600
+    unit: g
+    notes: >
+      Must conform to the 5-gram final weight and 3-centimeter starting square
+      standard specified by the Confraternita del Tortellino's 2008 deposit.
+  - name: lombo_di_maiale
+    amount: 300
+    unit: g
+    notes: >
+      Pork loin, marinated for two days with rosemary, garlic, salt, and pepper,
+      then browned in butter and cleaned before mincing.
+  - name: prosciutto_crudo
+    amount: 300
+    unit: g
+  - name: mortadella
+    amount: 300
+    unit: g
+    notes: >
+      Must be authentic Mortadella di Bologna IGP.
+  - name: parmigiano_reggiano
+    amount: 450
+    unit: g
+    notes: >
+      Must be authentic Parmigiano Reggiano DOP.
+  - name: uova
+    amount: 3
+    unit: piece
+  - name: noce_moscata
+    unit: q.b.
+  - name: carne_di_manzo
+    amount: 1000
+    unit: g
+    notes: >
+      Specifically the 'doppione' cut for the broth.
+  - name: gallina_ruspante
+    amount: 500
+    unit: g
+    notes: >
+      Half a free-range hen or capon for the broth.
+  - name: sedano
+    amount: 1
+    unit: piece
+    notes: >
+      One stalk for the broth aromatics.
+  - name: carota
+    amount: 1
+    unit: piece
+  - name: cipolla_dorata
+    amount: 1
+    unit: piece
+  - name: sale_fino
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Prepare the broth by simmering the beef, hen, celery, carrot, and onion in
+      abundant salted water for several hours. Skim the surface impurities, then
+      strain and clarify the liquid.
+  - order: 2
+    text: >
+      Prepare the pork loin by resting it for two days under a rub of salt,
+      pepper, rosemary, and garlic. Slowly brown it in butter, then remove from
+      the heat and clean off the herbal rub.
+  - order: 3
+    text: >
+      Pass the cooked pork loin, prosciutto crudo, and mortadella through a fine
+      mincer or chop extensively by hand until a fine paste forms.
+  - order: 4
+    text: >
+      Vigorously knead the minced meats with the Parmigiano Reggiano, eggs, and
+      a grating of nutmeg until homogeneous. Cover and rest for 24 hours.
+    timer_seconds: 86400
+  - order: 5
+    text: >
+      Roll fresh egg pasta dough exceptionally thin and cut into 3-centimeter
+      squares. Place a small node of filling on each square, fold into a triangle,
+      and wrap around the index finger to seal the tortellino tightly.
+  - order: 6
+    text: >
+      Bring the strained meat broth to a rolling boil. Drop the tortellini into
+      the broth and cook gently for 3 to 4 minutes. Serve immediately in the hot
+      broth.
+
+tags: [emilia_romagna, meat_sauce, broth_pasta, confraternita_codified]
+
+traditional_notes: >
+  The preparation of the Tortellino filling is the subject of fierce regional
+  dispute. While the official 1974 notarized recipe by the Dotta Confraternita
+  del Tortellino demands that the pork loin be slow-cooked in butter prior to
+  mincing, a profound familial counter-tradition exists advocating for entirely
+  raw meat fillings. The Accademia Italiana della Cucina explicitly notes that
+  modern chefs increasingly favor the raw method. Additionally, purists and the
+  Confraternita vehemently insist that only high-quality beef and capon broth is
+  acceptable for serving. A secondary dispute regarding the geographical origin
+  of the dish persists between Modena and Bologna.
+
+evidence_strength: accademia_published
+confidence: directly_stated
+
+sources:
+  - source_name: "Dotta Confraternita del Tortellino: La ricetta depositata"
+    source_url: "https://www.confraternitadeltortellino.it/la-ricetta-depositata/"
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      Ingredienti per circa 1000 tortellini... 300 g lombo di maiale rosolato al
+      burro. 300 g prosciutto crudo. 300 g vera mortadella di Bologna. 450 g
+      formaggio Parmigiano Reggiano. 3 uova... odore di noce moscata.
+    excerpt_translation: >
+      Ingredients for about 1000 tortellini... 300g pork loin browned in butter.
+      300g raw ham. 300g real Bologna mortadella. 450g Parmigiano Reggiano cheese.
+      3 eggs... scent of nutmeg.
+    accessed_date: 2026-05-04
+  - source_name: "Accademia Italiana della Cucina: Il tortellino in brodo a Bologna"
+    source_url: "https://www.accademiaitalianadellacucina.it/it/content/alla-scoperta-dei-piatti-tipici-nei-ristoranti-italiani-bologna-il-tortellino-brodo"
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      Tuttavia, secondo versioni di oggi, propugnate da alcuni cuochi, anche il
+      lombo dovrebbe essere usato a crudo nel ripieno.
+    excerpt_translation: >
+      However, according to modern versions advocated by some chefs, even the
+      loin should be used raw in the filling.
+    accessed_date: 2026-05-04

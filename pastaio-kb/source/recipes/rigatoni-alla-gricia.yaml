@@ -1,0 +1,119 @@
+recipe_id: rigatoni-alla-gricia
+title: Rigatoni alla Gricia
+shape_id: rigatoni
+region_id: lazio
+sauce_category_id: meat_based
+description: >
+  Pasta alla gricia is the pre-tomato ancestor of amatriciana —
+  guanciale, Pecorino Romano, black pepper, and starchy pasta water,
+  emulsified into a sauce. The Comune di Amatrice disciplinare for
+  Salsa all'Amatriciana explicitly defines a 'white' version,
+  identified as gricia, as the original pre-19th-century recipe of
+  the Monti della Laga shepherds. The dish is also formally listed
+  among the Prodotti Agroalimentari Tradizionali (PAT) of the
+  Region of Lazio.
+cook_time_minutes: 25
+serves: 4
+
+ingredients:
+  - name: rigatoni
+    amount: 400
+    unit: g
+    notes: Bucatini, spaghetti, tonnarelli, or mezze maniche are equally acceptable in Roman tradition.
+  - name: guanciale
+    amount: 150
+    unit: g
+    notes: Guanciale Amatriciano (PAT Lazio + Abruzzo) preferred. Not pancetta.
+  - name: pecorino_romano_dop
+    amount: 80
+    unit: g
+    notes: Finely grated; Pecorino di Amatrice acceptable.
+  - name: pepe_nero
+    unit: q.b.
+    notes: Freshly cracked, ideally pestled in a mortar.
+  - name: sale_grosso
+    unit: q.b.
+    notes: Salt the pasta water modestly — guanciale and pecorino are already salty.
+
+steps:
+  - order: 1
+    text: Bring a large pot of water to a boil; salt moderately.
+  - order: 2
+    text: Cut the guanciale into strips ~1 cm thick by 0.5 cm wide; remove the rind.
+  - order: 3
+    text: Place the guanciale into a cold dry pan and render over medium heat for ~10 minutes until the fat is translucent and the meat is golden. Don't let it burn — overcooked guanciale turns bitter.
+    timer_seconds: 600
+  - order: 4
+    text: Cook the rigatoni al dente, reserving abundant pasta cooking water.
+  - order: 5
+    text: Optional (Comune di Amatrice white-version method) — remove the guanciale and keep aside warm; deglaze the pan fat with a ladle of pasta water.
+  - order: 6
+    text: Drain the pasta into the pan with the rendered fat (or fat plus reserved guanciale). Add a ladle of starchy pasta water and toss vigorously off-heat.
+  - order: 7
+    text: Off the heat, add the grated Pecorino Romano in stages with more pasta water as needed, tossing until a glossy emulsion forms that coats every rigatone.
+  - order: 8
+    text: Plate immediately, finishing with a generous crack of black pepper and a little extra pecorino.
+
+tags:
+  - lazio
+  - cured_pork
+  - quick
+
+traditional_notes: >
+  Gricia has no EU STG, but the Comune di Amatrice disciplinare for
+  Salsa all'Amatriciana formally codifies the white (tomato-less)
+  version as gricia, and the dish is on Lazio's PAT register. It is
+  the technical ancestor of both amatriciana (= gricia + tomato) and
+  carbonara (= gricia + egg yolk), and shares its emulsion technique
+  with cacio e pepe. Contested points: (a) Etymology — Grisciano
+  (frazione of Accumoli, near Amatrice) versus the Roman 'grici'
+  food merchants from the Swiss Canton of Grisons. (b) White wine to
+  deglaze — common in Roman trattorie and on Italian recipe sites,
+  but NOT in the Comune di Amatrice's white version of the
+  disciplinare. (c) Pasta shape — modern Roman trattorie favor
+  rigatoni for the ridge-and-tube grip, but Amatrice tradition uses
+  spaghetti, and bucatini and tonnarelli also work.
+
+evidence_strength: comune_disciplinare
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Pastificio Strampelli (Amatrice) — English text of Comune di Amatrice disciplinare De.Co., including white (gricia) version
+    source_url: https://www.pastificiostrampelli.it/recipes/?lang=en
+    source_type: comune_disciplinare
+    source_tier: 1
+    quoted_excerpt: >
+      The original recipe, which is white and does not contain tomato,
+      is referred to as 'Gricia', and originated during the time when
+      Amatrice was part of ancient Abruzzo territory.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: ARSIAL (Lazio) — Prodotti Agroalimentari Tradizionali update
+    source_url: https://www.arsial.it/censiti-nel-lazio-18-nuovi-prodotti-agroalimentari-tradizionali-pat/
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: Confirms Lazio PAT register includes Gricia (Mipaaf DM 25 Feb 2022, GU 67/2022).
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: Italian Wikipedia — Pasta alla gricia (cited to Buccini 2007 and Anna Gosetti della Salda)
+    source_url: https://en.wikipedia.org/wiki/Pasta_alla_gricia
+    source_type: italian_wikipedia_with_citations
+    source_tier: 2
+    quoted_excerpt: >
+      According to one hypothesis, the name of the dish is derived
+      from the Romanesco word gricio [...] Others theorize that the
+      dish was invented in Grisciano, Lazio, near Amatrice.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: Slow Food Italia — 'Il senso del guanciale per Amatrice'
+    source_url: https://www.slowfood.it/il-senso-del-guanciale-per-amatrice/
+    source_type: slow_food_documentation
+    source_tier: 2
+    quoted_excerpt: >
+      Una tradizione incominciata durante le transumanze, quando
+      migliaia di pecore percorrevano i tratturi fino ai pascoli
+      della Capitanata.
+    excerpt_translation: >
+      A tradition that began during transhumance, when thousands of
+      sheep walked the cattle tracks to the pastures of Capitanata.
+    accessed_date: 2026-05-03

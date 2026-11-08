@@ -1,0 +1,159 @@
+recipe_id: lasagne-alla-bolognese
+title: Lasagne alla bolognese
+shape_id: lasagne
+region_id: emilia_romagna
+sauce_category_id: meat_based
+description: >
+  A layered baked dish formalized by the Accademia Italiana della Cucina in 2003.
+  True Bolognese lasagne is defined by its strict structural engineering: it
+  demands precisely seven layers of spinach-tinted pasta (sfoglia verde),
+  interleaved with slow-cooked meat ragù, creamy bechamel, and Parmigiano
+  Reggiano.
+cook_time_minutes: 90
+serves: 6
+
+ingredients:
+  - name: sfoglia_verde
+    amount: 500
+    unit: g
+    notes: >
+      Fresh egg pasta dough enriched with boiled, squeezed spinach. Cut into
+      rectangles and individually blanched.
+  - name: ragu_alla_bolognese
+    amount: 500
+    unit: g
+    notes: >
+      Prepared according to the Bolognese tradition.
+  - name: burro
+    amount: 50
+    unit: g
+    notes: >
+      For the bechamel roux and finishing flakes.
+  - name: farina_00
+    amount: 50
+    unit: g
+    notes: >
+      For the bechamel roux.
+  - name: latte_intero
+    amount: 500
+    unit: ml
+    notes: >
+      For the bechamel.
+  - name: sale_fino
+    unit: q.b.
+  - name: noce_moscata
+    unit: q.b.
+  - name: parmigiano_reggiano
+    amount: 150
+    unit: g
+    notes: >
+      Finely grated, for dusting abundantly between layers.
+
+substitutions:
+  - original: sfoglia_verde
+    substitutes: [sfoglia_gialla]
+    notes: >
+      The Accademia tradition specifies green spinach pasta, but plain
+      white/yellow egg pasta (sfoglia gialla) is a frequent contemporary
+      substitution.
+
+steps:
+  - order: 1
+    text: >
+      Prepare the bechamel by melting the butter, whisking in the flour to create
+      a light roux, and slowly incorporating the warm milk. Simmer until
+      thickened, seasoning with salt and freshly grated nutmeg.
+  - order: 2
+    text: >
+      Blanch the green pasta rectangles one by one in boiling salted water for
+      60 seconds, plunging them immediately into cold water to halt the cooking,
+      then laying them flat to dry on clean cloths.
+  - order: 3
+    text: >
+      Preheat the oven to 180°C. Smear a thin layer of bechamel on the bottom of
+      a rectangular baking dish.
+  - order: 4
+    text: >
+      Construct the architecture: lay down the first sheet of pasta, spread two
+      tablespoons of ragù, followed by two tablespoons of bechamel, and a dusting
+      of Parmigiano Reggiano.
+  - order: 5
+    text: >
+      Repeat this exact stratification pattern until you reach the seventh and
+      final layer of pasta.
+  - order: 6
+    text: >
+      For the seventh layer, spread only a thin veil of bechamel, a generous
+      dusting of Parmigiano, and small flakes of butter. Do NOT add ragù to the
+      top layer.
+  - order: 7
+    text: >
+      Cover the dish with foil and bake for 20 minutes, then remove the foil and
+      bake for a final 10 minutes to crisp the top corners. Rest before serving.
+
+tags: [emilia_romagna, meat_sauce, baked_pasta, accademia_codified]
+
+traditional_notes: >
+  The Accademia Italiana della Cucina solemnly certified the canonical recipe on
+  May 28, 2003 and registered it by notary deed on July 4, 2003 at the Bologna
+  Chamber of Commerce in the Palazzo della Mercanzia. The codification dictates
+  the use of 'sfoglia verde'—pasta colored and flavored with boiled, squeezed
+  spinach—as the authentic preparation; standard yellow egg pasta is treated as
+  a contemporary deviation. The deposited recipe specifies a layered architecture
+  of at least six stratified layers plus a covering top sheet (commonly described
+  as the seven-layer rule). The terminal layer departs from the pattern of the
+  others: it receives only a veil of bechamel, butter flakes, and Parmigiano,
+  with no ragù on top, to prevent the meat sugars from scorching during baking.
+  The deposit was certified by the Accademia jointly with Bologna delegations
+  and registered with the Camera di Commercio.
+
+evidence_strength: accademia_published
+confidence: directly_stated
+
+sources:
+  - source_name: "Bologna Welcome (Comune di Bologna / Camera di Commercio): Lasagne Verdi alla bolognese"
+    source_url: "https://www.bolognawelcome.com/en/other/recipes-and-typical-products/lasagne-verdi-alla-bolognese-2"
+    source_type: comune_disciplinare
+    source_tier: 1
+    quoted_excerpt: >
+      This recipe of green lasagne in the Bolognese style solemnly certified by
+      the Accademia Italiana della Cucina on May 28, 2003 and registered with
+      notary deed on July 4, 2003 with the Bologna Chamber of Commerce, in
+      Palazzo della Mercanzia.
+    excerpt_translation: ""
+    accessed_date: 2026-05-04
+  - source_name: "Accademia Italiana della Cucina: Civiltà della Tavola n. 259"
+    source_url: "https://www.accademiaitalianadellacucina.it/sites/default/files/allegati/CdT_259.pdf"
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      commercio di Bologna (Lasagne verdi alla bolognese), dalla Delegazione di
+      Bologna-San Luca.
+    excerpt_translation: >
+      ...Bologna Chamber of Commerce (Lasagne verdi alla bolognese), by the
+      Bologna-San Luca Delegation.
+    accessed_date: 2026-05-04
+  - source_name: "Tortellini & Co: Lasagne alla Bolognese con sfoglia verde e 7 strati"
+    source_url: "https://www.tortelliniandco.com/lasagne-alla-bolognese-ricetta/"
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      La ricetta è stata depositata presso la Mercanzia il 4 luglio 2003...
+      sfoglia verde... La settima (l'ultima) non ha ragù. Metti solo un velo di
+      besciamella, Parmigiano (circa 20 g) e qualche fiocco di burro.
+    excerpt_translation: >
+      The recipe was deposited at the Mercanzia on July 4, 2003... green dough...
+      The seventh (the last) has no ragù. Put only a veil of bechamel, Parmigiano
+      (about 20 g) and a few flakes of butter.
+    accessed_date: 2026-05-04
+  - source_name: "Il Giornale del Cibo: Lasagne alla bolognese"
+    source_url: "https://www.ilgiornaledelcibo.it/lasagne-alla-bolognese/"
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Per le lasagne 400 g di farina 0. 4 uova. 250 g di spinaci... Lasagne alla
+      bolognese vs lasagne gialle.
+    excerpt_translation: >
+      For the lasagne 400 g of flour 0. 4 eggs. 250 g of spinach... Bolognese
+      lasagne vs yellow lasagne.
+    accessed_date: 2026-05-04

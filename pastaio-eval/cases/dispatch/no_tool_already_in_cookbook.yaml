@@ -1,0 +1,19 @@
+# dispatch/no_tool_already_in_cookbook.yaml
+case_id: dispatch__no_tool_already_in_cookbook
+category: dispatch
+description: |
+  User on recipe screen asks "is this in my cookbook?" — answerable
+  from Context (cookbook list is in ChatContext). Should NOT call any
+  tool. Prompt rule 2.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+  cookbook: [trofie-al-pesto, spaghetti-alla-carbonara]
+
+turns:
+  - user_input: "Is this in my cookbook already?"
+    asserts:
+      expect_no_tools: true
+
+tags: [single_turn, no_tool, context_lookup]

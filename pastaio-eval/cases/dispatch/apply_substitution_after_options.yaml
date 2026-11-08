@@ -1,0 +1,39 @@
+# dispatch/apply_substitution_after_options.yaml
+case_id: dispatch__apply_substitution_after_options
+category: dispatch
+description: |
+  Two-turn case. Turn 1: user asks for a substitution, model calls
+  get_substitution_options. Turn 2: user picks one, model calls
+  apply_substitution.
+
+  This is the canonical apply_substitution dispatch path — it requires
+  a get_substitution_options call first per prompt rule 11. Tests
+  the read-then-write pattern in sequence.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+
+turns:
+  - user_input: "I don't have basil. What can I use instead?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_substitution_options
+          args_match: subset
+          expected_args:
+            missing_ingredient: basil
+      forbid_extra_tools: false
+
+  - user_input: "Let's go with parsley"
+    asserts:
+      expect_tool_calls:
+        - tool: apply_substitution
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+            original: basil
+            replacement: parsley
+      expect_state:
+        substitutions.trofie-al-pesto.basil: parsley
+
+tags: [multi_turn, read_then_write, substitution]

@@ -1,0 +1,112 @@
+recipe_id: spaghetti-aglio-olio-e-peperoncino
+title: Spaghetti aglio, olio e peperoncino
+shape_id: spaghetti
+region_id: campania
+sauce_category_id: oil_based
+description: >
+  A definitive exercise in minimalism, relying on the precise
+  thermal infusion of garlic and chili into extra-virgin olive oil.
+  The infused oil is tossed vigorously with pasta and its starchy
+  cooking water to create a light, cohesive sauce. Origin is
+  Campanian; widely adopted in Lazio as the classic
+  spaghettata di mezzanotte.
+cook_time_minutes: 15
+serves: 4
+
+ingredients:
+  - name: spaghetti
+    amount: 400
+    unit: g
+    notes: >
+      Accademia Italiana della Cucina codifies the Campanian variant
+      using vermicelli rather than spaghetti; both formats are
+      widely accepted.
+  - name: aglio
+    amount: 2
+    unit: piece
+  - name: olio_extravergine_di_oliva
+    amount: 60
+    unit: ml
+  - name: peperoncino
+    amount: 2
+    unit: piece
+  - name: prezzemolo
+    unit: q.b.
+    notes: >
+      Optional and contested. The Accademia Italiana della Cucina's
+      Campanian Vermicelli aglio e olio recipe explicitly includes
+      abundant chopped parsley; minimalist purists omit it entirely.
+  - name: sale_grosso
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Bring a large pot of water to a rolling boil. Salt the water
+      moderately and submerge the spaghetti.
+  - order: 2
+    text: >
+      In a wide, cold skillet, combine the extra-virgin olive oil,
+      sliced garlic, and chili peppers. Place over medium-low heat
+      to slowly extract the flavors, ensuring the garlic does not
+      brown.
+    timer_seconds: 180
+  - order: 3
+    text: >
+      Once the garlic turns a pale blond color, add a ladle of pasta
+      cooking water to halt the cooking process and prevent
+      bitterness.
+  - order: 4
+    text: >
+      Drain the spaghetti two to three minutes before al dente,
+      reserving additional starchy cooking water.
+  - order: 5
+    text: >
+      Transfer the spaghetti directly to the skillet. Toss vigorously
+      over medium-high heat, adding reserved water as needed, until
+      the oil and water bind into a sauce.
+  - order: 6
+    text: >
+      Remove from heat. Fold in the freshly chopped parsley if using,
+      and serve immediately.
+
+tags: [campania, vegetarian, quick, midnight_pasta]
+
+traditional_notes: >
+  The geographical origin of the dish is Campanian, though it has
+  been aggressively adopted in Lazio as the classic 'spaghettata di
+  mezzanotte' (midnight pasta). The primary orthodox debate centers
+  on parsley. The Accademia Italiana della Cucina's codified
+  Campanian variant uses vermicelli rather than spaghetti and
+  explicitly includes abundant chopped parsley off the heat; many
+  other Italian authorities omit parsley entirely to isolate the
+  raw garlic pungency. Both positions are heavily defended in
+  contemporary Italian cooking.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Vermicelli aglio e olio (Campania)
+    source_url: https://www.accademiaitalianadellacucina.it/it/ricette/ricetta/vermicelli-aglio-e-olio
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      Scolare la pasta molto al dente e condirla in una zuppiera da
+      portata, guarnita di abbondante prezzemolo tritato.
+    excerpt_translation: >
+      Drain the pasta very al dente and dress it in a serving bowl,
+      garnished with abundant chopped parsley.
+    accessed_date: 2026-05-03
+  - source_name: Identità Golose
+    source_url: https://www.identitagolose.it/sito/it/167/28246/ricette-dautore/spaghetti-a-mezzanotte-per-festeggiarelestate-e-la-fine-della-quarantena.html
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Ovvio: con una ricca Aglio, olio e peperoncino, perfetta per
+      due spaghi attorno alla mezzanotte. E' la classicissima
+      scelta...
+    excerpt_translation: >
+      Obvious: with a rich Aglio, olio e peperoncino, perfect for
+      two spaghi around midnight. It is the most classic choice...
+    accessed_date: 2026-05-03

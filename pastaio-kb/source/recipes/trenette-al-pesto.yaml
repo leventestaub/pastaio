@@ -1,0 +1,155 @@
+recipe_id: trenette-al-pesto
+title: Trenette al pesto
+shape_id: trenette
+region_id: liguria
+sauce_category_id: pesto_based
+description: >
+  The historical Genoese pasta pairing for pesto, predating the modern
+  commercial dominance of trofie. Long flat ribbon pasta dressed with
+  pesto Genovese, often in the 'avvantaggiato' style with green beans
+  and potatoes cooked in the same water.
+cook_time_minutes: 25
+serves: 4
+
+ingredients:
+  - name: trenette
+    amount: 400
+    unit: g
+    notes: >
+      Long, flat ribbon pasta. Often sold commercially as bavette;
+      linguine is an acceptable substitute.
+  - name: basilico_genovese
+    amount: 50
+    unit: g
+    notes: >
+      Young, small leaves; Basilico Genovese DOP per the Consorzio recipe.
+  - name: fagiolini
+    amount: 160
+    unit: g
+  - name: patate
+    amount: 160
+    unit: g
+  - name: olio_extravergine_di_oliva
+    amount: 60
+    unit: ml
+    notes: >
+      Riviera Ligure DOP preferred per the Consorzio recipe.
+  - name: parmigiano_reggiano
+    amount: 50
+    unit: g
+  - name: fiore_sardo
+    amount: 25
+    unit: g
+  - name: pinoli
+    amount: 15
+    unit: g
+  - name: aglio
+    amount: 2
+    unit: piece
+  - name: sale_grosso
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: >
+      Crush the peeled garlic with a few grains of coarse salt in a
+      marble mortar with a wooden pestle until a smooth paste forms.
+  - order: 2
+    text: >
+      Add the pine nuts and pestle them into the garlic paste.
+  - order: 3
+    text: >
+      Add the washed, dried basil leaves a few at a time and crush them
+      with a rotational motion against the walls of the mortar.
+  - order: 4
+    text: >
+      Fold in the grated Parmigiano Reggiano and Fiore Sardo, then
+      drizzle in the extra-virgin olive oil while stirring to form a
+      creamy emulsion. Transfer to a large bowl. Do not heat.
+  - order: 5
+    text: >
+      Bring a large pot of salted water to a boil. Add the diced
+      potatoes and green bean segments.
+  - order: 6
+    text: >
+      When the vegetables are nearly tender, add the trenette to the
+      same pot.
+  - order: 7
+    text: >
+      Drain the pasta and vegetables (reserving some cooking water),
+      then toss them into the bowl with the pesto off the heat, adding
+      drops of cooking water to adjust consistency.
+
+tags: [liguria, vegetarian, pesto, avvantaggiato, historical]
+
+traditional_notes: >
+  Trenette al pesto is recognized by the Accademia Italiana della
+  Cucina as the canonical Genoese pasta-and-pesto pairing in its
+  Ristoranti Storici rubric on Genoa. Trenette historically preceded
+  the modern dominance of trofie (which was originally an inland,
+  Recco-area home cooking tradition that became widely commercialized
+  in the late 20th century). The pesto recipe used is the same
+  codified by the Consorzio del Pesto Genovese; see the trofie al
+  pesto entry for full ingredient ratios. The 'avvantaggiato'
+  preparation — boiling pasta together with potatoes and green beans —
+  is, per the Consorzio, not part of the official pesto recipe but a
+  traditional Genoese serving practice.
+
+evidence_strength: contemporary_convention
+confidence: directly_stated
+
+sources:
+  - source_name: Accademia Italiana della Cucina — Ristoranti Storici (Genova, le trenette al pesto)
+    source_url: https://www.accademiaitalianadellacucina.it/it/content/alla-scoperta-dei-piatti-tipici-nei-ristoranti-italiani-genova-le-trenette-al-pesto
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      GENOVA — Le trenette al pesto. Nessuno può andare a Genova senza
+      gustare un buon piatto di trenette al vero pesto genovese. Il
+      pesto è fatto con pochi ingredienti pestati a freddo, ma le
+      ricette, e soprattutto le interpretazioni, sono molteplici, non
+      sempre accettabili.
+    excerpt_translation: >
+      GENOA — Trenette al pesto. No one can visit Genoa without enjoying
+      a good plate of trenette with true Genoese pesto. Pesto is made
+      with few ingredients pounded cold, but recipes, and especially
+      interpretations, are many, not always acceptable.
+    accessed_date: 2026-05-05
+
+  - source_name: Paolo Lingua, "Il mistero del pesto" — Civiltà della Tavola n.158 (2005), Accademia Italiana della Cucina
+    source_url: https://www.accademiaitalianadellacucina.it/sites/default/files/articoli_files/158_10.pdf
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      Il basilico, come componente primaria e cromatica del pesto, fa
+      la sua prima comparsa (in un documento scritto e stampato) nelle
+      due leggendarie "Cuciniere", quella di G.B. Ratto (1863) e quella
+      di Emanuele Rosso (1865). La salsa viene indicata come "battuto
+      alla genovese", con la parola "pesto" tra parentesi.
+    excerpt_translation: >
+      Basil, as the primary and color-defining component of pesto,
+      makes its first appearance (in a written and printed document)
+      in the two legendary Cuciniere — G.B. Ratto's (1863) and Emanuele
+      Rossi's (1865). The sauce is designated "battuto alla genovese,"
+      with the word "pesto" in parentheses.
+    accessed_date: 2026-05-05
+
+  - source_name: Slow Food — Ricette di Liguria
+    source_url: http://www.slowfood.it/wp-content/uploads/2017/04/ricette-liguria-1-15.pdf
+    source_type: slow_food_documentation
+    source_tier: 2
+    quoted_excerpt: >
+      Spostando l'attenzione ai primi, tutti pensano ovviamente al
+      pesto: gli ingredienti codificati di questo profumatissimo
+      condimento sono il basilico locale, che si fregia della Dop,
+      l'olio extravergine, parmigiano reggiano e pecorino sardo
+      grattugiati, aglio, pinoli, sale grosso. Accompagna trofie e
+      trenette, formati ampiamente adottati anche dall'industria.
+    excerpt_translation: >
+      Turning to first courses, everyone obviously thinks of pesto:
+      the codified ingredients of this aromatic condiment are local
+      basil, which carries the PDO designation, extra-virgin olive
+      oil, grated Parmigiano Reggiano and Pecorino Sardo, garlic,
+      pine nuts, coarse salt. It accompanies trofie and trenette,
+      formats also widely adopted by industry.
+    accessed_date: 2026-05-05

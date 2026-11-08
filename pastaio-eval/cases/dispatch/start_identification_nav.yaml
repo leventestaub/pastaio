@@ -1,0 +1,24 @@
+# dispatch/start_identification_nav.yaml
+case_id: dispatch__start_identification_nav
+category: dispatch
+description: |
+  User wants to identify a pasta shape via camera. Model should call
+  start_identification with no args. Tests no-args nav dispatch where
+  the user phrasing doesn't say "identify" — they say "scan", which the
+  tool description handles.
+
+initial_state:
+  current_screen: home
+
+turns:
+  - user_input: "Let me scan some pasta"
+    asserts:
+      expect_tool_calls:
+        - tool: start_identification
+          args_match: exact
+          expected_args: {}
+      forbid_extra_tools: true
+      expect_state:
+        current_screen: identify
+
+tags: [single_turn, navigation, no_args, paraphrase]

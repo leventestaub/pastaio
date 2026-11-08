@@ -1,0 +1,36 @@
+# coherence/correction_recipe_swap.yaml
+case_id: coherence__correction_recipe_swap
+category: coherence
+description: |
+  Conversational repair. User asks the model to do something with one
+  recipe, then corrects to a different one. Model should treat the
+  correction as authoritative, not perform both actions.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Save bucatini all'amatriciana to my cookbook"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: bucatini-allamatriciana
+      expect_state:
+        cookbook: [bucatini-allamatriciana]
+
+  - user_input: "Wait, I meant the gricia, not the matriciana. Switch them"
+    asserts:
+      expect_tool_calls:
+        - tool: save_to_cookbook
+          args_match: subset
+          expected_args:
+            recipe_id: rigatoni-alla-gricia
+      rubric: |
+        PASS: model saves rigatoni-alla-gricia. Acceptable to leave
+        bucatini-allamatriciana in cookbook (no remove tool exists in
+        v1) OR to acknowledge it can't remove. Either is honest.
+        FAIL: model doesn't save gricia, or saves a different recipe.
+
+tags: [two_turn, correction, repair, hand_graded]

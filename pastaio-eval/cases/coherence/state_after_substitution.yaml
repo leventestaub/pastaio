@@ -1,0 +1,49 @@
+# coherence/state_after_substitution.yaml
+case_id: coherence__state_after_substitution
+category: coherence
+description: |
+  Cross-turn state propagation. User applies a substitution (basil →
+  parsley) on trofie al pesto, then asks "does the recipe still need
+  basil?". The model should answer from the substituted state, not
+  the original recipe.
+
+  This tests whether the model reads ChatContext's substitutions field
+  (or reasons about the prior tool's effect) rather than answering
+  from the original recipe text.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+
+turns:
+  - user_input: "I don't have basil. What can I use?"
+    asserts:
+      expect_tool_calls:
+        - tool: get_substitution_options
+          args_match: subset
+          expected_args:
+            missing_ingredient: basil
+
+  - user_input: "Parsley works"
+    asserts:
+      expect_tool_calls:
+        - tool: apply_substitution
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+            original: basil
+            replacement: parsley
+      expect_state:
+        substitutions.trofie-al-pesto.basil: parsley
+
+  - user_input: "Does the recipe still need basil?"
+    asserts:
+      expect_no_tools: true
+      rubric: |
+        PASS: model reads the substitutions state and answers "no" or
+        "you swapped basil for parsley". May call get_recipe_details
+        and still pass IF the answer reflects the substitution.
+        FAIL: answer claims the recipe needs basil, ignoring the
+        substitution.
+
+tags: [three_turn, state_propagation, substitution_flow, hand_graded]

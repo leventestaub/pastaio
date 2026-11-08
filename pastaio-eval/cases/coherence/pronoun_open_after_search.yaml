@@ -1,0 +1,31 @@
+# coherence/pronoun_open_after_search.yaml
+case_id: coherence__pronoun_open_after_search
+category: coherence
+description: |
+  Pronoun reference one turn back. User searches for recipes, then
+  says "open the carbonara one" referring to a result from the prior
+  turn. Tests reference resolution where the antecedent is in the
+  prior assistant turn's tool results.
+
+initial_state:
+  current_screen: discover
+
+turns:
+  - user_input: "Show me long pasta dishes from Lazio"
+    asserts:
+      expect_tool_calls:
+        - tool: find_recipes
+          args_match: any
+
+  - user_input: "Open the carbonara one"
+    asserts:
+      expect_tool_calls:
+        - tool: open_recipe
+          args_match: subset
+          expected_args:
+            recipe_id: spaghetti-alla-carbonara
+      expect_state:
+        active_recipe_id: spaghetti-alla-carbonara
+        current_screen: recipe
+
+tags: [pronoun, two_turn, name_reference]

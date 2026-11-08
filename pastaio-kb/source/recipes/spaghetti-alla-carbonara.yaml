@@ -1,0 +1,137 @@
+recipe_id: spaghetti-alla-carbonara
+title: Spaghetti alla Carbonara
+shape_id: spaghetti
+region_id: lazio
+sauce_category_id: egg_based
+description: >
+  Carbonara is a Roman pasta dish that took its modern name and form
+  in the middle of the 20th century — pasta tossed off-heat with a
+  raw egg-and-Pecorino-Romano emulsion, rendered guanciale, and
+  abundant black pepper. The first published recipe appeared in the
+  Chicago guidebook Vittles and Vice in 1952; the first Italian
+  publication was La Cucina Italiana, August 1954, which called for
+  pancetta, Gruyère, and garlic. The 'guanciale-only, Pecorino-only,
+  no cream, no garlic, no onion' orthodoxy modern purists insist on
+  is itself a late-20th-century convergence.
+cook_time_minutes: 20
+serves: 4
+
+ingredients:
+  - name: spaghetti
+    amount: 400
+    unit: g
+    notes: Spaghettoni, rigatoni, or tonnarelli are also widely accepted.
+  - name: guanciale
+    amount: 150
+    unit: g
+    notes: >
+      Modern orthodoxy. Note — La Cucina Italiana 1954 and Ada Boni
+      1964 listed pancetta as equivalent or alternative; guanciale-only
+      convention emerged late 1980s-1990s.
+  - name: tuorli_d_uovo
+    amount: 4
+    unit: each
+    notes: >
+      Modern preference. Whole eggs (1 per person) is the older
+      convention; the egg-yolk-only version maximizes creaminess.
+  - name: pecorino_romano_dop
+    amount: 80
+    unit: g
+    notes: Finely grated. Some 20th-century recipes used Parmigiano or a Parmigiano/Pecorino mix; no longer considered orthodox in Italy.
+  - name: pepe_nero
+    unit: q.b.
+    notes: Freshly cracked, generously.
+  - name: sale_grosso
+    unit: q.b.
+
+steps:
+  - order: 1
+    text: Bring a large pot of water to a boil and salt moderately (guanciale and pecorino are salty).
+  - order: 2
+    text: Cut the guanciale into strips ~1 cm thick. Render in a dry cold pan over medium heat until the fat is translucent and the meat just colors — don't crisp it.
+  - order: 3
+    text: In a bowl, whisk the egg yolks with the grated Pecorino Romano and a generous amount of freshly cracked black pepper into a thick paste.
+  - order: 4
+    text: Cook the spaghetti al dente, reserving abundant pasta water.
+  - order: 5
+    text: Drain the pasta directly into the guanciale pan off-heat (or a few seconds off-flame); toss to coat in the rendered fat.
+  - order: 6
+    text: Loosen the egg-cheese paste with 2-3 tablespoons of hot pasta water until it pours like cream.
+  - order: 7
+    text: Off-heat (critical — residual pan must be warm but not actively cooking, or eggs scramble), pour the egg-cheese mixture over the pasta and toss vigorously until each strand is coated in a glossy sauce. Add more pasta water if too thick.
+  - order: 8
+    text: Plate immediately and finish with extra pecorino and another crack of pepper.
+
+tags:
+  - lazio
+  - cured_pork
+  - quick
+
+traditional_notes: >
+  Carbonara has NO Accademia Italiana della Cucina deposited recipe
+  (verified — Accademia's site search returns only restaurant-review
+  mentions). The 'canonical' five-ingredient rule (spaghetti,
+  guanciale, Pecorino Romano, egg yolks, black pepper) is contemporary
+  convention, not formal codification. Historically contested: (a) Pork
+  — La Cucina Italiana Aug 1954 used pancetta; Luigi Carnacina (1960)
+  was first to substitute guanciale; the guanciale-only insistence
+  dates to the 1990s. (b) Cheese — 1954 used Gruyère; Pecorino-only
+  became orthodoxy late 1950s-1960s. (c) Cream — used by major chefs
+  including Gualtiero Marchesi (1989, 250ml cream per 400g pasta);
+  cream disappeared from canonical recipes only in the 1990s.
+  (d) Whole egg vs. yolks — both have historical precedent. (e) Origin
+  — most likely 1944 Allied liberation of Rome (US Army K-rations of
+  bacon and powdered egg); shepherd-origin theories also circulate.
+  The dish is absent from Ada Boni's La Cucina Romana (1930), strong
+  evidence that it is post-WWII.
+
+evidence_strength: contemporary_convention
+confidence: synthesized_across_sources
+
+sources:
+  - source_name: Italian Wikipedia — Pasta alla carbonara (cited to Cesari, Trocino, Jannattoni 1991, La Cucina Italiana 1954)
+    source_url: https://it.wikipedia.org/wiki/Pasta_alla_carbonara
+    source_type: italian_wikipedia_with_citations
+    source_tier: 2
+    quoted_excerpt: >
+      Infine, la prima ricetta pubblicata in Italia risale ad agosto
+      1954 sulla rivista La Cucina italiana in una formulazione che
+      prevede la pancetta, il gruviera e l'aglio.
+    excerpt_translation: >
+      Finally, the first recipe published in Italy dates to August
+      1954 in the magazine La Cucina Italiana, in a formulation that
+      calls for pancetta, Gruyère, and garlic.
+    accessed_date: 2026-05-03
+  - source_name: La Cucina Italiana (US edition) — 'Carbonara Like It's 1954'
+    source_url: https://www.lacucinaitaliana.com/italian-food/how-to-cook/carbonara-how-we-did-it-in-50s
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Even if the 'right' way to make carbonara remains up for debate,
+      the recipe isn't codified like other Italian specialties.
+    excerpt_translation: ""
+    accessed_date: 2026-05-03
+  - source_name: Luca Cesari, ricettestoriche.it — multi-chapter history of carbonara (food historian)
+    source_url: https://www.ricettestoriche.it/2018/03/06/capitolo-3-gli-anni-doro-1960-2000/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      Il sorpasso definitivo [del binomio guanciale/pecorino] avviene
+      tra la metà e la fine degli anni Ottanta lasciando sempre meno
+      spazio alle alternative.
+    excerpt_translation: >
+      The definitive shift to the guanciale/pecorino pairing occurred
+      between the mid- and late 1980s, leaving ever less room for
+      alternatives.
+    accessed_date: 2026-05-03
+  - source_name: Gambero Rosso — 'La Carbonara del 1954' (Cesari interview, reproduces 1954 recipe)
+    source_url: https://www.gamberorosso.it/attualita/la-carbonara-del-1954-la-prima-ricetta-del-piatto-icona-di-roma-che-viene-da-milano-ed-e-fatta-con-laglio/
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      «Spaghetti gr. 400, pancetta gr. 150, gruviera gr. 100, uno
+      spicchio d'aglio, due uova, sale e pepe»
+    excerpt_translation: >
+      Spaghetti 400g, pancetta 150g, Gruyère 100g, a clove of garlic,
+      two eggs, salt and pepper.
+    accessed_date: 2026-05-03

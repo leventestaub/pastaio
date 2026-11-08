@@ -1,0 +1,16 @@
+case_id: dispatch__no_tool_for_greeting
+category: dispatch
+description: |
+  User sends a thank-you. Tests prompt rule 2 (no tool calls for
+  greetings/thanks/chitchat). Should produce zero tool calls and a
+  brief text reply.
+
+initial_state:
+  current_screen: home
+
+turns:
+  - user_input: "Thanks!"
+    asserts:
+      expect_no_tools: true
+
+tags: [single_turn, no_tool, prompt_rule_2]

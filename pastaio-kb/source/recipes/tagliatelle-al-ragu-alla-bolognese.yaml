@@ -1,0 +1,164 @@
+recipe_id: tagliatelle-al-ragu-alla-bolognese
+title: Tagliatelle al ragù alla bolognese
+shape_id: tagliatelle
+region_id: emilia_romagna
+sauce_category_id: meat_based
+description: >
+  The undisputed archetype of Emilian cuisine, utilizing a slow-simmered meat sauce
+  clinging to precisely cut fresh egg ribbons. The ragù relies on browning specific
+  beef cuts and pork belly, deglazing with wine, and slowly simmering with tomato
+  concentrate. Formally re-codified by the Accademia Italiana della Cucina in 2023
+  to reflect modern culinary advancements while protecting historical structural
+  integrity.
+cook_time_minutes: 180
+serves: 6
+
+ingredients:
+  - name: tagliatelle
+    amount: 600
+    unit: g
+    notes: >
+      Fresh egg pasta; Accademia specifies exactly 8mm width when cooked.
+  - name: polpa_di_manzo
+    amount: 400
+    unit: g
+    notes: >
+      Coarsely ground. The 2023 codification advises anterior cuts like shoulder
+      or brisket, replacing the historical cartella (diaphragm). A 60% beef to 40%
+      pork mixture is permitted.
+  - name: pancetta_fresca
+    amount: 150
+    unit: g
+    notes: >
+      Fresh pork belly, sliced and minced.
+  - name: cipolla_dorata
+    amount: 60
+    unit: g
+    notes: >
+      Must be finely chopped by hand on a board; food processors are discouraged.
+  - name: carota
+    amount: 60
+    unit: g
+  - name: sedano
+    amount: 60
+    unit: g
+  - name: vino_rosso_o_bianco
+    amount: 100
+    unit: ml
+  - name: passata_di_pomodoro
+    amount: 200
+    unit: g
+  - name: concentrato_di_pomodoro
+    amount: 15
+    unit: g
+    notes: >
+      Double concentrate.
+  - name: latte_intero
+    amount: 100
+    unit: ml
+    notes: >
+      Optional in the 2023 update, added halfway through cooking.
+  - name: brodo_di_carne
+    unit: q.b.
+    notes: >
+      Light meat or vegetable broth kept simmering to replenish liquid.
+  - name: olio_extravergine_di_oliva
+    amount: 45
+    unit: ml
+  - name: sale_fino
+    unit: q.b.
+  - name: pepe_nero
+    unit: q.b.
+
+substitutions:
+  - original: pancetta_fresca
+    substitutes: [pancetta_stesa, pancetta_arrotolata]
+    notes: >
+      The 2023 Accademia deposit explicitly allows stretched or rolled pancetta as
+      replacements for fresh pancetta, but strictly forbids smoked pancetta.
+
+steps:
+  - order: 1
+    text: >
+      Melt the minced pancetta in a heavy-bottomed casserole (24-26 cm diameter)
+      with the extra virgin olive oil over low heat until the fat renders.
+  - order: 2
+    text: >
+      Add the hand-chopped onion, carrot, and celery. Sauté gently over medium-low
+      heat, stirring continuously to prevent the onions from burning.
+  - order: 3
+    text: >
+      Increase the heat to medium-high and introduce the coarsely ground meat.
+      Cook thoroughly for approximately 10 minutes, stirring until the moisture
+      evaporates and the meat visibly sizzles in its fat.
+  - order: 4
+    text: >
+      Pour in the wine. Simmer until the liquid is entirely reduced and the
+      alcoholic aroma dissipates completely.
+  - order: 5
+    text: >
+      Stir in the tomato puree and the double concentrate. Add one cup of boiling
+      broth, lower the heat to a minimal simmer, and cover the vessel.
+  - order: 6
+    text: >
+      Simmer gently for 2 to 3 hours, periodically replenishing the moisture with
+      hot broth as needed.
+    timer_seconds: 7200
+  - order: 7
+    text: >
+      If utilizing milk, incorporate it halfway through the simmering process.
+      Adjust seasoning with salt and pepper before tossing with cooked tagliatelle.
+
+tags: [emilia_romagna, meat_sauce, sunday_pasta, accademia_codified]
+
+traditional_notes: >
+  The epistemological foundation of this dish underwent a historic shift on April
+  20, 2023, when the Accademia Italiana della Cucina officially superseded its
+  original 1982 notarized deposit. The 1982 orthodoxy mandated the use of the
+  'cartella' (beef diaphragm); however, the 2023 codification officially sanctions
+  anterior cuts (shoulder, brisket). Furthermore, contemporary practice frequently
+  utilizes a 60% beef to 40% pork mix, a variant explicitly approved in the updated
+  text. The inclusion of milk has been downgraded to an optional enrichment. The
+  Camera di Commercio deposit explicitly lists 'Varianti non ammesse' (unacceptable
+  variants): veal, smoked pancetta, garlic, rosemary, parsley, and flour for
+  thickening are all strictly forbidden.
+
+evidence_strength: accademia_published
+confidence: directly_stated
+
+sources:
+  - source_name: "Accademia Italiana della Cucina: Ricetta Aggiornata del Ragù alla Bolognese (2023)"
+    source_url: "https://www.accademiaitalianadellacucina.it/sites/default/files/Rag%C3%B9%20alla%20bolognese%20-%20ricetta%20aggiornata%2020%20aprile%202023.pdf"
+    source_type: accademia_publication
+    source_tier: 2
+    quoted_excerpt: >
+      In mancanza, o in aggiunta, sono da preferire i tagli anteriori ricchi di
+      collagene quali il muscolo, la spalla... VARIANTI AMMESSE: Carni miste:
+      manzo (circa il 60%) e maiale (circa il 40%).
+    excerpt_translation: >
+      In the absence of, or in addition to, collagen-rich front cuts such as
+      muscle, shoulder are to be preferred... ALLOWED VARIANTS: Mixed meats: beef
+      (about 60%) and pork (about 40%).
+    accessed_date: 2026-05-04
+  - source_name: "Camera di Commercio di Bologna: Depositata la rinnovata ricetta"
+    source_url: "https://www.bo.camcom.gov.it/it/blog/depositata-la-rinnovata-ricetta-del-vero-ragu-alla-bolognese"
+    source_type: comune_disciplinare
+    source_tier: 1
+    quoted_excerpt: >
+      VARIANTI NON AMMESSE. 1) Polpa di vitello; 2) Pancetta affumicata; 3) Solo
+      carne di maiale; 4) Aglio, rosmarino, prezzemolo, altri aromi o spezie;
+      5) Brandy... 6) Farina (per addensare).
+    excerpt_translation: >
+      VARIANTS NOT ALLOWED. 1) Veal pulp; 2) Smoked bacon; 3) Only pork meat;
+      4) Garlic, rosemary, parsley, other flavorings or spices; 5) Brandy...
+      6) Flour (to thicken).
+    accessed_date: 2026-05-04
+  - source_name: "Stefan Gourmet: The New Official Recipe for Ragù alla Bolognese"
+    source_url: "https://stefangourmet.com/2025/03/16/the-new-official-recipe-for-ragu-alla-bolognese/"
+    source_type: italian_culinary_magazine
+    source_tier: 3
+    quoted_excerpt: >
+      It is interesting to note that milk has gone from a fixed ingredient to an
+      optional one.
+    excerpt_translation: ""
+    accessed_date: 2026-05-04

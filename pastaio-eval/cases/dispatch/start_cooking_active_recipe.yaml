@@ -1,0 +1,27 @@
+# dispatch/start_cooking_active_recipe.yaml
+case_id: dispatch__start_cooking_active_recipe
+category: dispatch
+description: |
+  User on recipe screen says they want to start cooking. Should call
+  start_cooking with the active_recipe_id. Tests nav-with-recipe-id
+  dispatch and state transition into cooking mode.
+
+initial_state:
+  current_screen: recipe
+  active_recipe_id: trofie-al-pesto
+
+turns:
+  - user_input: "Let's start cooking this"
+    asserts:
+      expect_tool_calls:
+        - tool: start_cooking
+          args_match: subset
+          expected_args:
+            recipe_id: trofie-al-pesto
+      forbid_extra_tools: true
+      expect_state:
+        cooking_active: true
+        cooking_recipe_id: trofie-al-pesto
+        current_screen: cooking
+
+tags: [single_turn, navigation, cooking_mode_transition]

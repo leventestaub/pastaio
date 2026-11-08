@@ -1,0 +1,232 @@
+recipe_id: trofie-al-pesto
+title: Trofie al pesto
+shape_id: trofie
+region_id: liguria
+sauce_category_id: pesto_based
+description: >
+  The contemporary canonical pairing of pesto Genovese with hand-rolled
+  spiral trofie. Often prepared in the 'avvantaggiato' style, with green
+  beans and diced potatoes boiled in the same water as the pasta — a
+  traditional Genoese serving assembly distinct from the official pesto
+  recipe itself.
+cook_time_minutes: 25
+serves: 4
+
+ingredients:
+  - name: trofie
+    amount: 400
+    unit: g
+    notes: >
+      Hand-rolled fresh trofie, traditional in Liguria; dried trofie
+      (often produced in Recco) is also acceptable.
+  - name: basilico_genovese
+    amount: 50
+    unit: g
+    notes: >
+      Young, small leaves. The Consorzio del Pesto Genovese specifies
+      Basilico Genovese DOP. The DOP disciplinare requires "totale
+      assenza di aroma di menta" (total absence of mint-like notes) as
+      the discriminating organoleptic characteristic.
+  - name: fagiolini
+    amount: 160
+    unit: g
+    notes: >
+      Green beans, trimmed and cut into 3cm segments. Not part of the
+      Consorzio's official pesto recipe but a traditional Genoese
+      serving accompaniment.
+  - name: patate
+    amount: 160
+    unit: g
+    notes: >
+      Peeled and cut into small cubes. Not part of the Consorzio's
+      official pesto recipe but a traditional Genoese serving accompaniment;
+      the released starch helps emulsify the sauce when tossed off heat.
+  - name: olio_extravergine_di_oliva
+    amount: 60
+    unit: ml
+    notes: >
+      The Consorzio specifies "mezzo bicchiere" (about half a glass);
+      Riviera Ligure DOP is preferred, or oil from "regioni italiane
+      contigue" per the official recipe.
+  - name: parmigiano_reggiano
+    amount: 50
+    unit: g
+    notes: >
+      The Consorzio specifies 6 cucchiai (tablespoons); Grana Padano
+      DOP is permitted as a variant.
+  - name: fiore_sardo
+    amount: 25
+    unit: g
+    notes: >
+      The Consorzio recipe specifies Fiore Sardo (a Sardinian raw-milk
+      pecorino DOP), 2 cucchiai. Generic Pecorino Sardo or the much
+      sharper Pecorino Romano are not what the Consorzio recipe calls for.
+  - name: pinoli
+    amount: 15
+    unit: g
+    notes: >
+      Mediterranean pine nuts (Pinus pinea). The Consorzio specifies
+      "1 cucchiaio" (1 tablespoon).
+  - name: aglio
+    amount: 2
+    unit: piece
+    notes: >
+      The Consorzio's official recipe specifies 2 cloves (per 600g of pasta).
+      "Aglio dolce" — sweet garlic, ideally Aglio di Vessalico (a Slow
+      Food Presidium) if available.
+  - name: sale_grosso
+    unit: q.b.
+    notes: >
+      A few grains, per the Consorzio recipe ("qualche grano").
+
+steps:
+  - order: 1
+    text: >
+      Crush the peeled garlic and a few grains of coarse salt in a marble
+      mortar with a wooden pestle until creamy. (A blender may be used
+      with care — see traditional notes.)
+  - order: 2
+    text: >
+      Add the pine nuts and pestle them into the garlic paste.
+  - order: 3
+    text: >
+      Add the washed, dried basil leaves a few at a time and crush them
+      with a rotational motion against the walls of the mortar — the
+      Consorzio describes this as "stracciare, non tranciare" (tearing,
+      not cutting) — until you obtain a bright green paste.
+  - order: 4
+    text: >
+      Fold in the grated Parmigiano Reggiano and Fiore Sardo, then
+      drizzle in the extra-virgin olive oil while stirring to form
+      a creamy emulsion. Set the pesto aside in a large bowl. Do not
+      heat it.
+  - order: 5
+    text: >
+      Bring a large pot of salted water to a boil. Add the diced
+      potatoes and green bean segments.
+  - order: 6
+    text: >
+      When the vegetables are nearly tender, add the trofie to the same
+      pot. The starch released by the potatoes will help with sauce
+      consistency.
+  - order: 7
+    text: >
+      Once the pasta is cooked, transfer the trofie, potatoes, and
+      green beans to the bowl with the pesto. Add a splash of starchy
+      cooking water and toss off the heat until creamy.
+
+tags: [liguria, vegetarian, pesto, avvantaggiato]
+
+traditional_notes: >
+  The Consorzio del Pesto Genovese codifies the official recipe with
+  seven ingredients (per 600g of pasta): 50g Basilico Genovese DOP,
+  about half a glass of extra-virgin olive oil (preferably Riviera
+  Ligure), 6 tablespoons Parmigiano Reggiano DOP (Grana Padano variant
+  permitted), 2 tablespoons Pecorino DOP (Fiore Sardo), 2 garlic
+  cloves, 1 tablespoon Mediterranean pine nuts, and a few grains of
+  coarse salt. The Consorzio explicitly notes that potatoes and green
+  beans are not part of the official pesto recipe but are added to the
+  cooking water as part of the "antica tradizione genovese" — the
+  potato cubes contribute starch to the cooking water that helps
+  emulsify the final sauce. Pesto must be worked at room temperature
+  and finished as quickly as possible to avoid oxidation; it should
+  never be heated. The first written pesto recipe is in G.B. Ratto's
+  Cuciniera Genovese (1863) and Emanuele Rossi's (1865), where it is
+  called "battuto alla genovese (pesto)". Sardinian pecorino in
+  particular reflects centuries of Genoese maritime trade with
+  Sardinia, which during the 12th-14th centuries was effectively a
+  Genoese protectorate. Pesto alla Genovese is registered as a
+  Ligurian PAT (Prodotto Agroalimentare Tradizionale) on the Mipaaf
+  national register, establishing its traditional status (≥25 years
+  of consistent practice) without codifying ingredient ratios at the
+  STG/DOP level — the Basilico Genovese and Olio Riviera Ligure DOPs
+  protect the ingredients, not the recipe.
+
+evidence_strength: contemporary_convention
+confidence: directly_stated
+
+# Note: The recipe codification rests on the Consorzio del Pesto
+# Genovese (a producer consortium, not a regulatory body) plus
+# Mipaaf PAT registration of "pesto alla genovese" as a Ligurian
+# traditional product. The Basilico Genovese DOP and Olio Riviera
+# Ligure DOP back the *ingredients*, not the recipe. Pesto Genovese
+# itself has no STG/DOP protection — hence contemporary_convention
+# rather than stg_dop_protected.
+
+sources:
+  - source_name: Consorzio del Pesto Genovese — Ricetta ufficiale (riprodotta su Mangiareinliguria.it, indicato come fonte ufficiale su Wikipedia)
+    source_url: https://www.mangiareinliguria.it/pesto-genovese/ricetta-pesto-genovese
+    source_type: italian_culinary_magazine
+    source_tier: 2
+    quoted_excerpt: >
+      La vera ricetta tradizionale del Pesto Genovese è preparata con
+      i 7 ingredienti contemplati dal Consorzio: Basilico genovese
+      DOP, Olio extravergine d'oliva (Riviera Ligure), Parmigiano
+      Reggiano DOP (variante Grana Padano), Pecorino DOP (Fiore
+      Sardo), Pinoli, Aglio, Sale.
+    excerpt_translation: >
+      The true traditional recipe of Pesto Genovese is made with the
+      7 ingredients specified by the Consorzio: Basilico Genovese DOP,
+      extra-virgin olive oil (Riviera Ligure), Parmigiano Reggiano DOP
+      (Grana Padano variant), Pecorino DOP (Fiore Sardo), pine nuts,
+      garlic, salt.
+    accessed_date: 2026-05-05
+
+  - source_name: Disciplinare di produzione — Basilico Genovese DOP (Mipaaf, decreto 4 marzo 2025, GU n.61 del 14-3-2025)
+    source_url: https://www.madeinquality.it/wp-content/uploads/2025/05/Decreto-040325-Modifiche-ordinarie-Basilico-Genovese.pdf
+    source_type: comune_disciplinare
+    source_tier: 1
+    quoted_excerpt: >
+      La denominazione di origine protetta «Basilico Genovese» è
+      riservata, nel settore orticolo, al basilico (Ocimum Basilicum L.)
+      di tipologia genovese... assenza totale di aroma di menta; aroma
+      intenso e caratteristico. La zona di produzione del «Basilico
+      Genovese» D.O.P. è delimitata al solo versante tirrenico del
+      territorio amministrativo della Regione Liguria.
+    excerpt_translation: >
+      The Basilico Genovese PDO designation is reserved, in the
+      horticultural sector, for basil (Ocimum Basilicum L.) of the
+      Genoese type... total absence of mint-like aroma; intense and
+      characteristic aroma. The production zone of Basilico Genovese
+      DOP is delimited to the Tyrrhenian slope of the administrative
+      territory of the Liguria Region.
+    accessed_date: 2026-05-05
+
+  - source_name: Slow Food — Ricette di Liguria
+    source_url: http://www.slowfood.it/wp-content/uploads/2017/04/ricette-liguria-1-15.pdf
+    source_type: slow_food_documentation
+    source_tier: 2
+    quoted_excerpt: >
+      Spostando l'attenzione ai primi, tutti pensano ovviamente al
+      pesto: gli ingredienti codificati di questo profumatissimo
+      condimento sono il basilico locale, che si fregia della Dop,
+      l'olio extravergine, parmigiano reggiano e pecorino sardo
+      grattugiati, aglio, pinoli, sale grosso. Accompagna trofie e
+      trenette, formati ampiamente adottati anche dall'industria.
+    excerpt_translation: >
+      Turning to first courses, everyone obviously thinks of pesto:
+      the codified ingredients of this aromatic condiment are local
+      basil, which carries the PDO designation, extra-virgin olive
+      oil, grated Parmigiano Reggiano and Pecorino Sardo, garlic,
+      pine nuts, coarse salt. It accompanies trofie and trenette,
+      formats also widely adopted by industry.
+    accessed_date: 2026-05-05
+
+  - source_name: Mipaaf — Elenco dei Prodotti Agroalimentari Tradizionali (PAT) della Liguria
+    source_url: https://www.agriligurianet.it/it/impresa/marchi-e-disciplinari/riconoscimento-di-nuovi-prodotti-tradizionali.html
+    source_type: regional_government
+    source_tier: 1
+    quoted_excerpt: >
+      Si chiamano tradizionali quei prodotti agroalimentari i cui
+      metodi di lavorazione e conservazione risultano consolidati nel
+      tempo, omogenei per tutto il territorio interessato, secondo
+      regole tradizionali, per un periodo non inferiore ai venticinque
+      anni (ai sensi del D.Lgs. n.173/1998 e D.M. n.350/1999).
+    excerpt_translation: >
+      Traditional agroalimentary products are those whose processing
+      and conservation methods have been consolidated over time,
+      homogeneous throughout the territory concerned, according to
+      traditional rules, for a period of not less than twenty-five
+      years (per Legislative Decree 173/1998 and Ministerial Decree
+      350/1999).
+    accessed_date: 2026-05-05
