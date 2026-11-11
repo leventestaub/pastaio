@@ -9,6 +9,7 @@
  * user. The client itself does NOT retry — retry logic, when added, belongs
  * in the hook so it can show "retrying..." feedback to the user.
  */
+import { Platform } from 'react-native';
 import { BACKEND_URL } from '@/constants/config';
 import type {
   ChatRequest,
@@ -75,12 +76,17 @@ export const backend = {
   identify: async (imageUri: string): Promise<IdentifyResponse> => {
     // Multipart form for /identify since FastAPI expects UploadFile.
     const form = new FormData();
-    // React Native's FormData accepts this object shape for files.
-    form.append('image', {
-      uri: imageUri,
-      name: 'pasta.jpg',
-      type: 'image/jpeg',
-    } as unknown as Blob);
+    if (Platform.OS === 'web') {
+      // Browser FormData needs a real Blob; the picker returns a blob:/data: URI.
+      form.append('image', await (await fetch(imageUri)).blob(), 'pasta.jpg');
+    } else {
+      // React Native's FormData accepts this object shape for files.
+      form.append('image', {
+        uri: imageUri,
+        name: 'pasta.jpg',
+        type: 'image/jpeg',
+      } as unknown as Blob);
+    }
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), IDENTIFY_TIMEOUT_MS);

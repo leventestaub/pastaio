@@ -24,7 +24,6 @@ import { colors, fonts, radii, space } from '@/constants/theme';
 
 import { useSessionStore } from '@/stores/sessionStore';
 import { useMemoryStore } from '@/stores/memoryStore';
-const setActiveShape = useSessionStore((s) => s.setActiveShape);
 import {
   findRecipes,
   getShape,
@@ -37,6 +36,7 @@ export default function ShapeResultsScreen() {
   const { shape: shapeId } = useLocalSearchParams<{ shape: string }>();
 
   const setCurrentScreen = useSessionStore((s) => s.setCurrentScreen);
+  const setActiveShape = useSessionStore((s) => s.setActiveShape);
   const openAgentInput = useSessionStore((s) => s.openAgentInput);
   const cookingHistory = useMemoryStore((s) => s.cookingHistory);
 
