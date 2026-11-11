@@ -2,7 +2,7 @@
 //
 // Four tabs per FUNCTIONALITY_MAP §2: Home (index), Discover, Cookbook, Memory.
 // Custom tabBar prop replaces stock chrome with mono-uppercase labels and
-// custom pasta-shape icons. Active state uses passata color; inactive is ink30.
+// kitchen-object icons (pot, map pin, recipe book, notebook). Active state uses passata color; inactive is ink30.
 //
 // Note: the file STATE.md describes was built with these four tabs, but
 // the source you sent showed index+explore. I've gone with the documented
@@ -51,7 +51,7 @@ export default function TabLayout() {
                   gap: 4,
                 }}
               >
-                <ShapeIcon kind={iconKey} color={focused ? colors.passata : colors.ink30} />
+                <TabIcon kind={iconKey} color={focused ? colors.passata : colors.ink30} />
                 <Text
                   style={{
                     fontFamily: fonts.mono,
@@ -77,7 +77,7 @@ export default function TabLayout() {
   );
 }
 
-function ShapeIcon({ kind, color }: { kind: IconKey; color: string }) {
+function TabIcon({ kind, color }: { kind: IconKey; color: string }) {
   const size = 22;
   const sp = {
     stroke: color,
@@ -87,32 +87,35 @@ function ShapeIcon({ kind, color }: { kind: IconKey; color: string }) {
     fill: 'none',
   };
   switch (kind) {
-    case 'home': // orecchiette dimple
+    case 'home': // steaming pot: what you're cooking
       return (
         <Svg width={size} height={size} viewBox="0 0 24 24">
-          <Path d="M5 13c0-4 3-7 7-7s7 3 7 7-3 5-7 5-7-1-7-5z" {...sp} />
-          <Path d="M9 13c0-2 1.5-3.5 3-3.5s3 1.5 3 3.5-1.5 2.5-3 2.5-3-.5-3-2.5z" {...sp} strokeWidth={1} />
+          <Path d="M5 11h14v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z" {...sp} />
+          <Path d="M3 11h18" {...sp} />
+          <Path d="M9 4.5c-.8.8-.8 1.7 0 2.5M12 4c-.8.8-.8 1.7 0 2.5M15 4.5c-.8.8-.8 1.7 0 2.5" {...sp} />
         </Svg>
       );
-    case 'discover': // fusilli spiral
+    case 'discover': // map pin: shapes and regions
       return (
         <Svg width={size} height={size} viewBox="0 0 24 24">
-          <Path d="M9 4c4 1 4 4 0 5s-4 4 0 5 4 4 0 5" {...sp} />
-          <Path d="M15 4c-4 1-4 4 0 5s4 4 0 5-4 4 0 5" {...sp} />
+          <Path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0 1 13 0c0 5.2-6.5 11-6.5 11z" {...sp} />
+          <Circle cx={12} cy={10} r={2.4} {...sp} />
         </Svg>
       );
-    case 'cookbook': // tagliatelle nest
+    case 'cookbook': // recipe book with ribbon
       return (
         <Svg width={size} height={size} viewBox="0 0 24 24">
-          <Path d="M4 8c4-2 8-2 12 0M4 12c4-2 8-2 12 0M4 16c4-2 8-2 12 0" {...sp} />
-          <Path d="M16 6c2 0 4 2 4 5s-2 7-4 7" {...sp} />
+          <Path d="M6 4h11a1 1 0 0 1 1 1v15H7a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1z" {...sp} />
+          <Path d="M5 18a2 2 0 0 1 2-2h11" {...sp} />
+          <Path d="M10 4v6l1.5-1.2L13 10V4" {...sp} />
         </Svg>
       );
-    case 'memory': // farfalle bowtie
+    case 'memory': // notebook with pencil: what Pastaio remembers
       return (
         <Svg width={size} height={size} viewBox="0 0 24 24">
-          <Path d="M4 7l8 5-8 5V7zM20 7l-8 5 8 5V7z" {...sp} />
-          <Circle cx={12} cy={12} r={1.4} {...sp} strokeWidth={1} />
+          <Path d="M6 3h9a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" {...sp} />
+          <Path d="M8 8h5M8 11h5M8 14h3" {...sp} />
+          <Path d="M19 7l1.2 1.2-5 5-1.7.5.5-1.7z" {...sp} />
         </Svg>
       );
   }
