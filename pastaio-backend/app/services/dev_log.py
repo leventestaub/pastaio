@@ -245,15 +245,14 @@ def wrap_reasoning_client(client, backend_name: str):
         except Exception as e:
             log_error(rid, f"{original_class}.chat", e)
             raise
-        # token usage isn't part of ChatResponse currently. Providers like
-        # Groq surface it — if you want token logs, add a passthrough on
-        # ChatResponse and populate it from the client.
         log_llm_response(
             rid,
             backend_name,
             response.text,
             response.tool_calls,
             response.latency_ms,
+            token_usage={"prompt_tokens": response.prompt_tokens, "completion_tokens": response.completion_tokens}
+            if response.prompt_tokens is not None else None,
         )
         return response
 

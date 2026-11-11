@@ -11,8 +11,11 @@ from app.schemas.tools import (
 
 
 class ChatMessage(BaseModel):
-    role: Literal["user", "assistant", "system"]
+    role: Literal["user", "assistant", "system", "tool"]
     content: str
+    # Only set inside the server's agent loop. The app sends plain text turns.
+    tool_calls: list[ToolCall] = Field(default_factory=list)
+    tool_call_id: str | None = None
 
 
 class StoredObservation(BaseModel):
@@ -100,13 +103,31 @@ class ChatRequest(BaseModel):
     context: ChatContext = Field(default_factory=ChatContext)
 
 
-class ChatResponse(BaseModel):
-    """The LLM's turn output.
+class TraceCall(BaseModel):
+    name: str
+    arguments: dict
+    status: Literal["ok", "error", "action"]  # ok = data tool run on the server
+    error: str | None = None
 
-    `text` is what the user sees. `tool_calls` are actions for the app to
-    dispatch — the server never executes them. Both may be present; either
-    may be empty (pure text reply or pure action).
+
+class TraceStep(BaseModel):
+    """One LLM call inside a turn."""
+    latency_ms: int
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    calls: list[TraceCall] = Field(default_factory=list)
+
+
+class ChatResponse(BaseModel):
+    """The turn output (and, from a client, one LLM call's output).
+
+    `text` is what the user sees. `tool_calls` are the action tools for the
+    app to dispatch; data tools already ran on the server and show up only in
+    `trace`. Both may be present; either may be empty.
     """
     text: str
     tool_calls: list[ToolCall] = Field(default_factory=list)
     latency_ms: int
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    trace: list[TraceStep] = Field(default_factory=list)

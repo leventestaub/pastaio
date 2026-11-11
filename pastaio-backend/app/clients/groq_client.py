@@ -25,7 +25,6 @@ from app.clients.base import ReasoningClient
 from app.schemas.chat import ChatMessage, ChatResponse
 from app.schemas.tools import ToolCall, ToolName
 
-
 # Qwen3-32B on Groq. Same temperature philosophy as the Ollama client:
 # we want consistent tool-use behavior, not creative variety.
 DEFAULT_OPTIONS = {
@@ -97,7 +96,16 @@ class GroqClient(ReasoningClient):
     ) -> list[dict]:
         out: list[dict] = [{"role": "system", "content": system_prompt}]
         for m in messages:
-            out.append({"role": m.role, "content": m.content})
+            msg: dict = {"role": m.role, "content": m.content}
+            if m.tool_calls:
+                msg["tool_calls"] = [
+                    {"id": c.id, "type": "function",
+                     "function": {"name": c.name.value, "arguments": json.dumps(c.arguments)}}
+                    for c in m.tool_calls
+                ]
+            if m.tool_call_id:
+                msg["tool_call_id"] = m.tool_call_id
+            out.append(msg)
         return out
 
     @staticmethod
@@ -107,7 +115,7 @@ class GroqClient(ReasoningClient):
         Differences from Ollama:
         - choices[0].message instead of message
         - tool_calls[*].function.arguments is a JSON STRING, must parse
-        - tool_calls[*].id is present (we ignore it; not part of our schema)
+        - tool_calls[*].id is present; kept so tool results can reference it
         """
         msg = response.choices[0].message
         text = msg.content or ""
@@ -129,9 +137,16 @@ class GroqClient(ReasoningClient):
             except ValueError:
                 print(f"[GroqClient] unknown tool name: {name}")
                 continue
-            tool_calls.append(ToolCall(name=tool_name, arguments=arguments))
+            tool_calls.append(ToolCall(name=tool_name, arguments=arguments, id=raw.id))
 
-        return ChatResponse(text=text, tool_calls=tool_calls, latency_ms=latency_ms)
+        usage = getattr(response, "usage", None)
+        return ChatResponse(
+            text=text,
+            tool_calls=tool_calls,
+            latency_ms=latency_ms,
+            prompt_tokens=getattr(usage, "prompt_tokens", None),
+            completion_tokens=getattr(usage, "completion_tokens", None),
+        )
 
 
 def _to_openai_tool(td: dict) -> dict:

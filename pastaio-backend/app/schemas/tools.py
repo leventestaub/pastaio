@@ -179,6 +179,7 @@ class ToolCall(BaseModel):
     """
     name: ToolName
     arguments: dict[str, Any] = Field(default_factory=dict)
+    id: str | None = None  # provider's call id, links the tool-role reply
 
 
 def validate_tool_call(call: ToolCall) -> BaseModel:

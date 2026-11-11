@@ -5,7 +5,7 @@ per turn, dispatches tool calls into state, and hands off to asserts.
 
 Wire shape (matches `app/schemas/chat.py`):
   request  = { message: str, history: ChatMessage[], context: ChatContext }
-  response = { text: str, tool_calls: ToolCall[], latency_ms: int }
+  response = { text: str, tool_calls: ToolCall[], latency_ms: int, trace: TraceStep[] }
 
 Multi-turn: `history` carries prior real user + assistant turns. The
 backend's own loop in `chat_service.handle_chat` handles intra-turn
@@ -109,7 +109,12 @@ class CaseRunner:
         # trace and keep round-trip as a sanity check (~= inference + RTT).
         latency_ms = int(response.get("latency_ms") or round_trip_ms)
         text = response.get("text", "") or ""
-        tool_calls = response.get("tool_calls", []) or []
+        # Data tools run inside the backend's agent loop and appear only in
+        # its trace; tool_calls holds the action tools for the app.
+        server_calls = [
+            c for step in response.get("trace") or [] for c in step["calls"] if c["status"] == "ok"
+        ]
+        tool_calls = server_calls + (response.get("tool_calls", []) or [])
 
         # Update history *before* dispatching tools so that even if a tool
         # raises, the next turn sees a coherent conversation.

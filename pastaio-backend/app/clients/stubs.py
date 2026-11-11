@@ -39,7 +39,7 @@ class StubReasoningClient(ReasoningClient):
                 ToolCall(
                     name=ToolName.APPLY_SUBSTITUTION,
                     arguments={
-                        "recipe_id": "orecchiette-pugliese-01",
+                        "recipe_id": "trenette-al-pesto",
                         "original": "basil",
                         "replacement": "parsley",
                     },

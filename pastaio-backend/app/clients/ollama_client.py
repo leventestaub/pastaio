@@ -17,7 +17,6 @@ from app.clients.base import ReasoningClient
 from app.schemas.chat import ChatMessage, ChatResponse
 from app.schemas.tools import ToolCall, ToolName
 
-
 # Qwen2.5:3b sampling. temperature=0.3 because we want the model to follow
 # tool-use rules consistently, not be creative about when to call tools.
 # top_p=0.9 leaves enough variation that text responses don't feel robotic.
@@ -72,7 +71,12 @@ class OllamaClient(ReasoningClient):
         # build_system_prompt and passes it separately.
         out = [{"role": "system", "content": system_prompt}]
         for m in messages:
-            out.append({"role": m.role, "content": m.content})
+            msg: dict = {"role": m.role, "content": m.content}
+            if m.tool_calls:
+                msg["tool_calls"] = [
+                    {"function": {"name": c.name.value, "arguments": c.arguments}} for c in m.tool_calls
+                ]
+            out.append(msg)
         return out
 
     @staticmethod
@@ -106,7 +110,13 @@ class OllamaClient(ReasoningClient):
                 continue
             tool_calls.append(ToolCall(name=tool_name, arguments=arguments))
 
-        return ChatResponse(text=text, tool_calls=tool_calls, latency_ms=latency_ms)
+        return ChatResponse(
+            text=text,
+            tool_calls=tool_calls,
+            latency_ms=latency_ms,
+            prompt_tokens=_get(response, "prompt_eval_count"),
+            completion_tokens=_get(response, "eval_count"),
+        )
 
 
 def _to_ollama_tool(td: dict) -> dict:
