@@ -11,10 +11,11 @@ from tests.test_agent import Scripted, reply
 
 
 def test_every_kb_ingredient_and_replacement_is_classified():
+    # build.py enforces this too; this guards a hand-edited DB
     conn = sqlite3.connect(kb.KB_DB_PATH)
     names = {i["name"] for (ings,) in conn.execute("SELECT ingredients FROM recipes") for i in json.loads(ings)}
     names |= {r for (r,) in conn.execute("SELECT replacement_ingredient FROM substitutions")}
-    assert names - diet.INGREDIENT_CLASSES.keys() == set()
+    assert names - diet._tables()[0].keys() == set()
 
 
 def test_conflicts():
@@ -44,10 +45,6 @@ def _run_with(restriction, *replies):
     client = Scripted(*replies)
     ctx = ChatContext(current_screen="home",
                       dietary_restrictions=[StoredDietaryRestriction(restriction=restriction)])
-    import asyncio
-
-    from app.schemas.chat import ChatRequest
-    from app.services.chat_service import handle_chat
     asyncio.run(handle_chat(ChatRequest(message="hi", context=ctx), client))
     return json.loads(client.seen[1][-1].content)
 

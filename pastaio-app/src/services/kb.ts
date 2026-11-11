@@ -494,3 +494,37 @@ export async function getKbVersion(): Promise<KbVersion | null> {
     source_count: row.source_count,
   };
 }
+// ── Dietary classes (shared with the backend's restriction filter) ──
+
+export interface DietRules {
+  /** ingredient name -> classes ('pork', 'dairy', ...); [] = none restricted */
+  classes: Record<string, string[]>;
+  /** restriction -> classes it excludes */
+  excludes: Record<string, string[]>;
+}
+
+let dietRulesPromise: Promise<DietRules> | null = null;
+
+/** Loaded once. Empty rules if this DB copy predates the tables. */
+export function getDietRules(): Promise<DietRules> {
+  dietRulesPromise ??= (async () => {
+    const db = await openKb();
+    const rules: DietRules = { classes: {}, excludes: {} };
+    try {
+      for (const r of await db.getAllAsync<{ ingredient: string; class: string | null }>(
+        'SELECT ingredient, class FROM ingredient_classes',
+      )) {
+        (rules.classes[r.ingredient] ??= []).push(...(r.class ? [r.class] : []));
+      }
+      for (const r of await db.getAllAsync<{ restriction: string; class: string }>(
+        "SELECT restriction, class FROM restriction_classes WHERE severity = 'exclude'",
+      )) {
+        (rules.excludes[r.restriction] ??= []).push(r.class);
+      }
+    } catch (e) {
+      console.warn('[kb] no dietary class tables in this db copy', e);
+    }
+    return rules;
+  })();
+  return dietRulesPromise;
+}

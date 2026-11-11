@@ -37,7 +37,7 @@ import sys
 from datetime import date, datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 import yaml
 from pydantic import BaseModel, Field, ValidationError, model_validator
@@ -220,6 +220,16 @@ def load_substitutions(source_dir: Path) -> list[SubstitutionYaml]:
     return [SubstitutionYaml(**entry) for entry in raw]
 
 
+class IngredientClassesYaml(BaseModel):
+    restrictions: dict[str, dict[Literal["excludes", "caveats"], list[str]]]
+    ingredients: dict[str, list[str]]
+
+
+def load_ingredient_classes(source_dir: Path) -> IngredientClassesYaml:
+    path = source_dir / "ingredient_classes.yaml"
+    return IngredientClassesYaml(**(_load_yaml(path) or {"restrictions": {}, "ingredients": {}}))
+
+
 def load_recipes(source_dir: Path) -> list[RecipeYaml]:
     recipes_dir = source_dir / "recipes"
     if not recipes_dir.exists():
@@ -366,6 +376,7 @@ def build_db(
     sauce_categories: list[SauceCategoryYaml],
     recipes: list[RecipeYaml],
     substitutions: list[SubstitutionYaml],
+    classes: IngredientClassesYaml,
     verbose: bool = False,
 ) -> None:
     if output_path.exists():
@@ -513,6 +524,16 @@ def build_db(
         sub_source_rows,
     )
 
+    conn.executemany(
+        "INSERT INTO ingredient_classes VALUES (?, ?)",
+        [(n, c) for n, cs in classes.ingredients.items() for c in (cs or [None])],
+    )
+    conn.executemany(
+        "INSERT INTO restriction_classes VALUES (?, ?, ?)",
+        [(r, c, "exclude" if kind == "excludes" else "caveat")
+         for r, kinds in classes.restrictions.items() for kind, cs in kinds.items() for c in cs],
+    )
+
     # kb_version: one row, build metadata.
     conn.execute(
         """INSERT INTO kb_version
@@ -535,7 +556,8 @@ def build_db(
         for table in (
             "regions", "sauce_categories", "shapes", "recipes",
             "substitutions", "sources",
-            "recipe_sources", "substitution_sources", "kb_version",
+            "recipe_sources", "substitution_sources",
+            "ingredient_classes", "restriction_classes", "kb_version",
         ):
             count = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
             print(f"  {table}: {count} rows")
@@ -581,6 +603,7 @@ def main() -> int:
         sauce_categories = load_sauce_categories(args.source)
         substitutions = load_substitutions(args.source)
         recipes = load_recipes(args.source)
+        classes = load_ingredient_classes(args.source)
     except ValidationError as e:
         print(f"YAML validation failed:\n{e}", file=sys.stderr)
         return 1
@@ -591,6 +614,13 @@ def main() -> int:
     fk_errors = check_foreign_keys(
         shapes, regions, sauce_categories, recipes, substitutions
     )
+    used = {i.name for r in recipes for i in r.ingredients} | {
+        s.replacement_ingredient for s in substitutions
+    }
+    fk_errors += [
+        f"ingredient '{n}' has no entry in ingredient_classes.yaml"
+        for n in sorted(used - classes.ingredients.keys())
+    ]
     if fk_errors:
         print("Foreign key violations:", file=sys.stderr)
         for err in fk_errors:
@@ -613,6 +643,7 @@ def main() -> int:
         sauce_categories,
         recipes,
         substitutions,
+        classes,
         verbose=args.verbose,
     )
     print(f"Built {args.output}")

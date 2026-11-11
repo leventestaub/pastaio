@@ -171,6 +171,22 @@ CREATE TABLE substitution_sources (
     FOREIGN KEY (source_id) REFERENCES sources(source_id) ON DELETE CASCADE
 );
 
+-- Dietary classes: ingredient name -> class ('pork', 'dairy', ...), and
+-- which classes each restriction excludes or only flags. Source:
+-- source/ingredient_classes.yaml. Ingredients with no restricted class
+-- get one row with class NULL, so "classified" is checkable.
+CREATE TABLE ingredient_classes (
+    ingredient  TEXT NOT NULL,
+    class       TEXT
+);
+
+CREATE TABLE restriction_classes (
+    restriction TEXT NOT NULL,              -- DietaryRestriction value
+    class       TEXT NOT NULL,
+    severity    TEXT NOT NULL CHECK (severity IN ('exclude', 'caveat')),
+    PRIMARY KEY (restriction, class)
+);
+
 -- ── Indexes ───────────────────────────────────────────────────────
 -- For the queries the read tools actually do.
 

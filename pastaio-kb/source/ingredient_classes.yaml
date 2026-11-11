@@ -1,0 +1,109 @@
+# Ingredient classes for dietary restrictions.
+#
+# Every ingredient name used in source/recipes/*.yaml (and every
+# substitution replacement) must appear under `ingredients`; build.py
+# fails otherwise. Recipe filtering on the server and the restriction
+# banner in the app both read the resulting tables, so this is the one
+# place to classify an ingredient.
+#
+# This is ingredient classification, not a culinary claim, so entries
+# carry no sources. Conservative calls: calamari count as shellfish
+# (EU allergen lists separate molluscs, but "no shellfish" users rarely
+# mean squid is fine); filled and egg pasta carry their dough and
+# filling classes; DOP hard cheeses are made with animal rennet, a soft
+# caveat for vegetarians rather than an exclusion.
+
+restrictions:
+  vegetarian: {excludes: [meat, fish, shellfish], caveats: [animal_rennet]}
+  vegan: {excludes: [meat, fish, shellfish, dairy, egg]}
+  pescatarian: {excludes: [meat]}
+  gluten_free: {excludes: [gluten]}
+  dairy_free: {excludes: [dairy]}
+  no_pork: {excludes: [pork]}
+  no_shellfish: {excludes: [shellfish]}
+
+ingredients:
+  # animal_rennet, dairy
+  fiore_sardo: [animal_rennet, dairy]
+  parmigiano_reggiano: [animal_rennet, dairy]
+  pecorino_romano_dop: [animal_rennet, dairy]
+  # dairy
+  burro: [dairy]
+  latte_intero: [dairy]
+  # dairy, egg, gluten
+  pansoti: [dairy, egg, gluten]
+  # dairy, meat, pork
+  ragu_alla_bolognese: [dairy, meat, pork]
+  # egg
+  tuorli_d_uovo: [egg]
+  uova: [egg]
+  # egg, gluten
+  sfoglia_verde: [egg, gluten]
+  tagliatelle: [egg, gluten]
+  tortellini: [egg, gluten]
+  # fish
+  acciuga_salata: [fish]
+  acciughe: [fish]
+  # gluten
+  bucatini: [gluten]
+  cavatelli: [gluten]
+  farina_00: [gluten]
+  linguine: [gluten]
+  mollica_di_pane: [gluten]
+  mollica_di_pane_raffermo: [gluten]
+  orecchiette: [gluten]
+  rigatoni: [gluten]
+  spaghetti: [gluten]
+  strascinati: [gluten]
+  trenette: [gluten]
+  tria: [gluten]
+  trofie: [gluten]
+  # meat
+  brodo_di_carne: [meat]
+  carne_di_manzo: [meat]
+  gallina_ruspante: [meat]
+  polpa_di_manzo: [meat]
+  # meat, pork
+  guanciale: [meat, pork]
+  guanciale_amatriciano: [meat, pork]
+  lombo_di_maiale: [meat, pork]
+  mortadella: [meat, pork]
+  pancetta_fresca: [meat, pork]
+  prosciutto_crudo: [meat, pork]
+  # shellfish
+  calamari: [shellfish]
+  cozze: [shellfish]
+  scampi: [shellfish]
+  vongole: [shellfish]
+  # no restricted class
+  aglio: []
+  alloro: []
+  basilico_genovese: []
+  capperi: []
+  carota: []
+  ceci_secchi: []
+  cime_di_rapa: []
+  cipolla: []
+  cipolla_dorata: []
+  concentrato_di_pomodoro: []
+  fagioli_cannellini: []
+  fagiolini: []
+  noce_moscata: []
+  noci: []
+  olio_extravergine_di_oliva: []
+  olive_di_gaeta: []
+  passata_di_pomodoro: []
+  patate: []
+  pepe_nero: []
+  pepe_nero_in_grani: []
+  peperoncino: []
+  pinoli: []
+  pomodori_pelati: []
+  pomodorini: []
+  prezzemolo: []
+  sale: []
+  sale_fino: []
+  sale_grosso: []
+  sedano: []
+  vino_bianco_secco: []
+  vino_rosso_o_bianco: []

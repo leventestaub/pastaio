@@ -11,7 +11,7 @@
  * banner-using surfaces (cooking idle, cookbook starter, etc.) they
  * follow the same pattern: domain wrapper → Banner primitive.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Banner } from '@/components/primitives/Banner';
 import { useSessionStore } from '@/stores/sessionStore';
 import { useMemoryStore } from '@/stores/memoryStore';
@@ -19,7 +19,7 @@ import {
   detectIngredientConflicts,
   formatRestriction,
 } from '@/services/restrictionIngredients';
-import type { Ingredient } from '@/services/kb';
+import { getDietRules, type DietRules, type Ingredient } from '@/services/kb';
 
 export function RestrictionConflictBanner({
   ingredients,
@@ -28,12 +28,17 @@ export function RestrictionConflictBanner({
 }) {
   const restrictions = useMemoryStore((s) => s.dietaryRestrictions);
   const openAgentInput = useSessionStore((s) => s.openAgentInput);
+  const [rules, setRules] = useState<DietRules | null>(null);
+  useEffect(() => {
+    getDietRules().then(setRules);
+  }, []);
 
-  if (restrictions.length === 0) return null;
+  if (restrictions.length === 0 || !rules) return null;
 
   const conflicts = detectIngredientConflicts({
     ingredientNames: ingredients.map((i) => i.name),
     restrictions,
+    rules,
   });
 
   if (conflicts.length === 0) return null;
@@ -55,7 +60,7 @@ export function RestrictionConflictBanner({
   return (
     <Banner
       tint="warning"
-      title={`Contains ${primary.matchedIngredient.toLowerCase()}, which conflicts with your ${restrictionLabel} preference${moreText}.`}
+      title={`Contains ${primary.matchedIngredient.replace(/_/g, ' ')}, which conflicts with your ${restrictionLabel} preference${moreText}.`}
       sub="Tap to ask Pastaio for a substitute"
       onPress={openAgentInput}
     />
