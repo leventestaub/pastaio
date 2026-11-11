@@ -32,6 +32,9 @@ import { backend, BackendError } from '@/services/backend';
 import { getShape, type ShapeDetails } from '@/services/kb';
 import type { IdentifyResponse } from '@/services/backendTypes';
 
+// Mirrors app/schemas/identify.py :: UNKNOWN
+const UNKNOWN_SHAPE = 'unknown';
+
 type State =
   | { kind: 'idle' }
   | { kind: 'identifying'; imageUri: string }
@@ -63,7 +66,8 @@ export default function IdentifyScreen() {
     try {
       const response = await backend.identify(imageUri);
       const kbShape = await getShape(response.shape).catch(() => null);
-      setActiveShape(response.shape);
+      // 'unknown' = not pasta or not a KB shape; don't feed it to the agent as a shape.
+      setActiveShape(response.shape === UNKNOWN_SHAPE ? null : response.shape);
       setState({ kind: 'result', imageUri, response, kbShape });
     } catch (err) {
       const message = err instanceof BackendError ? err.message : String(err);
@@ -229,14 +233,18 @@ export default function IdentifyScreen() {
               }}
             />
 
-            <Text variant="mono" accent>
-              {Math.round(state.response.confidence * 100)}% match · {(state.response.latency_ms / 1000).toFixed(1)}s
-            </Text>
+            {state.response.shape !== UNKNOWN_SHAPE && (
+              <Text variant="mono" accent>
+                {Math.round(state.response.confidence * 100)}% match · {(state.response.latency_ms / 1000).toFixed(1)}s
+              </Text>
+            )}
             <Text
               variant="display"
               style={{ fontSize: 48, lineHeight: 48, marginTop: 4 }}
             >
-              {state.kbShape?.canonical_name ?? state.response.shape}
+              {state.response.shape === UNKNOWN_SHAPE
+                ? 'Not sure.'
+                : state.kbShape?.canonical_name ?? state.response.shape}
             </Text>
 
             {state.kbShape?.region_canonical_name && (
@@ -251,39 +259,45 @@ export default function IdentifyScreen() {
               </Text>
             )}
 
-            {!state.kbShape && (
+            {state.response.shape === UNKNOWN_SHAPE ? (
+              <Text variant="body" muted style={{ marginTop: 8 }}>
+                This doesn't look like one of the shapes in the knowledge base. Try a closer photo of the dry pasta.
+              </Text>
+            ) : !state.kbShape && (
               <Text variant="body" muted style={{ marginTop: 8, fontStyle: 'italic' }}>
                 Not in the local knowledge base yet.
               </Text>
             )}
 
-            <Pressable
-              onPress={() => router.push(`/shape/${state.response.shape}`)}
-              style={({ pressed }) => ({
-                marginTop: 20,
-                paddingVertical: 14,
-                backgroundColor: colors.passata,
-                borderRadius: radii.md,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-                opacity: pressed ? 0.92 : 1,
-              })}
-            >
-              <Text style={{ fontFamily: fonts.sansSemibold, fontSize: 15, color: colors.bone }}>
-                Find recipes
-              </Text>
-              <Svg width={14} height={14} viewBox="0 0 24 24" fill="none">
-                <Path
-                  d="M5 12 H 18 M 13 6 L 19 12 L 13 18"
-                  stroke={colors.bone}
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </Svg>
-            </Pressable>
+            {state.response.shape !== UNKNOWN_SHAPE && (
+              <Pressable
+                onPress={() => router.push(`/shape/${state.response.shape}`)}
+                style={({ pressed }) => ({
+                  marginTop: 20,
+                  paddingVertical: 14,
+                  backgroundColor: colors.passata,
+                  borderRadius: radii.md,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  opacity: pressed ? 0.92 : 1,
+                })}
+              >
+                <Text style={{ fontFamily: fonts.sansSemibold, fontSize: 15, color: colors.bone }}>
+                  Find recipes
+                </Text>
+                <Svg width={14} height={14} viewBox="0 0 24 24" fill="none">
+                  <Path
+                    d="M5 12 H 18 M 13 6 L 19 12 L 13 18"
+                    stroke={colors.bone}
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+              </Pressable>
+            )}
 
             {state.response.alternatives.length > 0 && (
               <>

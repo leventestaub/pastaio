@@ -21,22 +21,7 @@ from typing import Any
 import ollama
 
 from app.clients.base import VisionClient
-from app.schemas.identify import IdentifyResponse
-
-
-# Constrained vocabulary. Mirrors the shapes in pastaio-kb/source/shapes.yaml.
-# Lives here (not in the KB) because the backend deliberately doesn't read
-# the KB. When you add shapes, update this list manually.
-#
-# Order doesn't matter to the model; sorted alphabetically for review ease.
-KB_SHAPES = [
-    "bucatini",
-    "orecchiette",
-    "penne",
-    "spaghetti",
-    "trofie",
-    # Add more as the KB grows toward the spec target of ~40 shapes.
-]
+from app.schemas.identify import IdentifyResponse, build_identify_prompt
 
 
 # Sampling. Default Qwen3-VL recipe is temperature=1.0, top_p=0.95, top_k=20,
@@ -74,21 +59,6 @@ IDENTIFY_OUTPUT_SCHEMA: dict[str, Any] = {
 }
 
 
-def _build_prompt() -> str:
-    shapes_list = ", ".join(KB_SHAPES)
-    return f"""You are a pasta shape identifier. Look at the image and identify which pasta shape it shows.
-
-You MUST choose from this list of valid pasta shapes:
-{shapes_list}
-
-Return JSON with these fields:
-- shape: the most likely shape from the list above (string)
-- confidence: how confident you are, 0.0 to 1.0 (number)
-- alternatives: up to 2 runner-up guesses, each with shape and confidence (array)
-
-If the image does not show pasta, or shows a pasta shape not in the list, pick the closest visual match from the list and lower the confidence accordingly. Do not invent shape names."""
-
-
 class OllamaVisionClient(VisionClient):
     """Talks to a local Ollama instance running qwen3-vl:4b."""
 
@@ -117,7 +87,7 @@ class OllamaVisionClient(VisionClient):
             messages=[
                 {
                     "role": "user",
-                    "content": _build_prompt(),
+                    "content": build_identify_prompt(),
                     "images": [encoded],
                 }
             ],
@@ -149,27 +119,7 @@ class OllamaVisionClient(VisionClient):
                 f"VLM returned non-JSON content: {text[:200]!r}"
             ) from e
 
-        # Defensive coercion. The schema enforces presence + types but
-        # bounds aren't part of JSON Schema's "type": "number".
-        shape = str(data.get("shape", "")).strip()
-        confidence = max(0.0, min(1.0, float(data.get("confidence", 0.0))))
-
-        raw_alts = data.get("alternatives") or []
-        alternatives: list[tuple[str, float]] = []
-        for alt in raw_alts[:3]:  # cap at 3
-            if not isinstance(alt, dict):
-                continue
-            alt_shape = str(alt.get("shape", "")).strip()
-            alt_conf = max(0.0, min(1.0, float(alt.get("confidence", 0.0))))
-            if alt_shape and alt_shape != shape:
-                alternatives.append((alt_shape, alt_conf))
-
-        return IdentifyResponse(
-            shape=shape,
-            confidence=confidence,
-            alternatives=alternatives,
-            latency_ms=latency_ms,
-        )
+        return IdentifyResponse.from_model_json(data, latency_ms)
 
 
 def _get(obj: Any, key: str) -> Any:

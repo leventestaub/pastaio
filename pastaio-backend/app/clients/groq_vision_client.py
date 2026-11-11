@@ -1,12 +1,11 @@
 """Groq-backed vision client for Stage 1 identification.
 
-Uses Llama 4 Scout via Groq's OpenAI-compatible chat endpoint. Single-
-purpose: identify a pasta shape from one image, return constrained JSON.
+Uses Qwen3.8 27B (multimodal) via Groq's OpenAI-compatible chat endpoint.
+Single-purpose: identify a pasta shape from one image, return constrained JSON.
 
-Justified by spike: Llama 4 Scout achieves ≥75% top-1 on KB shapes,
-matching Qwen3-VL on distinctive shapes and showing the same systematic
-blind spots (bucatini→spaghetti). The swap is for free-tier cloud
-deployment, not for accuracy gains.
+History: the original spike used Llama 4 Scout (75% top-1 on a 4-class,
+20-image subset, same bucatini→spaghetti blind spot as Qwen3-VL). Groq has
+since retired Scout; accuracy on the current model is measured in Phase 3.
 """
 import base64
 import json
@@ -14,26 +13,10 @@ import os
 import time
 from typing import Any
 
-from groq import AsyncGroq
+from groq import AsyncGroq, BadRequestError
 
 from app.clients.base import VisionClient
-from app.schemas.identify import IdentifyResponse
-
-
-# Constrained vocabulary. Mirrors KB shapes — keep in sync when KB grows.
-KB_SHAPES = [
-    "spaghetti",
-    "bucatini",
-    "rigatoni",
-    "tonnarelli",
-    "linguine",
-    "tagliatelle",
-    "tortellini",
-    "lasagne",
-    "trofie",
-    "trenette",
-    "pansoti",
-]
+from app.schemas.identify import IdentifyResponse, build_identify_prompt
 
 
 DEFAULT_OPTIONS = {
@@ -43,54 +26,12 @@ DEFAULT_OPTIONS = {
 }
 
 
-# Strict JSON schema. Groq strict mode requires `additionalProperties: false`
-# on EVERY object level, not just the root — that's why this looks
-# verbose. Without it on the alternatives item, you get:
-#   "additionalProperties:false must be set on every object"
-IDENTIFY_OUTPUT_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "shape": {"type": "string"},
-        "confidence": {"type": "number"},
-        "alternatives": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "shape": {"type": "string"},
-                    "confidence": {"type": "number"},
-                },
-                "required": ["shape", "confidence"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    "required": ["shape", "confidence", "alternatives"],
-    "additionalProperties": False,
-}
-
-
-def _build_prompt() -> str:
-    shapes_list = ", ".join(KB_SHAPES)
-    return f"""You are a pasta shape identifier. Look at the image and identify which pasta shape it shows.
-
-You MUST choose from this list of valid pasta shapes:
-{shapes_list}
-
-Return JSON with these fields:
-- shape: the most likely shape from the list above (string)
-- confidence: how confident you are, 0.0 to 1.0 (number)
-- alternatives: up to 2 runner-up guesses, each with shape and confidence (array)
-
-If the image does not show pasta, or shows a pasta shape not in the list, pick the closest visual match from the list and lower the confidence accordingly. Do not invent shape names."""
-
-
 class GroqVisionClient(VisionClient):
-    """Talks to Groq's chat API with Llama 4 Scout for vision identification."""
+    """Talks to Groq's chat API with a multimodal model for vision identification."""
 
     def __init__(
         self,
-        model: str = "meta-llama/llama-4-scout-17b-16e-instruct",
+        model: str = "qwen/qwen3.8-27b",
         api_key: str | None = None,
         options: dict[str, Any] | None = None,
     ):
@@ -109,28 +50,33 @@ class GroqVisionClient(VisionClient):
         encoded = base64.b64encode(image_bytes).decode("ascii")
         data_url = f"data:image/jpeg;base64,{encoded}"
 
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": build_identify_prompt()},
+                    {"type": "image_url", "image_url": {"url": data_url}},
+                ],
+            }
+        ]
         start = time.monotonic()
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": _build_prompt()},
-                        {"type": "image_url", "image_url": {"url": data_url}},
-                    ],
-                }
-            ],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "pasta_identification",
-                    "schema": IDENTIFY_OUTPUT_SCHEMA,
-                    "strict": True,
-                },
-            },
-            **self.options,
-        )
+        # json_object, not strict json_schema: under the schema Qwen3.8 sometimes
+        # loops ('{"shapes":[{"confidence":[...') and Groq rejects the whole
+        # generation. Vocabulary is enforced in from_model_json instead.
+        for attempt in range(2):
+            try:
+                response = await self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    response_format={"type": "json_object"},
+                    # Qwen3 thinking breaks JSON output; same setting as GroqClient.
+                    reasoning_effort="none",
+                    **self.options,
+                )
+                break
+            except BadRequestError as e:
+                if attempt == 1 or "json_validate_failed" not in str(e):
+                    raise
         latency_ms = int((time.monotonic() - start) * 1000)
         return self._parse_response(response, latency_ms)
 
@@ -143,23 +89,4 @@ class GroqVisionClient(VisionClient):
             raise ValueError(
                 f"VLM returned non-JSON: {text[:200]!r}"
             ) from e
-
-        shape = str(data.get("shape", "")).strip()
-        confidence = max(0.0, min(1.0, float(data.get("confidence", 0.0))))
-
-        raw_alts = data.get("alternatives") or []
-        alternatives: list[tuple[str, float]] = []
-        for alt in raw_alts[:3]:
-            if not isinstance(alt, dict):
-                continue
-            alt_shape = str(alt.get("shape", "")).strip()
-            alt_conf = max(0.0, min(1.0, float(alt.get("confidence", 0.0))))
-            if alt_shape and alt_shape != shape:
-                alternatives.append((alt_shape, alt_conf))
-
-        return IdentifyResponse(
-            shape=shape,
-            confidence=confidence,
-            alternatives=alternatives,
-            latency_ms=latency_ms,
-        )
+        return IdentifyResponse.from_model_json(data, latency_ms)
