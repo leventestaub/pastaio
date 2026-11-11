@@ -6,18 +6,13 @@ resolvers without needing a snapshot file. Read-only; no state changes.
 from __future__ import annotations
 
 import sqlite3
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/kb", tags=["debug"])
 
 
-# Path resolution: the KB lives at pastaio-kb/pastaio-kb.db at the
-# monorepo root. If your layout is different, adjust this constant.
-KB_DB_PATH = (
-    Path(__file__).resolve().parents[3] / "pastaio-kb" / "pastaio-kb.db"
-)
+from app.services.kb import KB_DB_PATH
 
 
 @router.get("/recipes", response_model=list[str])
