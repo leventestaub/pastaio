@@ -5,6 +5,7 @@ from collections import defaultdict, deque
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from groq import APIError, RateLimitError
 
 from app.api import chat, identify, kb_debug
 
@@ -20,10 +21,20 @@ RATE_LIMITS = {"/chat": 10, "/identify": 5}
 _hits: dict[tuple[str, str], deque[float]] = defaultdict(deque)
 
 
+# Groq failures as clean JSON. Unhandled errors would become a bare 500 without
+# CORS headers, which the browser reports as "can't reach the server".
+@app.exception_handler(APIError)
+async def groq_error(request: Request, exc: APIError):
+    if isinstance(exc, RateLimitError):
+        return JSONResponse({"detail": "The demo has used up its free AI quota for now. Try again later."}, status_code=503)
+    return JSONResponse({"detail": "The AI service had a problem. Try again."}, status_code=502)
+
+
 @app.middleware("http")
 async def rate_limit(request: Request, call_next):
-    # ponytail: in-memory, single worker, X-Forwarded-For is spoofable;
-    # move to a shared store if the demo ever runs more than one replica.
+    # ponytail: in-memory per instance (a soft cap on Vercel, where several
+    # instances can run), X-Forwarded-For is spoofable. Groq's own limit is
+    # the hard cap; move to a shared store (e.g. Upstash) if abuse shows up.
     limit = RATE_LIMITS.get(request.url.path)
     if limit and request.method == "POST":
         ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip()

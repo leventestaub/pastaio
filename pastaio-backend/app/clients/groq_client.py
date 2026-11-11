@@ -19,7 +19,7 @@ import os
 import time
 from typing import Any
 
-from groq import AsyncGroq
+from groq import AsyncGroq, BadRequestError
 
 from app.clients.base import ReasoningClient
 from app.schemas.chat import ChatMessage, ChatResponse
@@ -68,16 +68,25 @@ class GroqClient(ReasoningClient):
         groq_tools = [_to_openai_tool(td) for td in tool_definitions]
 
         start = time.monotonic()
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=groq_messages,
-            tools=groq_tools,
-            tool_choice="auto",
-            # Disable Qwen3's reasoning mode. Same lesson as Ollama
-            # think=False: small models dispatch worse with reasoning on.
-            reasoning_effort="none",
-            **self.options,
-        )
+        # Groq rejects the whole generation when the model calls a tool name
+        # that doesn't exist (tool_use_failed); sampling again usually fixes it.
+        # ponytail: blind retry; Phase 2A adds proper tool-call validation/repair.
+        for attempt in range(2):
+            try:
+                response = await self.client.chat.completions.create(
+                    model=self.model,
+                    messages=groq_messages,
+                    tools=groq_tools,
+                    tool_choice="auto",
+                    # Disable Qwen3's reasoning mode. Same lesson as Ollama
+                    # think=False: small models dispatch worse with reasoning on.
+                    reasoning_effort="none",
+                    **self.options,
+                )
+                break
+            except BadRequestError as e:
+                if attempt == 1 or "tool_use_failed" not in str(e):
+                    raise
         latency_ms = int((time.monotonic() - start) * 1000)
 
         return self._parse_response(response, latency_ms)
