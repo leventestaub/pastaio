@@ -34,8 +34,29 @@ const UNREACHABLE =
   "Couldn't reach the Pastaio server. If the demo has been idle it takes up to a minute to wake up. Try again shortly.";
 
 function httpError(path: string, status: number, text: string): BackendError {
+  // The backend's 429/502/503 bodies carry a message written for the user.
+  if ([429, 502, 503].includes(status)) {
+    try {
+      const { detail } = JSON.parse(text);
+      if (typeof detail === 'string') return new BackendError(detail, status);
+    } catch {}
+  }
   if (status === 429) return new BackendError('Too many requests. Wait a minute and try again.', status);
   return new BackendError(`${path} returned ${status}: ${text || 'no body'}`, status);
+}
+
+// Web only: the picker hands back the original file, which can exceed the
+// host's 4.5 MB body limit. 1280 px is plenty for shape identification.
+async function downscaleForUpload(uri: string, maxSide = 1280): Promise<Blob> {
+  const bitmap = await createImageBitmap(await (await fetch(uri)).blob());
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('image encode failed'))), 'image/jpeg', 0.85)
+  );
 }
 
 // Fire-and-forget on app start so a sleeping demo backend starts waking
@@ -87,7 +108,7 @@ export const backend = {
     const form = new FormData();
     if (Platform.OS === 'web') {
       // Browser FormData needs a real Blob; the picker returns a blob:/data: URI.
-      form.append('image', await (await fetch(imageUri)).blob(), 'pasta.jpg');
+      form.append('image', await downscaleForUpload(imageUri), 'pasta.jpg');
     } else {
       // React Native's FormData accepts this object shape for files.
       form.append('image', {
