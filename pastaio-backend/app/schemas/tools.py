@@ -85,6 +85,7 @@ class FindRecipesArgs(BaseModel):
 
 class GetRecipeDetailsArgs(BaseModel):
     recipe_id: str
+    servings: int | None = Field(None, gt=0, le=50)  # scale ingredient amounts to this many people
 
 
 class GetSubstitutionOptionsArgs(BaseModel):
@@ -218,9 +219,12 @@ TOOL_DEFINITIONS: list[ToolDefinition] = [
         name=ToolName.FIND_RECIPES,
         description=(
             "Search the recipe collection. Filter by pasta shape and/or "
-            "search by free-text terms in the title or description. "
-            "Returns up to 10 matching recipes with id, title, region, and "
-            "cook time. Call get_recipe_details for full ingredients and steps."
+            "search by a free-text term in the title, description or an "
+            "ingredient name (Italian, e.g. guanciale, pecorino, basilico). "
+            "Returns up to 10 matching recipes with id, title, region, cook "
+            "time and ingredient names. Recipes that break the user's dietary "
+            "restrictions are left out and listed under 'excluded' with the "
+            "reason. Call get_recipe_details for quantities and steps."
         ),
         parameters=_schema_for(FindRecipesArgs),
     ),
@@ -229,8 +233,10 @@ TOOL_DEFINITIONS: list[ToolDefinition] = [
         description=(
             "Fetch full details for one recipe by ID: ingredients with "
             "quantities, steps, cook time, region, traditional pairings. "
-            "Use when the user asks specifics about a recipe you have not "
-            "already loaded."
+            "Pass servings to get quantities scaled to that many people; "
+            "never scale amounts yourself. The result lists conflicts with "
+            "the user's dietary restrictions. Use when the user asks "
+            "specifics about a recipe you have not already loaded."
         ),
         parameters=_schema_for(GetRecipeDetailsArgs),
     ),

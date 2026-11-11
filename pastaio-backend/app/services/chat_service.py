@@ -28,7 +28,7 @@ from app.schemas.chat import (
     TraceStep,
 )
 from app.schemas.tools import ToolCall, ToolName, validate_tool_call
-from app.services import kb
+from app.services import diet, kb
 from app.services.prompts import build_system_prompt
 from app.services.tool_filter import tools_for_context
 
@@ -64,7 +64,7 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
             if error:
                 result, status, had_error = {"error": error}, "error", True
             elif call.name in DATA_TOOLS:
-                result, status, needs_data = _run_data_tool(call), "ok", True
+                result, status, needs_data = _run_data_tool(call, request.context.dietary_restrictions), "ok", True
             else:
                 result, status = ACTION_ACK, "action"
                 if not any(a.name == call.name and a.arguments == call.arguments for a in actions):
@@ -108,15 +108,30 @@ def _check(call: ToolCall) -> str | None:
     return None
 
 
-def _run_data_tool(call: ToolCall) -> dict:
+def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
+    """Run a data tool; dietary restrictions from Context act as hard filters."""
     args = call.arguments
     if call.name == ToolName.FIND_RECIPES:
         shape = args.get("shape")
-        return {"recipes": kb.find_recipes(shape_id=shape.lower() if shape else None, query=args.get("query"))}
+        recipes, excluded = [], []
+        for r in kb.find_recipes(shape_id=shape.lower() if shape else None, query=args.get("query")):
+            found = diet.conflicts([{"name": n} for n in r["ingredient_names"]], restrictions)["conflicts"]
+            if found:
+                excluded.append({"recipe_id": r["recipe_id"], "title": r["title"], "conflicts": found})
+            else:
+                recipes.append(r)
+        return {"recipes": recipes, **({"excluded": excluded} if excluded else {})}
     if call.name == ToolName.GET_RECIPE_DETAILS:
-        return {"recipe": kb.get_recipe_details(args["recipe_id"])}
+        recipe = kb.get_recipe_details(args["recipe_id"])
+        if recipe and args.get("servings"):
+            recipe["ingredients"] = kb.scale_ingredients(recipe["ingredients"], recipe["serves"], args["servings"])
+            recipe["serves"] = args["servings"]
+        if recipe and restrictions:
+            recipe["dietary_check"] = diet.conflicts(recipe["ingredients"], restrictions)
+        return {"recipe": recipe}
+    options = kb.get_substitution_options(args["missing_ingredient"], args.get("recipe_id"))
     return {
-        "options": kb.get_substitution_options(args["missing_ingredient"], args.get("recipe_id")),
+        "options": [o for o in options if not diet.conflicts([{"name": o["replacement"]}], restrictions)["conflicts"]],
         "missing_ingredient": args["missing_ingredient"],
     }
 

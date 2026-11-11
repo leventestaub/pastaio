@@ -30,21 +30,35 @@ def _connect() -> sqlite3.Connection:
 
 
 def find_recipes(shape_id: str | None = None, query: str | None = None, limit: int = 10) -> list[dict]:
-    where, params = [], []
-    if shape_id:
-        where.append("shape_id = ?")
-        params.append(shape_id)
-    if query and query.strip():
-        where.append("(LOWER(title) LIKE ? OR LOWER(description) LIKE ?)")
-        pattern = f"%{query.strip().lower()}%"
-        params += [pattern, pattern]
-    clause = f"WHERE {' AND '.join(where)}" if where else ""
+    """Recipes matching shape and/or query; the query hits title, description
+    or an ingredient name ("guanciale", "pecorino", "basilico")."""
+    sql = "SELECT recipe_id, title, region_id, cook_time_minutes, description, ingredients FROM recipes"
     with _connect() as conn:
-        rows = conn.execute(
-            f"SELECT recipe_id, title, region_id, cook_time_minutes FROM recipes {clause} LIMIT ?",
-            [*params, limit],
-        ).fetchall()
-    return [dict(r) for r in rows]
+        rows = conn.execute(sql + (" WHERE shape_id = ?" if shape_id else ""), [shape_id] if shape_id else []).fetchall()
+    q = (query or "").strip().lower()
+    out = []
+    for r in rows:
+        names = [i["name"] for i in json.loads(r["ingredients"])]
+        haystack = [r["title"].lower(), r["description"].lower(), *(n.replace("_", " ") for n in names)]
+        if q and not any(q in h for h in haystack):
+            continue
+        out.append({"recipe_id": r["recipe_id"], "title": r["title"], "region_id": r["region_id"],
+                    "cook_time_minutes": r["cook_time_minutes"], "ingredient_names": names})
+    return out[:limit]
+
+
+def scale_ingredients(ingredients: list[dict], serves: int, servings: int) -> list[dict]:
+    """Amounts scaled from `serves` to `servings`; "q.b." (to taste) stays unscaled."""
+    factor = servings / serves
+    scaled = []
+    for ing in ingredients:
+        amount = ing.get("amount")
+        if amount is not None:
+            amount *= factor
+            # grams/ml to the nearest 5 above 50, counts to the nearest half
+            amount = (round(amount / 5) * 5 if amount > 50 else round(amount)) if ing.get("unit") in ("g", "ml")                 else max(0.5, round(amount * 2) / 2)
+        scaled.append({**ing, "amount": amount})
+    return scaled
 
 
 def get_recipe_details(recipe_id: str) -> dict | None:
