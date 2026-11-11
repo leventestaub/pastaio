@@ -70,12 +70,40 @@ def get_recipe_details(recipe_id: str) -> dict | None:
                FROM recipes WHERE recipe_id = ?""",
             [recipe_id],
         ).fetchone()
-    if row is None:
-        return None
-    recipe = dict(row)
-    for key in ("ingredients", "steps", "tags"):
-        recipe[key] = json.loads(recipe[key])
+        if row is None:
+            return None
+        recipe = dict(row)
+        for key in ("ingredients", "steps", "tags"):
+            recipe[key] = json.loads(recipe[key])
+        recipe["pairing"] = _pairing(conn, recipe["shape_id"], recipe["sauce_category_id"])
+        recipe["sources"] = [dict(r) for r in conn.execute(
+            """SELECT s.source_name AS name, s.source_url AS url, s.source_tier AS tier,
+                      s.quoted_excerpt AS excerpt
+               FROM sources s JOIN recipe_sources rs USING (source_id)
+               WHERE rs.recipe_id = ? ORDER BY s.source_tier""",
+            [recipe_id],
+        )]
     return recipe
+
+
+def _pairing(conn: sqlite3.Connection, shape_id: str, sauce_id: str | None) -> dict:
+    """Why this shape goes with this sauce, as the KB states it."""
+    shape = conn.execute(
+        "SELECT canonical_name, description, traditional_sauces FROM shapes WHERE shape_id = ?", [shape_id]
+    ).fetchone()
+    sauce = conn.execute(
+        "SELECT canonical_name, description FROM sauce_categories WHERE sauce_category_id = ?", [sauce_id]
+    ).fetchone()
+    traditional = json.loads(shape["traditional_sauces"]) if shape else []
+    return {
+        "shape": shape["canonical_name"] if shape else shape_id,
+        "shape_description": shape["description"].strip() if shape else None,
+        "sauce_category": sauce["canonical_name"] if sauce else sauce_id,
+        "sauce_category_description": sauce["description"].strip() if sauce else None,
+        "shape_traditional_sauces": traditional,
+        # False also when the shape lists none: the KB is silent, not contradicting
+        "listed_as_traditional": sauce_id in traditional,
+    }
 
 
 def get_substitution_options(missing_ingredient: str, recipe_id: str | None = None) -> list[dict]:

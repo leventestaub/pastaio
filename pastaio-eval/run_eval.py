@@ -136,7 +136,7 @@ def main() -> int:
         finished_at=finished_at,
         backend_url=args.backend,
         model=os.environ.get("PASTAIO_GROQ_LLM_MODEL", "qwen/qwen3.8-27b"),
-        prompt_version=os.environ.get("PROMPT_VERSION_OVERRIDE", "v8"),
+        prompt_version=os.environ.get("PROMPT_VERSION_OVERRIDE", "v9"),
         n_cases=len(case_results),
         n_passed_majority=sum(1 for cr in case_results if cr.majority_passed),
         by_category=dict(by_category),

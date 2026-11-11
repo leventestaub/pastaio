@@ -42,3 +42,11 @@ def test_committed_db_matches_yaml_sources(tmp_path):
     assert dump(fresh) == dump(kb.KB_DB_PATH), (
         "app/kb/pastaio-kb.db is stale: python pastaio-kb/build.py --output pastaio-backend/app/kb/pastaio-kb.db"
     )
+
+
+def test_recipe_details_carry_pairing_and_sources():
+    trofie = kb.get_recipe_details("trofie-al-pesto")
+    assert trofie["pairing"]["listed_as_traditional"] is True and trofie["pairing"]["shape_description"]
+    assert trofie["sources"] and all(s["url"].startswith("http") for s in trofie["sources"])
+    assert [s["tier"] for s in trofie["sources"]] == sorted(s["tier"] for s in trofie["sources"])
+    assert kb.get_recipe_details("orecchiette-cime-di-rapa")["pairing"]["listed_as_traditional"] is False

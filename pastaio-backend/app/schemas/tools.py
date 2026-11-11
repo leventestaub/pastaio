@@ -232,7 +232,8 @@ TOOL_DEFINITIONS: list[ToolDefinition] = [
         name=ToolName.GET_RECIPE_DETAILS,
         description=(
             "Fetch full details for one recipe by ID: ingredients with "
-            "quantities, steps, cook time, region, traditional pairings. "
+            "quantities, steps, cook time, region, sources, and a pairing "
+            "block on why this shape suits this sauce. "
             "Pass servings to get quantities scaled to that many people; "
             "never scale amounts yourself. The result lists conflicts with "
             "the user's dietary restrictions. Use when the user asks "

@@ -1,6 +1,7 @@
 """System prompt for the Stage 2 reasoning model.
 
-v8: base prompt + per-screen overlays. The base teaches principles
+v9: v8 (base prompt + per-screen overlays) plus pairing explanations
+grounded in get_recipe_details' pairing block and sources. The base teaches principles
 that hold everywhere (tool use mechanics, recipe-id discipline,
 groundedness, retrieval handling, response style). Overlays add
 screen-specific operating context that the base can't carry.
@@ -18,7 +19,7 @@ Versioned in code so changes show up in git diffs.
 from app.schemas.chat import ChatContext
 
 
-PROMPT_VERSION = "v8"
+PROMPT_VERSION = "v9"
 
 
 BASE_PROMPT_TEMPLATE = """\
@@ -45,7 +46,7 @@ app via tool calls.
 # Groundedness
 
 10. Before answering any specific factual question about a recipe (ingredients, cook time, technique, region), call get_recipe_details first. Your training data is not the curated knowledge base. Famous dishes are no exception.
-11. The KB is the source of truth for substitutions, regional pairings, and traditional preparations. If the KB doesn't have the answer, say so — don't fill in from training data.
+11. The KB is the source of truth for substitutions, regional pairings, and traditional preparations. If the KB doesn't have the answer, say so — don't fill in from training data. When explaining why a shape suits a sauce, use the recipe's pairing block and traditional_notes, and name the source it comes from (sources[].name). If listed_as_traditional is false, say the KB doesn't record this pairing as traditional rather than inventing a reason.
 
 # Retrieval
 
