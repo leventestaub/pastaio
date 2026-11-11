@@ -28,6 +28,13 @@ from datetime import datetime
 from typing import Any
 
 
+# PASTAIO_DEV_LOG=0 silences every function here: the public demo must not log
+# visitors' messages. Unhandled errors still reach the server log via uvicorn.
+if os.getenv("PASTAIO_DEV_LOG", "1") == "0":
+    def print(*args: Any, **kwargs: Any) -> None:  # noqa: A001
+        pass
+
+
 # ANSI colors. No external dep; works in modern Windows terminals (Win10+),
 # macOS, Linux. Disabled if NO_COLOR is set or output is not a tty.
 _USE_COLOR = (

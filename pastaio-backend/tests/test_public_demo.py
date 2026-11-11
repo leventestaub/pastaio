@@ -30,3 +30,30 @@ def test_oversized_image_rejected():
     r = client.post("/identify", files={"image": ("p.jpg", b"x" * (MAX_IMAGE_BYTES + 1), "image/jpeg")})
     assert r.status_code == 413
     _hits.clear()
+
+
+def test_dev_log_off_prints_nothing(monkeypatch, capsys):
+    import importlib
+
+    from app.services import dev_log
+
+    monkeypatch.setenv("PASTAIO_DEV_LOG", "0")
+    quiet = importlib.reload(dev_log)
+    quiet.log_user_input("ab12", "my private question")
+    assert capsys.readouterr().out == ""
+    monkeypatch.delenv("PASTAIO_DEV_LOG")
+    importlib.reload(dev_log)
+
+
+def test_groq_quota_error_is_503_with_cors():
+    import httpx
+    from groq import RateLimitError
+
+    @app.get("/_boom")
+    async def boom():
+        resp = httpx.Response(429, request=httpx.Request("POST", "https://api.groq.com"))
+        raise RateLimitError("quota", response=resp, body=None)
+
+    r = client.get("/_boom", headers=ORIGIN)
+    assert r.status_code == 503 and "quota" in r.json()["detail"]
+    assert r.headers["access-control-allow-origin"] == "http://localhost:8081"
