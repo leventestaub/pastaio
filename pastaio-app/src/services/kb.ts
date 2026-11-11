@@ -350,49 +350,6 @@ export async function getShape(
   };
 }
 
-export async function recipeExists(recipe_id: string): Promise<boolean> {
-  const db = await openKb();
-  const row = await db.getFirstAsync<{ n: number }>(
-    `SELECT 1 AS n FROM recipes WHERE recipe_id = ? LIMIT 1`,
-    [recipe_id],
-  );
-  return row !== null;
-}
-
-export async function resolveFuzzyRecipeId(
-  candidate: string,
-): Promise<string | null> {
-  const normalized = candidate.toLowerCase().trim();
-  if (!normalized) return null;
-
-  const candidateTokens = new Set(
-    normalized.split('-').filter((t) => t.length >= 3),
-  );
-  if (candidateTokens.size === 0) return null;
-
-  const db = await openKb();
-  const rows = await db.getAllAsync<{ recipe_id: string }>(
-    'SELECT recipe_id FROM recipes',
-  );
-
-  const matches: string[] = [];
-  for (const row of rows) {
-    const realTokens = new Set(
-      row.recipe_id.toLowerCase().split('-').filter((t) => t.length >= 3),
-    );
-    let shared = 0;
-    for (const t of candidateTokens) {
-      if (realTokens.has(t)) shared++;
-    }
-    if (shared >= 2) {
-      matches.push(row.recipe_id);
-    }
-  }
-
-  // Only return when we're confident — exactly one match.
-  return matches.length === 1 ? matches[0] : null;
-}
-
 export async function getSubstitutionOptions(args: {
   missing_ingredient: string;
   recipe_id?: string;

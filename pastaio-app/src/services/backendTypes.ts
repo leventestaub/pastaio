@@ -31,7 +31,8 @@ export type ToolName =
 export interface ToolCall {
   name: ToolName;
   // Argument shape varies per tool; the dispatcher narrows by `name`.
-  arguments: Record<string, unknown>;
+  arguments: Record<string, any>;
+  id?: string | null;
 }
 
 // Mirrors app/schemas/chat.py :: ChatMessage
@@ -62,10 +63,22 @@ export interface ChatRequest {
   context?: ChatContext;
 }
 
+// One LLM call inside the backend's agent loop (debug/eval only).
+export interface TraceStep {
+  latency_ms: number;
+  prompt_tokens: number | null;
+  completion_tokens: number | null;
+  calls: Array<{ name: string; arguments: Record<string, unknown>; status: 'ok' | 'error' | 'action'; error: string | null }>;
+}
+
+// tool_calls = action tools for the app; data tools already ran on the server.
 export interface ChatResponse {
   text: string;
   tool_calls: ToolCall[];
   latency_ms: number;
+  prompt_tokens?: number | null;
+  completion_tokens?: number | null;
+  trace?: TraceStep[];
 }
 
 export interface IdentifyResponse {
