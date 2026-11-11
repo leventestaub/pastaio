@@ -13,13 +13,16 @@ Key Groq-specific quirks:
 - Tool definitions use OpenAI's {type: "function", function: {...}}
   shape — same as what we already produce for Ollama via _to_ollama_tool,
   so we reuse the same conversion helper.
+- The free tier caps tokens per day per model. On a rate limit the client
+  moves on to the next model in `fallbacks`, so the public demo keeps
+  answering when Qwen's daily quota is spent.
 """
 import json
 import os
 import time
 from typing import Any
 
-from groq import AsyncGroq, BadRequestError
+from groq import AsyncGroq, BadRequestError, RateLimitError
 
 from app.clients.base import ReasoningClient
 from app.schemas.chat import ChatMessage, ChatResponse
@@ -45,6 +48,7 @@ class GroqClient(ReasoningClient):
         model: str = "qwen/qwen3.8-27b",
         api_key: str | None = None,
         options: dict[str, Any] | None = None,
+        fallbacks: list[str] | None = None,
     ):
         api_key = api_key or os.getenv("GROQ_API_KEY")
         if not api_key:
@@ -53,9 +57,11 @@ class GroqClient(ReasoningClient):
                 "Get a free key at https://console.groq.com"
             )
         self.model = model
-        self.client = AsyncGroq(api_key=api_key)
+        self.models = [model, *(fallbacks or [])]
+        # No SDK retries when there is a fallback: a 429 should switch model, not wait.
+        self.client = AsyncGroq(api_key=api_key, **({"max_retries": 0} if fallbacks else {}))
         self.options = {**DEFAULT_OPTIONS, **(options or {})}
-        print(f"[GroqClient] model={model} options={self.options}")
+        print(f"[GroqClient] models={self.models} options={self.options}")
 
     async def chat(
         self,
@@ -64,32 +70,33 @@ class GroqClient(ReasoningClient):
         tool_definitions: list[dict],
     ) -> ChatResponse:
         groq_messages = self._build_messages(messages, system_prompt)
-        groq_tools = [_to_openai_tool(td) for td in tool_definitions]
+        # No tools = the agent loop wants a text answer.
+        tools = {"tools": [_to_openai_tool(td) for td in tool_definitions], "tool_choice": "auto"}             if tool_definitions else {}
 
         start = time.monotonic()
-        # Groq rejects the whole generation when the model calls a tool name
-        # that doesn't exist (tool_use_failed); sampling again usually fixes it.
-        # ponytail: blind retry; Phase 2A adds proper tool-call validation/repair.
-        for attempt in range(2):
+        for i, model in enumerate(self.models):
             try:
-                response = await self.client.chat.completions.create(
-                    model=self.model,
-                    messages=groq_messages,
-                    tools=groq_tools,
-                    tool_choice="auto",
-                    # Disable Qwen3's reasoning mode. Same lesson as Ollama
-                    # think=False: small models dispatch worse with reasoning on.
-                    # gpt-oss has no "none"; use "low" there.
-                    reasoning_effort=os.getenv("PASTAIO_GROQ_REASONING_EFFORT", "none"),
-                    **self.options,
-                )
+                response = await self._create(model, groq_messages, tools)
                 break
-            except BadRequestError as e:
-                if attempt == 1 or "tool_use_failed" not in str(e):
+            except RateLimitError:
+                if i == len(self.models) - 1:
                     raise
+                print(f"[GroqClient] {model} rate limited, falling back to {self.models[i + 1]}")
         latency_ms = int((time.monotonic() - start) * 1000)
 
         return self._parse_response(response, latency_ms)
+
+    async def _create(self, model: str, messages: list[dict], tools: dict) -> Any:
+        # Groq rejects the whole generation when the model calls a tool name
+        # that doesn't exist (tool_use_failed); sampling again usually fixes it.
+        for attempt in range(2):
+            try:
+                return await self.client.chat.completions.create(
+                    model=model, messages=messages, **tools, **_effort(model, self.model), **self.options,
+                )
+            except BadRequestError as e:
+                if attempt == 1 or "tool_use_failed" not in str(e):
+                    raise
 
     @staticmethod
     def _build_messages(
@@ -148,6 +155,17 @@ class GroqClient(ReasoningClient):
             prompt_tokens=getattr(usage, "prompt_tokens", None),
             completion_tokens=getattr(usage, "completion_tokens", None),
         )
+
+
+def _effort(model: str, primary: str) -> dict:
+    """Reasoning off where the model allows it: small and mid models dispatch
+    worse with reasoning on (same lesson as Ollama think=False). gpt-oss has
+    no "none", so "low". PASTAIO_GROQ_REASONING_EFFORT overrides the primary."""
+    if model == primary and os.getenv("PASTAIO_GROQ_REASONING_EFFORT"):
+        return {"reasoning_effort": os.environ["PASTAIO_GROQ_REASONING_EFFORT"]}
+    if "qwen" in model:
+        return {"reasoning_effort": "none"}
+    return {"reasoning_effort": "low"} if "gpt-oss" in model else {}
 
 
 def _to_openai_tool(td: dict) -> dict:

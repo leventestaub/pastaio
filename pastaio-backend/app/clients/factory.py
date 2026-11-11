@@ -14,6 +14,9 @@ Ollama config (when PASTAIO_*_BACKEND=ollama):
 Groq config (when PASTAIO_*_BACKEND=groq):
   GROQ_API_KEY               = "gsk_..."  (required)
   PASTAIO_GROQ_LLM_MODEL     = "qwen/qwen3.8-27b"
+  PASTAIO_GROQ_FALLBACK_MODELS = "openai/gpt-oss-120b,openai/gpt-oss-20b"
+                               tried in order when a model's quota runs out
+                               ("" = no fallback)
   PASTAIO_GROQ_VLM_MODEL     = "qwen/qwen3.8-27b"
 
 Logging:
@@ -84,7 +87,8 @@ def get_reasoning_client() -> ReasoningClient:
         from app.clients.groq_client import GroqClient
 
         model = os.getenv("PASTAIO_GROQ_LLM_MODEL", "qwen/qwen3.8-27b")
-        client = GroqClient(model=model)
+        fallbacks = os.getenv("PASTAIO_GROQ_FALLBACK_MODELS", "openai/gpt-oss-120b,openai/gpt-oss-20b")
+        client = GroqClient(model=model, fallbacks=[m.strip() for m in fallbacks.split(",") if m.strip()])
     else:
         raise ValueError(f"Unknown reasoning backend: {backend}")
 
