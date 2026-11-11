@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from app.clients.base import VisionClient
 from app.clients.factory import get_vision_client
@@ -13,6 +13,8 @@ from app.services.dev_log import (
 
 router = APIRouter(prefix="/identify", tags=["identify"])
 
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
+
 
 @router.post("", response_model=IdentifyResponse)
 async def identify(
@@ -21,7 +23,9 @@ async def identify(
 ) -> IdentifyResponse:
     rid = new_request_id()
     log_request_start(rid, "POST /identify", f"file={image.filename}")
-    image_bytes = await image.read()
+    image_bytes = await image.read(MAX_IMAGE_BYTES + 1)
+    if len(image_bytes) > MAX_IMAGE_BYTES:
+        raise HTTPException(status_code=413, detail="Image too large (max 8 MB).")
     log_image_input(rid, len(image_bytes))
 
     try:
