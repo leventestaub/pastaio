@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Static web export for GitHub Pages, served from /pastaio.
-# Usage: PASTAIO_BACKEND_URL=https://<space>.hf.space sh scripts/export-pages.sh
+# Usage: PASTAIO_BACKEND_URL=https://<project>.vercel.app sh scripts/export-pages.sh
 set -e
 export PASTAIO_BASE_URL=/pastaio PASTAIO_WEB_CAPTURE=1 CI=1
 rm -rf dist

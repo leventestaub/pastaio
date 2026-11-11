@@ -15,17 +15,19 @@ RUN pip install \
     "python-multipart>=0.0.9" \
     "groq>=0.11"
 
-# Hugging Face Spaces runs containers as uid 1000.
+# Non-root user.
 RUN useradd -m -u 1000 user
 USER user
 WORKDIR /home/user/app
 COPY --chown=user app/ ./app/
 
-# Public demo defaults. GROQ_API_KEY comes from the Space secret, never the image.
+# Public demo defaults (same as app/vercel.py). GROQ_API_KEY comes from the
+# host's secrets, never the image.
 ENV PORT=7860 \
     PASTAIO_REASONING_BACKEND=groq \
     PASTAIO_VISION_BACKEND=groq \
-    PASTAIO_CORS_ORIGINS=https://leventestaub.github.io
+    PASTAIO_CORS_ORIGINS=https://leventestaub.github.io \
+    PASTAIO_DEV_LOG=0
 EXPOSE 7860
 
 HEALTHCHECK CMD python -c "import urllib.request,os; urllib.request.urlopen(f'http://localhost:{os.environ[\"PORT\"]}/health')"

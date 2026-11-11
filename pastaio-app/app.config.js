@@ -1,6 +1,6 @@
 // Build-time overrides on top of app.json, used by the GitHub Pages workflow:
 //   PASTAIO_BASE_URL     sub-path the web export is served from (e.g. /pastaio)
-//   PASTAIO_BACKEND_URL  production backend (the Hugging Face Space)
+//   PASTAIO_BACKEND_URL  production backend (the Vercel deployment)
 module.exports = ({ config }) => ({
   ...config,
   experiments: {

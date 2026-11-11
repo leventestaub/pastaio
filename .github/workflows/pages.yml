@@ -1,5 +1,5 @@
 # Web app -> GitHub Pages (https://leventestaub.github.io/pastaio/).
-# Needs the repo variable PASTAIO_BACKEND_URL (the Hugging Face Space URL).
+# Needs the repo variable PASTAIO_BACKEND_URL (the Vercel backend URL).
 name: Deploy web app to Pages
 
 on:
