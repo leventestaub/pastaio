@@ -13,7 +13,7 @@ scope. Adding to the right list matters: a tool the LLM needs but doesn't
 see can't be called.
 """
 from app.schemas.chat import ChatContext
-from app.schemas.tools import TOOL_DEFINITIONS, ToolDefinition, ToolName
+from app.schemas.tools import TOOL_DEFINITIONS, ToolName
 
 
 # Always available, regardless of screen. The LLM needs these from any

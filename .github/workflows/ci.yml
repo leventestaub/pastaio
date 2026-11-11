@@ -1,0 +1,49 @@
+# Lint and tests on every push and PR. No model calls: the agent loop is
+# tested with a scripted client, the eval job only checks the cases.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pastaio-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --extra dev
+      - run: uv run ruff check .
+      # includes the check that app/kb/pastaio-kb.db matches the YAML sources
+      - run: uv run pytest -q -m "not integration"
+
+  eval:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pastaio-eval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv run --with pytest pytest -q tests
+
+  app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pastaio-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: pastaio-app/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test

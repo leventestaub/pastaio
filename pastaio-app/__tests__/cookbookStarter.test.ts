@@ -57,7 +57,7 @@ beforeEach(() => {
       liguria: 'Liguria',
       emilia_romagna: 'Emilia-Romagna',
     };
-    return map[id] ?? id;
+    return (id && map[id]) || id || '';
   });
 });
 

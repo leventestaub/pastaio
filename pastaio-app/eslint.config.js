@@ -7,4 +7,8 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    // HTML-entity rule; React Native <Text> renders apostrophes as-is.
+    rules: { "react/no-unescaped-entities": "off" },
+  },
 ]);

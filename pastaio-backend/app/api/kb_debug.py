@@ -9,10 +9,9 @@ import sqlite3
 
 from fastapi import APIRouter, HTTPException
 
-router = APIRouter(prefix="/kb", tags=["debug"])
-
-
 from app.services.kb import KB_DB_PATH
+
+router = APIRouter(prefix="/kb", tags=["debug"])
 
 
 @router.get("/recipes", response_model=list[str])
