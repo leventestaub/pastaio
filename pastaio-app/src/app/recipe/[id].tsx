@@ -31,6 +31,7 @@ import { useSessionStore } from '@/stores/sessionStore';
 import { useMemoryStore } from '@/stores/memoryStore';
 import { useCookingStore } from '@/stores/cookingStore';
 import { getRecipeDetails, type RecipeDetails } from '@/services/kb';
+import { ingredientName } from '@/constants/ingredientNames';
 import { resolveRegionName } from '@/services/discover';
 
 export default function RecipeScreen() {
@@ -208,7 +209,7 @@ export default function RecipeScreen() {
               const last = i === ingredientLines.length - 1;
               const displayName = override
                 ? override.replacement
-                : `${formatAmount(ing.amount, ing.unit)} ${ing.name}`;
+                : `${formatAmount(ing.amount, ing.unit)} ${ingredientName(ing.name)}`;
               return (
                 <View
                   key={i}
@@ -254,7 +255,7 @@ export default function RecipeScreen() {
                       style={{ marginLeft: 'auto', color: colors.ink50 }}
                       numberOfLines={1}
                     >
-                      was {ing.name}
+                      was {ingredientName(ing.name)}
                     </Text>
                   )}
                 </View>

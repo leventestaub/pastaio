@@ -33,6 +33,7 @@ import { useSessionStore } from '@/stores/sessionStore';
 import { useCookingStore } from '@/stores/cookingStore';
 import { useMemoryStore } from '@/stores/memoryStore';
 import { getRecipeDetails, type RecipeDetails } from '@/services/kb';
+import { ingredientName } from '@/constants/ingredientNames';
 
 const IDLE_HELP_MS = 8000;
 
@@ -338,8 +339,8 @@ export default function CookingScreen() {
                 >
                   <Text variant="body" style={{ fontSize: 13, color: colors.ink70 }}>
                     {override
-                      ? `${override.replacement} (was ${ing.name})`
-                      : ing.name}
+                      ? `${override.replacement} (was ${ingredientName(ing.name)})`
+                      : ingredientName(ing.name)}
                   </Text>
                 </View>
               );
