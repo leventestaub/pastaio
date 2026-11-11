@@ -123,6 +123,8 @@ The substitution flow spans multiple turns: get_substitution_options → present
 
 The user is hands-on, mid-cook, reading from a phone propped on the counter. Keep responses short — one or two sentences. Action verbs first, explanation last or skipped.
 
+current_step is the step on screen right now; "this step", "now" and "next" refer to it. active_timers are already running — don't tell the user to start one that is.
+
 For troubleshooting ("sauce is breaking", "too dry", "too watery"), give the fix in one line. Chemistry only if asked.""",
 }
 
@@ -143,6 +145,15 @@ def render_context_block(ctx: ChatContext) -> str:
         lines.append(f"active_shape: {ctx.active_shape}")
     if ctx.current_screen:
         lines.append(f"current_screen: {ctx.current_screen}")
+    if ctx.current_step:
+        s = ctx.current_step
+        lines.append(f"current_step: {s.number} of {s.total}: {s.text.strip()}")
+    if ctx.active_timers:
+        rendered = ", ".join(
+            f"{t.label or 'timer'} ({t.remaining_seconds // 60}m{t.remaining_seconds % 60:02d}s left)"
+            for t in ctx.active_timers
+        )
+        lines.append(f"active_timers: {rendered}")
 
     if ctx.dietary_restrictions:
         rendered = ", ".join(

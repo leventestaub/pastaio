@@ -49,6 +49,7 @@ export default function CookingScreen() {
   const insets = useSafeAreaInsets();
 
   const setCurrentScreen = useSessionStore((s) => s.setCurrentScreen);
+  const setCookingStep = useSessionStore((s) => s.setCookingStep);
   const openAgentInput = useSessionStore((s) => s.openAgentInput);
 
   const currentStepIndex = useCookingStore((s) => s.currentStepIndex);
@@ -71,8 +72,20 @@ export default function CookingScreen() {
   useFocusEffect(
     useCallback(() => {
       setCurrentScreen('cooking');
-    }, [setCurrentScreen]),
+      return () => setCookingStep(null);
+    }, [setCurrentScreen, setCookingStep]),
   );
+
+  // Keep the agent's view of "this step" in sync with the screen.
+  useEffect(() => {
+    if (!recipe || recipe.steps.length === 0) return;
+    const index = Math.max(0, Math.min(currentStepIndex, recipe.steps.length - 1));
+    setCookingStep({
+      number: index + 1,
+      total: recipe.steps.length,
+      text: recipe.steps[index].text,
+    });
+  }, [recipe, currentStepIndex, setCookingStep]);
 
   useEffect(() => {
     let cancelled = false;

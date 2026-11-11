@@ -12,6 +12,12 @@
 import { create } from 'zustand';
 import type { ScreenName } from '@/types';
 
+export interface CookingStep {
+  number: number; // 1-based, as shown on screen
+  total: number;
+  text: string;
+}
+
 interface SessionState {
   // The screen the user is currently viewing. Set via setCurrentScreen on
   // navigation events. Sent to the backend in ChatContext.current_screen.
@@ -26,6 +32,10 @@ interface SessionState {
   // across screen navigations until the user identifies again or it's cleared.
   activeShape: string | null;
 
+  // The step on screen in cooking mode, so "this step" resolves without a
+  // tool call. Set by the cooking screen; null everywhere else.
+  cookingStep: CookingStep | null;
+
   // Whether the agent input field is currently summoned. Any screen with an
   // agent affordance flips this on; the input itself flips it off when dismissed.
   agentInputOpen: boolean;
@@ -35,6 +45,7 @@ interface SessionState {
   setCurrentScreen: (screen: ScreenName) => void;
   setActiveRecipeId: (id: string | null) => void;
   setActiveShape: (shape: string | null) => void;
+  setCookingStep: (step: CookingStep | null) => void;
   openAgentInput: () => void;
   closeAgentInput: () => void;
 }
@@ -43,11 +54,13 @@ export const useSessionStore = create<SessionState>((set) => ({
   currentScreen: 'home',
   activeRecipeId: null,
   activeShape: null,
+  cookingStep: null,
   agentInputOpen: false,
 
   setCurrentScreen: (screen) => set({ currentScreen: screen }),
   setActiveRecipeId: (id) => set({ activeRecipeId: id }),
   setActiveShape: (shape) => set({ activeShape: shape }),
+  setCookingStep: (step) => set({ cookingStep: step }),
   openAgentInput: () => set({ agentInputOpen: true }),
   closeAgentInput: () => set({ agentInputOpen: false }),
 }));

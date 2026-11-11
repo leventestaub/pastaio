@@ -11,6 +11,7 @@ import { buildChatContext } from '@/services/buildChatContext';
 import { dispatchToolCall } from '@/services/toolDispatcher';
 import { useMemoryStore } from '@/stores/memoryStore';
 import { useSessionStore } from '@/stores/sessionStore';
+import { useCookingStore } from '@/stores/cookingStore';
 import type { ChatMessage, ToolCall } from '@/services/backendTypes';
 import {
   logRequestStart,
@@ -57,7 +58,8 @@ export function useChat(): UseChatResult {
     // made by tool dispatches in prior iterations.
     const initialContext = buildChatContext(
       useSessionStore.getState(),
-      useMemoryStore.getState()
+      useMemoryStore.getState(),
+      useCookingStore.getState()
     );
 
     logRequestStart('user message');
@@ -82,7 +84,8 @@ export function useChat(): UseChatResult {
         // same .send() call. Cheap pure function on store snapshots.
         const context = buildChatContext(
           useSessionStore.getState(),
-          useMemoryStore.getState()
+          useMemoryStore.getState(),
+          useCookingStore.getState()
         );
 
         const t0 = Date.now();

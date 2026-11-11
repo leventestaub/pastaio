@@ -93,11 +93,25 @@ def test_unset_fields_omitted():
 def test_full_prompt_contains_load_bearing_rules():
     """Spot-check that the rules we depend on are actually in the prompt."""
     prompt = build_system_prompt(ChatContext())
-    # The differentiation rule
-    assert "get_substitution_options" in prompt
+    # The differentiation rule lives in the recipe-screen overlay
+    assert "get_substitution_options" in build_system_prompt(
+        ChatContext(current_screen="recipe")
+    )
     # The over-logging rule
     assert "Do NOT log obvious" in prompt
     # The reference resolution rule
     assert "active_recipe_id" in prompt
     # The Spike 1 announce rule
     assert "Do not announce" in prompt
+
+
+def test_cooking_step_and_timers_render():
+    ctx = ChatContext(
+        current_screen="cooking",
+        current_step={"number": 3, "total": 7, "text": " Toss the pasta. "},
+        active_timers=[{"label": "pasta", "remaining_seconds": 245}, {"remaining_seconds": 5}],
+    )
+    block = render_context_block(ctx)
+    assert "current_step: 3 of 7: Toss the pasta." in block
+    assert "active_timers: pasta (4m05s left), timer (0m05s left)" in block
+    assert "current_step" in build_system_prompt(ctx)

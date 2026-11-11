@@ -27,6 +27,17 @@ class StoredDietaryRestriction(BaseModel):
     custom_text: str | None = None
 
 
+class CookingStep(BaseModel):
+    number: int = Field(..., description="1-based step number shown on screen")
+    total: int
+    text: str
+
+
+class ActiveTimer(BaseModel):
+    label: str | None = None
+    remaining_seconds: int
+
+
 class ChatContext(BaseModel):
     """Context the app sends with each request.
 
@@ -52,6 +63,12 @@ class ChatContext(BaseModel):
             "Values are app-defined: 'home', 'cookbook', 'memory', "
             "'identify', 'recipe', 'cooking'."
         ),
+    )
+    current_step: CookingStep | None = Field(
+        None, description="Cooking mode only: the step currently on screen"
+    )
+    active_timers: list[ActiveTimer] = Field(
+        default_factory=list, description="Cooking mode only: running timers"
     )
     pantry_items: list[str] = Field(
         default_factory=list,

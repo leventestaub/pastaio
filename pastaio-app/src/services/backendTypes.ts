@@ -45,6 +45,8 @@ export interface ChatContext {
   active_recipe_id?: string | null;
   active_shape?: string | null;
   current_screen?: ScreenName | null;
+  current_step?: { number: number; total: number; text: string } | null;
+  active_timers?: Array<{ label: string | null; remaining_seconds: number }>;
   pantry_items?: string[];
   dietary_restrictions?: Array<{
     restriction: StoredDietaryRestriction['restriction'];
