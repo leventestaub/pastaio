@@ -13,10 +13,12 @@ Key Groq-specific quirks:
 - Tool definitions use OpenAI's {type: "function", function: {...}}
   shape — same as what we already produce for Ollama via _to_ollama_tool,
   so we reuse the same conversion helper.
-- The free tier caps tokens per day per model. On a rate limit the client
-  moves on to the next model in `fallbacks`, so the public demo keeps
-  answering when Qwen's daily quota is spent.
+- The free tier caps tokens per minute (8k) and per day, per model. On a
+  rate limit the client moves on to the next model in `fallbacks`; when all
+  are limited for a few seconds only (per-minute cap) it waits once and
+  tries again. A daily cap waits much longer, so that raises (-> 503).
 """
+import asyncio
 import json
 import os
 import time
@@ -38,6 +40,7 @@ DEFAULT_OPTIONS = {
     # bad samples.
     "max_tokens": 2048,
 }
+MAX_WAIT_S = 20  # longest per-minute rate-limit wait worth holding a chat request for
 
 
 class GroqClient(ReasoningClient):
@@ -74,14 +77,21 @@ class GroqClient(ReasoningClient):
         tools = {"tools": [_to_openai_tool(td) for td in tool_definitions], "tool_choice": "auto"}             if tool_definitions else {}
 
         start = time.monotonic()
-        for i, model in enumerate(self.models):
-            try:
-                response = await self._create(model, groq_messages, tools)
+        response = None
+        for attempt in range(2):
+            waits = []
+            for model in self.models:
+                try:
+                    response = await self._create(model, groq_messages, tools)
+                    break
+                except RateLimitError as e:
+                    print(f"[GroqClient] {model} rate limited")
+                    last, waits = e, [*waits, float(e.response.headers.get("retry-after") or 3600)]
+            if response is not None:
                 break
-            except RateLimitError:
-                if i == len(self.models) - 1:
-                    raise
-                print(f"[GroqClient] {model} rate limited, falling back to {self.models[i + 1]}")
+            if attempt or min(waits) > MAX_WAIT_S:
+                raise last
+            await asyncio.sleep(min(waits))
         latency_ms = int((time.monotonic() - start) * 1000)
 
         return self._parse_response(response, latency_ms)
