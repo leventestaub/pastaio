@@ -23,6 +23,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
 import { openKb } from '@/services/kb';
+import { wakeBackend } from '@/services/backend';
 import { AgentInput } from '@/components/AgentInput';
 import { SplashGate } from '@/components/splash/SplashGate';
 import { colors } from '@/constants/theme';
@@ -48,6 +49,7 @@ export default function RootLayout() {
 
   const [kbReady, setKbReady] = useState(false);
   useEffect(() => {
+    wakeBackend();
     let mounted = true;
     openKb()
       .then(() => mounted && setKbReady(true))

@@ -30,6 +30,20 @@ class BackendError extends Error {
   }
 }
 
+const UNREACHABLE =
+  "Couldn't reach the Pastaio server. If the demo has been idle it takes up to a minute to wake up. Try again shortly.";
+
+function httpError(path: string, status: number, text: string): BackendError {
+  if (status === 429) return new BackendError('Too many requests. Wait a minute and try again.', status);
+  return new BackendError(`${path} returned ${status}: ${text || 'no body'}`, status);
+}
+
+// Fire-and-forget on app start so a sleeping demo backend starts waking
+// before the first real request.
+export function wakeBackend(): void {
+  fetch(`${BACKEND_URL}/health`).catch(() => {});
+}
+
 async function postJson<TReq, TRes>(
   path: string,
   body: TReq,
@@ -48,10 +62,7 @@ async function postJson<TReq, TRes>(
 
     if (!response.ok) {
       const text = await response.text().catch(() => '');
-      throw new BackendError(
-        `${path} returned ${response.status}: ${text || 'no body'}`,
-        response.status
-      );
+      throw httpError(path, response.status, text);
     }
 
     return (await response.json()) as TRes;
@@ -61,9 +72,7 @@ async function postJson<TReq, TRes>(
       throw new BackendError(`${path} timed out after ${timeoutMs}ms`);
     }
     console.error(`[backend] ${path} failed:`, err);
-    throw new BackendError(
-      `Could not reach backend at ${BACKEND_URL}. Check that the server is running and the LAN IP in src/constants/config.ts is correct.`
-    );
+    throw new BackendError(UNREACHABLE);
   } finally {
     clearTimeout(timer);
   }
@@ -98,10 +107,7 @@ export const backend = {
       });
       if (!response.ok) {
         const text = await response.text().catch(() => '');
-        throw new BackendError(
-          `/identify returned ${response.status}: ${text || 'no body'}`,
-          response.status
-        );
+        throw httpError('/identify', response.status, text);
       }
       return (await response.json()) as IdentifyResponse;
     } catch (err) {
@@ -112,9 +118,7 @@ export const backend = {
         );
       }
       console.error('[backend] /identify failed:', err);
-      throw new BackendError(
-        `Could not reach backend at ${BACKEND_URL}.`
-      );
+      throw new BackendError(UNREACHABLE);
     } finally {
       clearTimeout(timer);
     }
