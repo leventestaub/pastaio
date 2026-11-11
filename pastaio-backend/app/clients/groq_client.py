@@ -79,7 +79,8 @@ class GroqClient(ReasoningClient):
                     tool_choice="auto",
                     # Disable Qwen3's reasoning mode. Same lesson as Ollama
                     # think=False: small models dispatch worse with reasoning on.
-                    reasoning_effort="none",
+                    # gpt-oss has no "none"; use "low" there.
+                    reasoning_effort=os.getenv("PASTAIO_GROQ_REASONING_EFFORT", "none"),
                     **self.options,
                 )
                 break
