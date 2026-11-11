@@ -3,7 +3,7 @@ import asyncio
 import json
 
 from app.clients.base import ReasoningClient
-from app.schemas.chat import ChatContext, ChatRequest, ChatResponse
+from app.schemas.chat import ChatContext, ChatRequest, ChatResponse, StoredDietaryRestriction
 from app.schemas.tools import ToolCall, ToolName
 from app.services.chat_service import MAX_STEPS, handle_chat
 
@@ -12,10 +12,11 @@ class Scripted(ReasoningClient):
     """Replies in order; records the messages of every call."""
 
     def __init__(self, *replies: ChatResponse):
-        self.replies, self.seen = list(replies), []
+        self.replies, self.seen, self.tools = list(replies), [], []
 
     async def chat(self, messages, system_prompt, tool_definitions):
         self.seen.append(list(messages))
+        self.tools.append(tool_definitions)
         return self.replies.pop(0) if self.replies else reply("done")
 
 
@@ -24,8 +25,10 @@ def reply(text="", *calls):
                         latency_ms=10, prompt_tokens=100, completion_tokens=5)
 
 
-def run(client, message="hi", screen="recipe"):
-    return asyncio.run(handle_chat(ChatRequest(message=message, context=ChatContext(current_screen=screen)), client))
+def run(client, message="hi", screen="recipe", diet=()):
+    ctx = ChatContext(current_screen=screen,
+                      dietary_restrictions=[StoredDietaryRestriction(restriction=d) for d in diet])
+    return asyncio.run(handle_chat(ChatRequest(message=message, context=ctx), client))
 
 
 def test_data_tool_runs_on_server_and_result_goes_back_as_tool_message():
@@ -59,13 +62,41 @@ def test_invalid_call_gets_one_repair_attempt():
     assert [c.status for s in out.trace for c in s.calls] == ["error", "action"]
 
 
-def test_second_invalid_call_is_not_retried_or_returned():
+def test_second_invalid_call_is_not_returned_and_model_must_answer_in_text():
     bad = (ToolName.OPEN_RECIPE, {"recipe_id": "made-up-dish"})
-    out = run(Scripted(reply("", bad), reply("", bad), reply("never reached")))
-    assert out.tool_calls == [] and len(out.trace) == 2 and out.text  # fallback text
+    client = Scripted(reply("", bad), reply("", bad), reply("I couldn't find that dish."))
+    out = run(client)
+    assert out.tool_calls == [] and out.text == "I couldn't find that dish."
+    assert client.tools[-1] == [] and len(out.trace) == 3
 
 
 def test_step_limit():
     looping = [reply("", (ToolName.FIND_RECIPES, {"query": "pesto"})) for _ in range(MAX_STEPS + 2)]
-    out = run(Scripted(*looping))
+    client = Scripted(*looping)
+    out = run(client)
     assert len(out.trace) == MAX_STEPS
+    assert client.tools[-1] == [] and all(client.tools[:-1])  # last call: text only
+
+
+def test_all_matches_excluded_says_so():
+    client = Scripted(reply("", (ToolName.FIND_RECIPES, {"query": "carbonara"})), reply("None fit."))
+    run(client, diet=["vegan"])
+    result = json.loads(client.seen[1][-1].content)
+    assert result["recipes"] == [] and result["excluded"] and "note" in result
+
+
+def test_substitution_that_breaks_a_restriction_is_blocked():
+    sub = (ToolName.APPLY_SUBSTITUTION,
+           {"recipe_id": "spaghetti-alla-carbonara", "original": "guanciale", "replacement": "pancetta"})
+    client = Scripted(reply("Swapped.", sub), reply("Pancetta is pork too; try mushrooms?"))
+    out = run(client, diet=["vegetarian"])
+    assert out.tool_calls == [] and "vegetarian" in client.seen[1][-1].content
+    assert out.text.startswith("Pancetta")
+
+
+def test_opening_a_conflicting_recipe_is_allowed_but_flagged():
+    open_it = (ToolName.OPEN_RECIPE, {"recipe_id": "spaghetti-alla-carbonara"})
+    client = Scripted(reply("Opening.", open_it), reply("Heads up: guanciale isn't vegetarian.", open_it))
+    out = run(client, diet=["vegetarian"])
+    assert [c.name for c in out.tool_calls] == [ToolName.OPEN_RECIPE]  # deduped
+    assert "dietary_conflicts" in client.seen[1][-1].content and out.text.startswith("Heads up")

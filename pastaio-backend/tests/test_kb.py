@@ -14,6 +14,9 @@ KB_SRC = Path(__file__).resolve().parents[2] / "pastaio-kb"
 def test_queries():
     assert {r["recipe_id"] for r in kb.find_recipes(shape_id="spaghetti")} >= {"spaghetti-alla-carbonara"}
     assert kb.find_recipes(query="PESTO")
+    # words, not the whole phrase; best match first
+    assert kb.find_recipes(query="amatriciana disciplinare")[0]["recipe_id"] == "bucatini-allamatriciana"
+    assert not kb.find_recipes(query="sushi")
     assert kb.get_recipe_details("rigatoni-alla-gricia")["ingredients"]
     assert kb.get_recipe_details("nope") is None
     assert kb.get_substitution_options("basil", "trenette-al-pesto") == []  # KB has no rules yet

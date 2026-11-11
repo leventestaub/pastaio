@@ -30,21 +30,26 @@ def _connect() -> sqlite3.Connection:
 
 
 def find_recipes(shape_id: str | None = None, query: str | None = None, limit: int = 10) -> list[dict]:
-    """Recipes matching shape and/or query; the query hits title, description
-    or an ingredient name ("guanciale", "pecorino", "basilico")."""
-    sql = "SELECT recipe_id, title, region_id, cook_time_minutes, description, ingredients FROM recipes"
+    """Recipes matching shape and/or query; query words hit the title,
+    description, traditional notes or an ingredient name ("guanciale",
+    "pecorino", "basilico"). Recipes matching more words come first, so
+    "amatriciana disciplinare" still finds amatriciana."""
+    sql = ("SELECT recipe_id, title, region_id, cook_time_minutes, description, traditional_notes, ingredients "
+           "FROM recipes")
     with _connect() as conn:
         rows = conn.execute(sql + (" WHERE shape_id = ?" if shape_id else ""), [shape_id] if shape_id else []).fetchall()
-    q = (query or "").strip().lower()
-    out = []
+    words = [w for w in re.findall(r"\w+", (query or "").lower()) if len(w) > 2]
+    scored = []
     for r in rows:
         names = [i["name"] for i in json.loads(r["ingredients"])]
-        haystack = [r["title"].lower(), r["description"].lower(), *(n.replace("_", " ") for n in names)]
-        if q and not any(q in h for h in haystack):
+        text = " ".join([r["title"], r["description"], r["traditional_notes"] or "", *names]).lower().replace("_", " ")
+        hits = sum(w in text for w in words)
+        if words and not hits:
             continue
-        out.append({"recipe_id": r["recipe_id"], "title": r["title"], "region_id": r["region_id"],
-                    "cook_time_minutes": r["cook_time_minutes"], "ingredient_names": names})
-    return out[:limit]
+        scored.append((-hits, {"recipe_id": r["recipe_id"], "title": r["title"], "region_id": r["region_id"],
+                               "cook_time_minutes": r["cook_time_minutes"], "ingredient_names": names}))
+    scored.sort(key=lambda s: s[0])  # stable: KB order within the same hit count
+    return [r for _, r in scored[:limit]]
 
 
 def scale_ingredients(ingredients: list[dict], serves: int, servings: int) -> list[dict]:

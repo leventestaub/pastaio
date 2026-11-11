@@ -9,9 +9,12 @@ One /chat request = one user turn. The loop:
   tool-role messages;
 - collects action tools (navigation, timers, cookbook writes) for the app,
   which owns that state, and tells the model they were handed over;
-- feeds invalid calls back as errors, once (one repair attempt).
+- feeds invalid calls back as errors, once (one repair attempt);
+- blocks substitutions that break a stored restriction and flags
+  conflicting recipes the model opens.
 It stops when the model answers without needing more data, or after
-MAX_STEPS model calls.
+MAX_STEPS model calls. The last call, and a retry after an empty answer,
+get no tools, so the turn ends in text rather than a canned fallback.
 """
 from __future__ import annotations
 
@@ -44,11 +47,12 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
     messages = [*request.history, ChatMessage(role="user", content=request.message)]
     actions: list[ToolCall] = []
     trace: list[TraceStep] = []
-    repaired = False
+    repaired = force_text = False
     text = ""
 
-    for _ in range(MAX_STEPS):
-        reply = await client.chat(messages, system_prompt, tools)
+    for n in range(MAX_STEPS):
+        last = n == MAX_STEPS - 1
+        reply = await client.chat(messages, system_prompt, [] if last or force_text else tools)
         text = reply.text
         step = TraceStep(
             latency_ms=reply.latency_ms,
@@ -65,17 +69,22 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
                 result, status, had_error = {"error": error}, "error", True
             elif call.name in DATA_TOOLS:
                 result, status, needs_data = _run_data_tool(call, request.context.dietary_restrictions), "ok", True
+            elif error := _diet_block(call, request.context.dietary_restrictions):
+                result, status, had_error = {"error": error}, "error", True
             else:
-                result, status = ACTION_ACK, "action"
+                result, status = _ack(call, request.context.dietary_restrictions), "action"
                 if not any(a.name == call.name and a.arguments == call.arguments for a in actions):
                     actions.append(call)
+                    needs_data = needs_data or "dietary_conflicts" in result  # the model must warn the user
             step.calls.append(TraceCall(name=call.name.value, arguments=call.arguments, status=status, error=error))
             tool_messages.append(ChatMessage(
                 role="tool", content=json.dumps(result, ensure_ascii=False), tool_call_id=call.id,
             ))
 
-        if not needs_data and (not had_error or repaired):
+        done = not needs_data and (not had_error or repaired)
+        if last or (done and (text or actions or force_text)):
             break
+        force_text = done  # empty answer: ask once more, without tools
         repaired = repaired or had_error
         messages += [ChatMessage(role="assistant", content=reply.text, tool_calls=reply.tool_calls), *tool_messages]
 
@@ -120,7 +129,11 @@ def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
                 excluded.append({"recipe_id": r["recipe_id"], "title": r["title"], "conflicts": found})
             else:
                 recipes.append(r)
-        return {"recipes": recipes, **({"excluded": excluded} if excluded else {})}
+        out = {"recipes": recipes, **({"excluded": excluded} if excluded else {})}
+        if excluded and not recipes:
+            out["note"] = ("Every match conflicts with the user's dietary restrictions (see excluded). "
+                           "Say so and name the conflicting ingredients; the KB has no compliant match.")
+        return out
     if call.name == ToolName.GET_RECIPE_DETAILS:
         recipe = kb.get_recipe_details(args["recipe_id"])
         if recipe and args.get("servings"):
@@ -134,6 +147,31 @@ def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
         "options": [o for o in options if not diet.conflicts([{"name": o["replacement"]}], restrictions)["conflicts"]],
         "missing_ingredient": args["missing_ingredient"],
     }
+
+
+def _diet_block(call: ToolCall, restrictions: list) -> str | None:
+    """Error for a substitution whose replacement breaks a restriction (fail closed)."""
+    if call.name != ToolName.APPLY_SUBSTITUTION or not restrictions:
+        return None
+    name = call.arguments["replacement"].strip().lower().replace(" ", "_")
+    found = diet.conflicts([{"name": name}], restrictions)["conflicts"]
+    if not found:
+        return None
+    return (f"'{call.arguments['replacement']}' conflicts with or cannot be checked against the user's "
+            f"restrictions ({', '.join(sorted({c['restriction'] for c in found}))}); not applied. "
+            "Offer a replacement from get_substitution_options instead.")
+
+
+def _ack(call: ToolCall, restrictions: list) -> dict:
+    """Action ack; opening or cooking a recipe that breaks a restriction says so."""
+    if call.name not in (ToolName.OPEN_RECIPE, ToolName.START_COOKING) or not restrictions:
+        return ACTION_ACK
+    recipe = kb.get_recipe_details(call.arguments["recipe_id"])
+    found = diet.conflicts(recipe["ingredients"], restrictions)["conflicts"] if recipe else []
+    if not found:
+        return ACTION_ACK
+    return {**ACTION_ACK, "dietary_conflicts": found,
+            "note": "This recipe breaks the user's restrictions. Tell them which ingredients and offer substitutes."}
 
 
 def _total(trace: list[TraceStep], field: str) -> int | None:

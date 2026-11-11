@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parent
 KB_DB = ROOT.parent / "pastaio-backend" / "app" / "kb" / "pastaio-kb.db"
 RESULTS = ROOT.parent / "docs" / "results"
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-PLAIN_PROMPT = "You are a helpful Italian home-cooking assistant."
+PLAIN_PROMPT = "You are a helpful Italian home-cooking assistant. Answer in the user's language."
 # Same sampling as the backend's GroqClient.
 SAMPLING = {"temperature": 0.3, "top_p": 0.9, "max_tokens": 2048}
 METRICS = ["facts", "scaling", "restrictions", "actions"]
@@ -244,7 +244,7 @@ def main() -> None:
     ap.add_argument("--backend", default="http://localhost:8000")
     ap.add_argument("--repeats", type=int, default=5)
     ap.add_argument("--case", help="only cases whose id starts with this")
-    ap.add_argument("--prompt-version", default="v9")
+    ap.add_argument("--prompt-version", default="v10")
     ap.add_argument("--report-only", action="store_true")
     a = ap.parse_args()
     model = os.getenv("PASTAIO_GROQ_LLM_MODEL", "qwen/qwen3.8-27b")
