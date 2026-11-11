@@ -43,7 +43,7 @@ class GroqClient(ReasoningClient):
 
     def __init__(
         self,
-        model: str = "qwen/qwen3-32b",
+        model: str = "qwen/qwen3.8-27b",
         api_key: str | None = None,
         options: dict[str, Any] | None = None,
     ):

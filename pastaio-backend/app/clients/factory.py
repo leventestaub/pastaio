@@ -13,8 +13,8 @@ Ollama config (when PASTAIO_*_BACKEND=ollama):
 
 Groq config (when PASTAIO_*_BACKEND=groq):
   GROQ_API_KEY               = "gsk_..."  (required)
-  PASTAIO_GROQ_LLM_MODEL     = "qwen/qwen3-32b"
-  PASTAIO_GROQ_VLM_MODEL     = "meta-llama/llama-4-scout-17b-16e-instruct"
+  PASTAIO_GROQ_LLM_MODEL     = "qwen/qwen3.8-27b"
+  PASTAIO_GROQ_VLM_MODEL     = "qwen/qwen3.8-27b"
 
 Logging:
   PASTAIO_LOG_LEVEL          = "normal" | "verbose"  (default: "normal")
@@ -56,7 +56,7 @@ def get_vision_client() -> VisionClient:
 
         model = os.getenv(
             "PASTAIO_GROQ_VLM_MODEL",
-            "meta-llama/llama-4-scout-17b-16e-instruct",
+            "qwen/qwen3.8-27b",
         )
         client = GroqVisionClient(model=model)
     else:
@@ -83,7 +83,7 @@ def get_reasoning_client() -> ReasoningClient:
     elif backend == "groq":
         from app.clients.groq_client import GroqClient
 
-        model = os.getenv("PASTAIO_GROQ_LLM_MODEL", "qwen/qwen3-32b")
+        model = os.getenv("PASTAIO_GROQ_LLM_MODEL", "qwen/qwen3.8-27b")
         client = GroqClient(model=model)
     else:
         raise ValueError(f"Unknown reasoning backend: {backend}")

@@ -2,6 +2,7 @@
 # Never commit. If you find yourself adding an exception, stop.
 .env
 .env.*
+!.env.example
 *.key
 *.pem
 secrets/
