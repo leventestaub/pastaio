@@ -5,31 +5,31 @@
 <p align="center"><b>An Italian pasta-cooking app with a tool-calling LLM agent. It answers from a sourced recipe knowledge base, and the rules that must not break are enforced in code.</b></p>
 
 <p align="center">
-  <a href="https://leventestaub.github.io/pastaio/"><b>Live demo</b></a> ·
   <a href="https://pastaio-rho.vercel.app/health">API</a> ·
   <a href="#guaranteed-in-code-not-by-the-model">What the code guarantees</a> ·
   <a href="#design-decisions">Design decisions</a><br><br>
   <a href="https://github.com/leventestaub/pastaio/actions/workflows/ci.yml"><img src="https://github.com/leventestaub/pastaio/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/leventestaub/pastaio/actions/workflows/pages.yml"><img src="https://github.com/leventestaub/pastaio/actions/workflows/pages.yml/badge.svg" alt="Pages"></a>
 </p>
 
 <p align="center">
-  <img src="docs/media/walkthrough.gif" width="320" alt="Walkthrough: a photo of raw rigatoni is identified, the agent scales Rigatoni alla Gricia for two, answers a cooking question and sets a 10-minute timer for the step"><br>
+  <img src="docs/media/walkthrough.gif" width="390" alt="Walkthrough: a photo of raw rigatoni is identified, the agent scales Rigatoni alla Gricia for two, answers a cooking question and sets a 10-minute timer for the step"><br>
   <sub>Recorded against the real backend: photo → shape → recipe → "scale this for 2" → cooking questions → timer. Only the model waits are sped up (6×).</sub>
 </p>
 
-<p align="center">
-  <img src="docs/media/01-home.png" width="200" alt="Home: tonight's recipe, Ask Pastaio, identify a shape">
-  <img src="docs/media/03-recipe-detail.png" width="200" alt="Recipe detail with sourced notes per ingredient">
-  <img src="docs/media/04-cooking-step.png" width="200" alt="Cooking mode, one step at a time">
-  <img src="docs/media/06b-ask-pastaio-reply.png" width="200" alt="Ask Pastaio answering while cooking">
-</p>
+Each answer shows the question, the reply and, under "How Pastaio answered", what the backend actually did that turn (from the agent trace). Every shot below is one exchange with the real backend, and each shows one rule the code enforces:
 
-You photograph a pasta shape, and a vision model identifies it. You then pick a dish and cook it step by step. On any screen you can ask Pastaio something, for example "scale this for two", "how do I know the guanciale is done?", "I'm out of pecorino" or "set a timer for that".
+| | | |
+|---|---|---|
+| <img src="docs/media/08-ask-scaling.png" width="240" alt="Asked to scale Rigatoni alla Gricia for 2: 200 g rigatoni and 75 g guanciale; trace: read the recipe from the KB, amounts scaled to 2 in code"> | <img src="docs/media/11-ask-diet.png" width="240" alt="With vegetarian remembered, asked what to cook tonight: suggests aglio, olio e peperoncino; trace: 3 found, 7 excluded by your diet"> | <img src="docs/media/09-ask-sourced-fact.png" width="240" alt="Asked where amatriciana comes from: Amatrice, STG under EU Regulation 2020/395; trace: read the recipe from the KB, 4 sources"> |
+| **Scaling** is computed in code; the model only reports the numbers. | **Dietary restrictions** filter the search in code before the model sees the results. | **Facts** come from the KB record and its sources, not from the model's memory. |
+| <img src="docs/media/10-ask-timer.png" width="240" alt="In cooking mode, asked to set a timer for this step: a 10-minute timer starts, the duration from the KB step"> | <img src="docs/media/12-identify.png" width="240" alt="A photo of raw rigatoni identified as rigatoni at 95%, bucatini offered as the alternative"> | |
+| **Actions** (here a timer, its length from the step in the KB) run in the app through the same dispatcher as the buttons. | **Shape ID** from a photo, with the runner-up shapes to pick from. | |
+
+You photograph a pasta shape, and a vision model identifies it. You then pick a dish and cook it step by step. On any screen you can ask Pastaio something, for example "scale this for two", "how do I know the guanciale is done?", "I'm vegetarian" or "set a timer for that".
 
 The agent looks up the answer in a curated knowledge base (18 recipes, each fact tied to an institutional Italian source) and acts through the same tools the buttons use. It can open a recipe, start cooking, set a timer, save to the cookbook or remember a dietary restriction. If the knowledge base doesn't record something, the agent says so instead of guessing.
 
-The live demo runs in the browser; on a desktop it opens in a phone frame. It is built with Expo, so the same code targets iOS and Android.
+It is built with Expo, so the same code targets the web, iOS and Android. There is no public demo; [Run it](#run-it) starts it locally.
 
 ## Architecture
 ```mermaid
@@ -60,7 +60,7 @@ Principle: *reasoning in the cloud, state and action on the device.*
 
 | Folder | What it is |
 |---|---|
-| `pastaio-app/` | Expo SDK 54, React Native, TypeScript, Zustand, expo-router. Screens, the action dispatcher, and on-device SQLite for memory and the cookbook. Deployed to GitHub Pages as a web build. |
+| `pastaio-app/` | Expo SDK 54, React Native, TypeScript, Zustand, expo-router. Screens, the action dispatcher, and on-device SQLite for memory and the cookbook. Also builds for the web. |
 | `pastaio-backend/` | Python 3.12, FastAPI, Pydantic v2. `/chat` runs the agent loop, `/identify` handles the photo, `/kb/recipes` is for debugging. LLM backends: Groq, Ollama or an offline stub. Deployed on Vercel; a Dockerfile is included. |
 | `pastaio-kb/` | Recipes, regions, shapes, sauces and ingredient classes as YAML. `build.py` validates them with Pydantic and compiles them to SQLite. Sourcing rules are in `RESEARCH_PRINCIPLES.md`. |
 | `pastaio-eval/` | An evaluation harness. It runs multi-turn conversations against `/chat`, mirrors the app's dispatcher in Python so no phone is needed, and scores each turn against assertions. |
@@ -122,7 +122,7 @@ npm test && npx tsc --noEmit
 
 The app reads the backend URL from `extra.backendUrl` in `pastaio-app/app.json`. `localhost` works for the web build and for emulators. For Expo Go on a phone, use your computer's LAN IP.
 
-CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the backend, the harness tests for eval, and typecheck, lint and Jest for the app. `pages.yml` builds the KB from YAML and deploys the web app. Vercel deploys the backend.
+CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the backend, the harness tests for eval, and typecheck, lint and Jest for the app. Vercel deploys the backend.
 
 `docs/media/capture-scripts/` re-records the screenshots and GIFs with Playwright against the web build.
 
