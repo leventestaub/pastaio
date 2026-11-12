@@ -17,9 +17,12 @@ from app.schemas.tools import TOOL_DEFINITIONS, ToolName
 
 
 # Always available, regardless of screen. The LLM needs these from any
-# context — search, navigation, memory writes.
+# context — search, look-up, navigation, memory writes. Details belong
+# here: the prompt requires a look-up before any factual answer, and
+# without it the model on the home screen answered from memory.
 BASELINE_TOOLS: set[ToolName] = {
     ToolName.FIND_RECIPES,
+    ToolName.GET_RECIPE_DETAILS,
     ToolName.OPEN_RECIPE,
     ToolName.SAVE_TO_COOKBOOK,
     ToolName.SET_DIETARY_RESTRICTION,
@@ -32,7 +35,6 @@ BASELINE_TOOLS: set[ToolName] = {
 # Available when there's a recipe in context (either the user is on a
 # recipe/cooking screen, or active_recipe_id is set).
 RECIPE_CONTEXT_TOOLS: set[ToolName] = {
-    ToolName.GET_RECIPE_DETAILS,
     ToolName.GET_SUBSTITUTION_OPTIONS,
     ToolName.APPLY_SUBSTITUTION,
     ToolName.RATE_RECIPE,

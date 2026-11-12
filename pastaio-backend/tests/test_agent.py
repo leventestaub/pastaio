@@ -85,6 +85,12 @@ def test_all_matches_excluded_says_so():
     assert result["recipes"] == [] and result["excluded"] and "note" in result
 
 
+def test_search_results_point_to_details_for_facts():
+    client = Scripted(reply("", (ToolName.FIND_RECIPES, {"query": "carbonara"})), reply("Found it."))
+    run(client)
+    assert "get_recipe_details" in json.loads(client.seen[1][-1].content)["note"]
+
+
 def test_substitution_that_breaks_a_restriction_is_blocked():
     sub = (ToolName.APPLY_SUBSTITUTION,
            {"recipe_id": "spaghetti-alla-carbonara", "original": "guanciale", "replacement": "pancetta"})
@@ -100,3 +106,22 @@ def test_opening_a_conflicting_recipe_is_allowed_but_flagged():
     out = run(client, diet=["vegetarian"])
     assert [c.name for c in out.tool_calls] == [ToolName.OPEN_RECIPE]  # deduped
     assert "dietary_conflicts" in client.seen[1][-1].content and out.text.startswith("Heads up")
+
+
+def test_abstaining_without_a_lookup_is_sent_back_once():
+    client = Scripted(
+        reply("The KB doesn't record that regulation."),
+        reply("", (ToolName.GET_RECIPE_DETAILS, {"recipe_id": "bucatini-allamatriciana"})),
+        reply("Regulation (EU) 2020/395."),
+    )
+    out = run(client, "Which regulation registered amatriciana?")
+    assert out.text == "Regulation (EU) 2020/395."
+    assert "looked anything up" in client.seen[1][-1].content
+
+
+def test_abstaining_after_a_lookup_stands():
+    client = Scripted(
+        reply("", (ToolName.GET_RECIPE_DETAILS, {"recipe_id": "rigatoni-alla-gricia"})),
+        reply("The KB doesn't record who invented it."),
+    )
+    assert run(client).text == "The KB doesn't record who invented it." and len(client.seen) == 2

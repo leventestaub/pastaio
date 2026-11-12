@@ -11,7 +11,9 @@ One /chat request = one user turn. The loop:
   which owns that state, and tells the model they were handed over;
 - feeds invalid calls back as errors, once (one repair attempt);
 - blocks substitutions that break a stored restriction and flags
-  conflicting recipes the model opens.
+  conflicting recipes the model opens;
+- sends back, once, an answer that says the KB lacks something when no
+  data tool ran this turn: the model has to check before it abstains.
 It stops when the model answers without needing more data, or after
 MAX_STEPS model calls. The last call, and a retry after an empty answer,
 get no tools, so the turn ends in text rather than a canned fallback.
@@ -19,6 +21,7 @@ get no tools, so the turn ends in text rather than a canned fallback.
 from __future__ import annotations
 
 import json
+import re
 
 from pydantic import ValidationError
 
@@ -39,6 +42,13 @@ MAX_STEPS = 4
 DATA_TOOLS = {ToolName.FIND_RECIPES, ToolName.GET_RECIPE_DETAILS, ToolName.GET_SUBSTITUTION_OPTIONS}
 ACTION_ACK = {"status": "handed to the app, which carries it out"}
 FALLBACK_TEXT = "Sorry, I couldn't work that out. Could you rephrase?"
+# "The KB doesn't record that", "the knowledge base has no ..."
+UNCHECKED_ABSTAIN = re.compile(
+    r"\b(kb|knowledge base)\b[^.]{0,60}?\b(doesn.t|does not|don.t|has no|have no|no record|not (record|list|includ|contain|mention))",
+    re.IGNORECASE,
+)
+LOOK_FIRST = ("You said the knowledge base doesn't have this, but you haven't looked anything up this turn. "
+              "Call find_recipes and get_recipe_details first, then answer from what they return.")
 
 
 async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResponse:
@@ -47,7 +57,7 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
     messages = [*request.history, ChatMessage(role="user", content=request.message)]
     actions: list[ToolCall] = []
     trace: list[TraceStep] = []
-    repaired = force_text = False
+    repaired = force_text = looked_up = pushed_back = False
     text = ""
 
     for n in range(MAX_STEPS):
@@ -69,6 +79,7 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
                 result, status, had_error = {"error": error}, "error", True
             elif call.name in DATA_TOOLS:
                 result, status, needs_data = _run_data_tool(call, request.context.dietary_restrictions), "ok", True
+                looked_up = True
             elif error := _diet_block(call, request.context.dietary_restrictions):
                 result, status, had_error = {"error": error}, "error", True
             else:
@@ -82,6 +93,10 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
             ))
 
         done = not needs_data and (not had_error or repaired)
+        if done and not (last or looked_up or pushed_back or reply.tool_calls) and UNCHECKED_ABSTAIN.search(text):
+            pushed_back = True
+            messages += [ChatMessage(role="assistant", content=text), ChatMessage(role="user", content=LOOK_FIRST)]
+            continue
         if last or (done and (text or actions or force_text)):
             break
         force_text = done  # empty answer: ask once more, without tools
@@ -130,7 +145,11 @@ def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
             else:
                 recipes.append(r)
         out = {"recipes": recipes, **({"excluded": excluded} if excluded else {})}
-        if excluded and not recipes:
+        if recipes:
+            # weaker fallback models answer from this summary unless told otherwise
+            out["note"] = ("Summaries only. Sources, history, regulations, amounts and steps are in "
+                           "get_recipe_details: call it before answering a factual question.")
+        elif excluded:
             out["note"] = ("Every match conflicts with the user's dietary restrictions (see excluded). "
                            "Say so and name the conflicting ingredients; the KB has no compliant match.")
         return out
