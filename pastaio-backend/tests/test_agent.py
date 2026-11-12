@@ -166,3 +166,24 @@ def test_tool_call_written_as_text_is_not_shown():
     client = Scripted(*[reply("", (ToolName.FIND_RECIPES, {"shape": "penne"}))] * (MAX_STEPS - 1), reply(leaked))
     out = run(client, screen="identify")
     assert "<tool_call>" not in out.text and "rigatoni" in out.text
+
+
+def test_trace_summarises_each_call_for_the_app():
+    client = Scripted(
+        reply("", (ToolName.FIND_RECIPES, {"query": "guanciale"}),
+              (ToolName.GET_RECIPE_DETAILS, {"recipe_id": "rigatoni-alla-gricia", "servings": 2})),
+        reply("200 g rigatoni.", (ToolName.SET_TIMER, {"duration_minutes": 10})),
+    )
+    summaries = [c.summary for s in run(client, diet=["vegetarian"]).trace for c in s.calls]
+    assert summaries[0].startswith('Searched the KB for "guanciale": ') and "excluded by your diet" in summaries[0]
+    assert summaries[1].startswith("Read Rigatoni alla Gricia") and "scaled to 2 in code" in summaries[1]
+    assert "conflicts: guanciale" in summaries[1] and summaries[2] == "Set a 10-min timer"
+
+
+def test_trace_names_the_guard_that_sent_an_answer_back():
+    client = Scripted(
+        reply("The KB doesn't record that regulation."),
+        reply("", (ToolName.GET_RECIPE_DETAILS, {"recipe_id": "bucatini-allamatriciana"})),
+        reply("Regulation (EU) 2020/395."),
+    )
+    assert run(client).trace[0].guard.startswith("Said the KB lacks it without looking")

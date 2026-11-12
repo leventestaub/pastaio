@@ -108,6 +108,7 @@ class TraceCall(BaseModel):
     arguments: dict
     status: Literal["ok", "error", "action"]  # ok = data tool run on the server
     error: str | None = None
+    summary: str | None = None  # one line for the app: what the call did or found
 
 
 class TraceStep(BaseModel):
@@ -116,6 +117,7 @@ class TraceStep(BaseModel):
     prompt_tokens: int | None = None
     completion_tokens: int | None = None
     calls: list[TraceCall] = Field(default_factory=list)
+    guard: str | None = None  # set when the backend sent this answer back or replaced it
 
 
 class ChatResponse(BaseModel):

@@ -100,7 +100,8 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
                 if not any(a.name == call.name and a.arguments == call.arguments for a in actions):
                     actions.append(call)
                     needs_data = needs_data or "dietary_conflicts" in result  # the model must warn the user
-            step.calls.append(TraceCall(name=call.name.value, arguments=call.arguments, status=status, error=error))
+            step.calls.append(TraceCall(name=call.name.value, arguments=call.arguments, status=status,
+                                        error=error, summary=_summary(call, status, result)))
             tool_messages.append(ChatMessage(
                 role="tool", content=json.dumps(result, ensure_ascii=False), tool_call_id=call.id,
             ))
@@ -108,14 +109,17 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
         done = not needs_data and (not had_error or repaired)
         if done and not (last or looked_up or pushed_back or reply.tool_calls) and UNCHECKED_ABSTAIN.search(text):
             pushed_back = True
+            step.guard = "Said the KB lacks it without looking: sent back to look it up"
             messages += [ChatMessage(role="assistant", content=text), ChatMessage(role="user", content=LOOK_FIRST)]
             continue
         if done and searched and not found and (invented := _invented_dishes(text)):
             # every search came back empty, yet the answer lists dishes: they come from memory
             if last or pushed_back:
                 text = _no_match_text()
+                step.guard = "Listed dishes the KB doesn't have: replaced with what it covers"
                 break
             pushed_back = True
+            step.guard = "Listed dishes the KB doesn't have: sent back"
             messages += [ChatMessage(role="assistant", content=text), ChatMessage(role="user", content=(
                 f"find_recipes returned nothing, so {', '.join(invented)} are not in the knowledge base. "
                 "Tell the user the KB has no such recipe and offer the shapes it covers."))]
@@ -227,6 +231,48 @@ def _ack(call: ToolCall, restrictions: list) -> dict:
         return ACTION_ACK
     return {**ACTION_ACK, "dietary_conflicts": found,
             "note": "This recipe breaks the user's restrictions. Tell them which ingredients and offer substitutes."}
+
+
+def _summary(call: ToolCall, status: str, result: dict) -> str:
+    """What the call did, in one line the app can show under the answer."""
+    args = call.arguments
+    if status == "error":
+        if call.name == ToolName.APPLY_SUBSTITUTION and "restrictions" in result["error"]:
+            return f"Blocked {args['replacement']}: breaks a dietary restriction"
+        return f"Rejected an invalid {call.name.value} call: sent back to fix"
+    if call.name == ToolName.FIND_RECIPES:
+        what = " ".join(f'"{v}"' for v in (args.get("shape"), args.get("query")) if v)
+        found = f"{len(result['recipes'])} found" if result["recipes"] else "nothing found"
+        if excluded := result.get("excluded"):
+            found += f", {len(excluded)} excluded by your diet"
+        return f"Searched the KB for {what or 'recipes'}: {found}"
+    if call.name == ToolName.GET_RECIPE_DETAILS:
+        if not (recipe := result["recipe"]):
+            return "Looked up a recipe the KB doesn't have"
+        line = f"Read {recipe['title']} from the KB ({len(recipe['sources'])} sources)"
+        if args.get("servings"):
+            line += f", amounts scaled to {args['servings']} in code"
+        if conflicts := (recipe.get("dietary_check") or {}).get("conflicts"):
+            line += f"; conflicts: {', '.join(sorted({c['ingredient'].replace('_', ' ') for c in conflicts}))}"
+        return line
+    if call.name == ToolName.GET_SUBSTITUTION_OPTIONS:
+        n = len(result["options"])
+        return f"Checked substitutions for {args['missing_ingredient']}: " + (f"{n} found" if n else "none curated")
+    line = {
+        ToolName.SET_TIMER: lambda: f"Set a {args['duration_minutes']}-min timer",
+        ToolName.OPEN_RECIPE: lambda: f"Opened {_title(args['recipe_id'])}",
+        ToolName.START_COOKING: lambda: f"Started cooking {_title(args['recipe_id'])}",
+        ToolName.SAVE_TO_COOKBOOK: lambda: f"Saved {_title(args['recipe_id'])} to the cookbook",
+        ToolName.SET_DIETARY_RESTRICTION: lambda: f"Remembered: {args['restriction']}",
+    }.get(call.name, lambda: call.name.value.replace("_", " ").capitalize())()
+    if conflicts := result.get("dietary_conflicts"):
+        line += f"; warned about {', '.join(sorted({c['ingredient'].replace('_', ' ') for c in conflicts}))}"
+    return line
+
+
+def _title(recipe_id: str) -> str:
+    recipe = kb.get_recipe_details(recipe_id)
+    return recipe["title"] if recipe else recipe_id
 
 
 def _total(trace: list[TraceStep], field: str) -> int | None:
