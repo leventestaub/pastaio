@@ -87,9 +87,15 @@ class GroqClient(ReasoningClient):
                 except RateLimitError as e:
                     print(f"[GroqClient] {model} rate limited")
                     last, waits = e, [*waits, float(e.response.headers.get("retry-after") or 3600)]
+                except BadRequestError as e:
+                    # still rejected after _create's retry: another model may comply
+                    if "tool_use_failed" not in str(e):
+                        raise
+                    print(f"[GroqClient] {model} tool call rejected")
+                    last = e
             if response is not None:
                 break
-            if attempt or min(waits) > MAX_WAIT_S:
+            if attempt or not waits or min(waits) > MAX_WAIT_S:
                 raise last
             await asyncio.sleep(min(waits))
         latency_ms = int((time.monotonic() - start) * 1000)
@@ -97,8 +103,9 @@ class GroqClient(ReasoningClient):
         return self._parse_response(response, latency_ms)
 
     async def _create(self, model: str, messages: list[dict], tools: dict) -> Any:
-        # Groq rejects the whole generation when the model calls a tool name
-        # that doesn't exist (tool_use_failed); sampling again usually fixes it.
+        # Groq rejects the whole generation when the model calls a tool that
+        # isn't offered (tool_use_failed), e.g. gpt-oss calling one on the
+        # text-only last step. Sample again, telling the model why.
         for attempt in range(2):
             try:
                 return await self.client.chat.completions.create(
@@ -107,6 +114,9 @@ class GroqClient(ReasoningClient):
             except BadRequestError as e:
                 if attempt == 1 or "tool_use_failed" not in str(e):
                     raise
+                hint = "Only call the tools you were given." if tools else \
+                    "No tools are available now: answer in plain text from the results above."
+                messages = [*messages, {"role": "user", "content": f"(Your last reply was rejected. {hint})"}]
 
     @staticmethod
     def _build_messages(
@@ -200,7 +210,8 @@ def _to_openai_tool(td: dict) -> dict:
 
 
 def _simplify_schema(schema: dict) -> dict:
-    """Same simplification as ollama_client._simplify_schema.
+    """Same simplification as ollama_client._simplify_schema, except that
+    optional fields stay nullable.
 
     Duplicated rather than imported to keep clients independent — if
     one provider's schema needs change, the other shouldn't have to.
@@ -213,6 +224,10 @@ def _simplify_schema(schema: dict) -> dict:
         if len(non_null) == 1:
             merged = {**schema, **non_null[0]}
             merged.pop("anyOf", None)
+            # Stay nullable: Groq validates calls against this schema, and
+            # gpt-oss sends null for optional arguments it doesn't use.
+            if len(non_null) < len(schema["anyOf"]) and isinstance(merged.get("type"), str):
+                merged["type"] = [merged["type"], "null"]
             schema = merged
 
     cleaned = {}
