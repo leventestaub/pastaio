@@ -510,7 +510,7 @@ function ActionTiles({ onAsk, onIdentify }: { onAsk: () => void; onIdentify: () 
         mark="✻"
         title="Ask"
         subtitle="Pastaio"
-        desc="substitutions, fixes, ideas"
+        desc="questions, scaling, timers"
         onPress={onAsk}
       />
       <ViewfinderTile
