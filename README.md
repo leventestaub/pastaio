@@ -86,7 +86,7 @@ A prompt can ask the model to behave, but it can't make it. The behaviours below
 - **Data tools run on the server, action tools run on the device.** The model gets KB results within the same turn, so it can look something up and then act on it. App state stays on the phone, and an action from the agent goes through the same code path as a tap.
 - **Tools are filtered per screen.** Sending all 14 tool definitions costs about 3k tokens per call. Filtering by screen cuts that to 1.1–1.9k, which matters on an 8k tokens-per-minute free tier. It also removes wrong options, such as `set_timer` on the home screen.
 - **The model has to look up facts.** The prompt requires a lookup before any factual answer about a dish (cook time, region, regulation, source). If the KB is silent, the agent says so. This came from an evaluation finding: without the rule, the model cited an EU regulation from memory, and the citation was wrong.
-- **Context is rebuilt on every turn.** The app sends a compact snapshot (screen, recipe, step, timers, restrictions, last 5 messages) instead of the full chat history. Restrictions are marked as hard rules and observations as soft preferences.
+- **Context is rebuilt on every turn.** The app sends a compact snapshot (screen, recipe, step, timers, restrictions, the last 5 cooks) with the plain text of the current chat. Earlier tool results are not sent again. Restrictions are marked as hard rules and observations as soft preferences.
 - **The model choice is pragmatic.** `qwen3.8-27b` is the only vision-capable model on Groq's free tier, so it handles both chat and vision. The two `gpt-oss` models are the fallback for chat.
 
 ## Evaluation

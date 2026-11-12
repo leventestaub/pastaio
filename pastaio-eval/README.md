@@ -15,7 +15,7 @@ Three case categories, each in its own folder under `cases/`:
   dispatch correctness ≥ 90%.
 - `coherence/` — 3–5 turn conversations with ambiguous references
   ("save it", "set a timer for that"). Tests app-side reference
-  resolution + dispatcher fuzzy matching + prompt v6 working together.
+  resolution + dispatcher fuzzy matching + the system prompt working together.
   Maps to spec target: 5-turn dialogues maintain context in ≥ 90%.
 - `reasoning/` — Italian-cooking judgment cases. Structural assertion
   plus a free-text rubric for hand-grading. Maps to spec target:
@@ -24,22 +24,44 @@ Three case categories, each in its own folder under `cases/`:
 ## Running
 
 ```bash
+# Model-free tests of the harness itself (these run in CI).
+uv run --with pytest pytest -q tests
+
 # All cases, 3 repeats each, against the local backend.
-python run_eval.py --backend http://localhost:8000
+uv run python run_eval.py --backend http://localhost:8000
 
 # Only one category.
-python run_eval.py --category dispatch
+uv run python run_eval.py --category dispatch
 
 # Single case (for iteration).
-python run_eval.py --case dispatch/find_recipes_by_shape.yaml --repeats 1
+uv run python run_eval.py --case dispatch/find_recipes_by_shape.yaml --repeats 1
 ```
 
 The harness needs to know which recipe IDs exist in the KB so the
-fuzzy resolver can do its job. By default it fetches `GET /kb/recipes`
-from the backend; failing that, it falls back to `known_recipes.json`
-in the repo root. **You'll need to add a debug route to the backend
-that returns the recipe list, or commit a snapshot.** A debug route
-is preferable so the eval stays in sync as the KB grows.
+fuzzy resolver can do its job. It fetches them from the backend's
+`GET /kb/recipes`, so the eval stays in sync as the KB grows.
+
+## Guarantee checks (`compare.py`)
+
+`compare.py` runs the 31 single-turn cases in `compare_cases.yaml`
+twice: once through `/chat`, and once against the same model with a
+one-line prompt and no tools or KB. Cases cover numeric facts and
+sources, scaling, dietary restrictions, safety (allergens, prompt
+injection, off-topic requests, food safety) and actions. Each case
+asserts regexes on the answer or an action the app must receive. Expected values come from the KB sources,
+so a miss means the answer disagrees with the sourced KB.
+
+Rates come with 95% Wilson intervals. Answers append to
+`docs/results/compare-<model>.jsonl`, so a run interrupted by the Groq
+free tier resumes where it stopped:
+
+```bash
+uv run --env-file ../.env python compare.py --backend http://localhost:8000
+uv run python compare.py --report-only
+```
+
+These are regression checks for the guarantees in the main README, not
+a leaderboard.
 
 ## Authoring cases
 
