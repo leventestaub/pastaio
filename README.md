@@ -133,7 +133,7 @@ CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the back
 
 ## Roadmap
 - **A local agent:** distil the tool-calling behaviour into a small on-device model (Qwen3-1.7B, fine-tuned on traces from open-weight models), so the app works offline and without a quota. `pastaio-eval` will serve as the acceptance test.
-- **An evaluation of the vision step** on a labelled photo set of the 18 shapes.
+- **An evaluation of the vision step** on a labelled photo set of the 15 shapes.
 - **Sourced substitution rules**, with the same evidence standard as the recipes.
 - **Voice input in cooking mode**, for hands-free use.
 
