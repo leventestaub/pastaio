@@ -14,7 +14,7 @@ const BASE = process.env.BASE || 'http://localhost:8081';
   const type = async (box, text) => { await box.click(); await box.pressSequentially(text, {delay: 35}); };
   const ask = async q => {
     const box = p.getByPlaceholder(/Ask Pastaio|Ask a follow-up/).first();
-    if (!(await box.isVisible().catch(() => false))) { await p.getByText(/^Ask/).last().click(); await wait(700); }
+    if (!(await box.isVisible().catch(() => false))) { await p.getByText(/^Ask/).filter({visible: true}).last().click(); await wait(700); }
     await type(p.getByPlaceholder(/Ask Pastaio|Ask a follow-up/).first(), q);
     await p.keyboard.press('Enter'); mark(`wait:${++asks}`);
     await p.getByText('Pastaio is thinking…').waitFor({state: 'hidden', timeout: 120000});
@@ -23,7 +23,7 @@ const BASE = process.env.BASE || 'http://localhost:8081';
 
   await p.goto(BASE); await wait(7000); mark('home');
   await wait(1500);
-  await p.getByText('Identify', {exact: false}).first().click(); await wait(2000);
+  await p.getByText('Identify', {exact: false}).filter({visible: true}).first().click(); await wait(2000);
   const [fc] = await Promise.all([p.waitForEvent('filechooser'), p.getByText('Pick from library').click()]);
   await fc.setFiles(process.argv[2]); mark('wait:photo');
   await p.getByText('Find recipes').waitFor({timeout: 120000}); mark('done:photo');

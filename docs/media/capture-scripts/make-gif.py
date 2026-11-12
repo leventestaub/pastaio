@@ -12,7 +12,7 @@ import sys
 
 import imageio_ffmpeg
 
-WAIT_SPEED, FPS, WIDTH = 6, 10, 320
+WAIT_SPEED, FPS, WIDTH = 6, 10, 390
 
 video, marks_path, out = sys.argv[1:4]
 marks = json.load(open(marks_path))

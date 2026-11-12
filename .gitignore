@@ -107,3 +107,8 @@ coverage/
 /spikes
 pastaio-app/pastaio-kb.db
 
+
+# Capture-script scratch output
+docs/media/capture-scripts/out/
+docs/media/capture-scripts/vid/
+docs/media/capture-scripts/marks.json
