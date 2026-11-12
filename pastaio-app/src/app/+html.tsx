@@ -57,7 +57,7 @@ export default function Root({ children }: PropsWithChildren) {
           <p>
             <a href="https://github.com/leventestaub/pastaio">Source, design notes and tests on GitHub</a>
           </p>
-          <small>Live demo on a free AI tier: replies can slow down when the quota runs low.</small>
+          <small>Live demo. Replies can occasionally be slow or unavailable.</small>
         </aside>
       </body>
     </html>

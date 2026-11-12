@@ -55,5 +55,5 @@ def test_groq_quota_error_is_503_with_cors():
         raise RateLimitError("quota", response=resp, body=None)
 
     r = client.get("/_boom", headers=ORIGIN)
-    assert r.status_code == 503 and "quota" in r.json()["detail"]
+    assert r.status_code == 503 and "busy" in r.json()["detail"]
     assert r.headers["access-control-allow-origin"] == "http://localhost:8081"

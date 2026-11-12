@@ -26,7 +26,7 @@ _hits: dict[tuple[str, str], deque[float]] = defaultdict(deque)
 @app.exception_handler(APIError)
 async def groq_error(request: Request, exc: APIError):
     if isinstance(exc, RateLimitError):
-        return JSONResponse({"detail": "The demo has used up its free AI quota for now. Try again later."}, status_code=503)
+        return JSONResponse({"detail": "The assistant is busy right now. Try again in a few minutes."}, status_code=503)
     return JSONResponse({"detail": "The AI service had a problem. Try again."}, status_code=502)
 
 
