@@ -20,6 +20,7 @@ import {
   formatRestriction,
 } from '@/services/restrictionIngredients';
 import { getDietRules, type DietRules, type Ingredient } from '@/services/kb';
+import { ingredientName } from '@/constants/ingredientNames';
 
 export function RestrictionConflictBanner({
   ingredients,
@@ -60,7 +61,7 @@ export function RestrictionConflictBanner({
   return (
     <Banner
       tint="warning"
-      title={`Contains ${primary.matchedIngredient.replace(/_/g, ' ')}, which conflicts with your ${restrictionLabel} preference${moreText}.`}
+      title={`Contains ${ingredientName(primary.matchedIngredient)}, which conflicts with your ${restrictionLabel} preference${moreText}.`}
       sub="Tap to ask Pastaio for a substitute"
       onPress={openAgentInput}
     />
