@@ -8,7 +8,7 @@ exports.newPage = async (opts={}) => {
   await p.route('http://localhost:8000/**', async route=>{
     const r=route.request();
     if(r.method()==='OPTIONS') return route.fulfill({status:204,headers:CORS});
-    const res=await fetch(r.url(),{method:r.method(),headers:r.headers(),body:r.postData()});
+    const res=await fetch(r.url(),{method:r.method(),headers:r.headers(),body:r.postDataBuffer()});
     const buf=Buffer.from(await res.arrayBuffer()); if(process.env.DBG)console.log('RESP',res.status,buf.toString().slice(0,600)); route.fulfill({status:res.status,headers:{...CORS,'content-type':res.headers.get('content-type')||'application/json'},body:buf});
   });
   await p.addInitScript(()=>{const s=document.createElement('style');s.textContent='*{outline:none !important}';document.addEventListener('DOMContentLoaded',()=>document.head.appendChild(s));});

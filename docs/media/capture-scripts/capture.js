@@ -1,6 +1,6 @@
-// Usage: node capture.js  (expo web on :8081, backend on :8000)
+// Usage: BASE=http://localhost:8081 node capture.js  (web build, real backend on :8000)
 const {newPage}=require('./lib');
-const BASE='http://localhost:8081', OUT='out/';
+const BASE=process.env.BASE||'http://localhost:8081', OUT='out/';
 (async()=>{
  const {b,c,p}=await newPage();
  const wait=(ms=1500)=>p.waitForTimeout(ms);
@@ -23,6 +23,7 @@ const BASE='http://localhost:8081', OUT='out/';
  await p.getByText('Start cooking',{exact:true}).click(); await wait(1500);
  await p.touchscreen.tap(340,25); await wait(1200);
  await p.screenshot({path:OUT+'06a-ask-pastaio-open.png'});
- await p.fill('input,textarea',"I'm out of basil. Can I use spinach instead?"); await p.keyboard.press('Enter'); await p.waitForTimeout(1000);
+ await p.fill('input,textarea','For 2 people: how much trofie and basil?'); await p.keyboard.press('Enter');
+ await p.getByText('Pastaio is thinking…').waitFor({state:'hidden',timeout:120000}); await wait(1500);
  await p.screenshot({path:OUT+'06b-ask-pastaio-reply.png'});
  await b.close();})();
