@@ -67,6 +67,8 @@ After each model call the loop decides what happens next:
 | A data tool ran, or an opened recipe conflicts | Feed the results back and call the model again. |
 | A call was invalid | Feed the error back once (one repair attempt). After that, invalid calls are dropped. |
 | The model says "the KB doesn't record that" without a lookup this turn | Send it back once with an instruction to look it up first. |
+| Every `find_recipes` this turn came back empty, but the answer lists dishes that aren't KB titles | Send it back once; on the last step, replace it with the shapes the KB covers. |
+| The text is a tool call written out (`<tool_call>…`) | Treat it as empty. |
 | The answer is empty | Ask once more, without tools, so the turn ends in text. |
 | Last step | No tools are offered, so the model has to answer. |
 

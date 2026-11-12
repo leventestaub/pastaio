@@ -125,3 +125,44 @@ def test_abstaining_after_a_lookup_stands():
         reply("The KB doesn't record who invented it."),
     )
     assert run(client).text == "The KB doesn't record who invented it." and len(client.seen) == 2
+
+
+INVENTED = "Here are some penne recipes:\n\n1. **Penne all'arrabbiata** – Lazio, 20 min\n2. **Penne alla vodka** – Lazio, 25 min"
+
+
+def test_empty_search_says_so_and_lists_covered_shapes():
+    client = Scripted(reply("", (ToolName.FIND_RECIPES, {"shape": "penne"})), reply("No penne here."))
+    run(client, screen="identify")
+    result = json.loads(client.seen[1][-1].content)
+    assert result["recipes"] == [] and "from memory" in result["note"]
+    assert "rigatoni" in result["shapes_with_recipes"] and "penne" not in result["shapes_with_recipes"]
+
+
+def test_dishes_listed_after_an_empty_search_are_sent_back_once():
+    client = Scripted(
+        reply("", (ToolName.FIND_RECIPES, {"shape": "penne"})),
+        reply(INVENTED),
+        reply("The KB has no penne recipes; it covers rigatoni, trofie and more."),
+    )
+    out = run(client, "penne recipes?", screen="identify")
+    assert "Penne all'arrabbiata, Penne alla vodka are not in the knowledge base" in client.seen[2][-1].content
+    assert out.text.startswith("The KB has no penne")
+
+
+def test_invented_dishes_on_the_last_step_are_replaced():
+    client = Scripted(*[reply("", (ToolName.FIND_RECIPES, {"shape": "penne"}))] * (MAX_STEPS - 1), reply(INVENTED))
+    out = run(client, screen="identify")
+    assert "Penne" not in out.text and "rigatoni" in out.text
+
+
+def test_kb_dishes_listed_after_a_search_stand():
+    listed = "1. **Rigatoni alla Gricia** – Lazio\n2. **Bucatini all’Amatriciana** – Lazio"
+    client = Scripted(reply("", (ToolName.FIND_RECIPES, {"shape": "rigatoni"})), reply(listed))
+    assert run(client).text == listed
+
+
+def test_tool_call_written_as_text_is_not_shown():
+    leaked = "<tool_call>\n<function=find_recipes>\n<parameter=shape>\npenne\n</parameter>\n</function>\n</tool_call>"
+    client = Scripted(*[reply("", (ToolName.FIND_RECIPES, {"shape": "penne"}))] * (MAX_STEPS - 1), reply(leaked))
+    out = run(client, screen="identify")
+    assert "<tool_call>" not in out.text and "rigatoni" in out.text

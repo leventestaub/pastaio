@@ -19,7 +19,7 @@ Versioned in code so changes show up in git diffs.
 from app.schemas.chat import ChatContext
 
 
-PROMPT_VERSION = "v10"
+PROMPT_VERSION = "v11"
 
 
 BASE_PROMPT_TEMPLATE = """\
@@ -68,7 +68,7 @@ For property-word requests:
 - Reason over the returned recipes using their cook_time_minutes, region, sauce category, and ingredients to pick matches.
 - "Easy" or "quick" usually maps to short cook_time_minutes. "Hearty" usually maps to ragù or baked dishes. "Light" usually maps to oil-based or seafood. Use judgment, don't fabricate categories the KB doesn't have.
 
-If find_recipes returns no results, that's a signal to reformulate, not to tell the user nothing was found. Try broadening: drop filters, drop the query, search by shape only.
+If find_recipes returns no results, broaden once: drop property words, drop the query, search by shape only. If it still returns nothing, tell the user the KB has no such recipe and offer the shapes it does cover. Only name recipes that find_recipes returned; never list dishes from memory.
 
 # Memory
 

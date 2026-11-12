@@ -12,6 +12,8 @@ One /chat request = one user turn. The loop:
 - feeds invalid calls back as errors, once (one repair attempt);
 - blocks substitutions that break a stored restriction and flags
   conflicting recipes the model opens;
+- sends back, once, a list of dishes when every search this turn came back
+  empty (they come from memory);
 - sends back, once, an answer that says the KB lacks something when no
   data tool ran this turn: the model has to check before it abstains.
 It stops when the model answers without needing more data, or after
@@ -49,6 +51,15 @@ UNCHECKED_ABSTAIN = re.compile(
 )
 LOOK_FIRST = ("You said the knowledge base doesn't have this, but you haven't looked anything up this turn. "
               "Call find_recipes and get_recipe_details first, then answer from what they return.")
+# "1. **Penne all'arrabbiata** – Lazio": a dish named in a list
+LISTED_DISH = re.compile(r"^\s*(?:\d+[.)]|[-*•])\s+\*\*(.+?)\*\*", re.MULTILINE)
+# Qwen sometimes writes a tool call as text when no tools are offered.
+TOOL_MARKUP = re.compile(r"<tool_call>|<function=")
+
+
+def _no_match_text() -> str:
+    return ("The knowledge base has no recipes for that. It covers "
+            f"{', '.join(kb.shapes_with_recipes())}. Want one of those?")
 
 
 async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResponse:
@@ -57,13 +68,13 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
     messages = [*request.history, ChatMessage(role="user", content=request.message)]
     actions: list[ToolCall] = []
     trace: list[TraceStep] = []
-    repaired = force_text = looked_up = pushed_back = False
+    repaired = force_text = looked_up = pushed_back = searched = found = False
     text = ""
 
     for n in range(MAX_STEPS):
         last = n == MAX_STEPS - 1
         reply = await client.chat(messages, system_prompt, [] if last or force_text else tools)
-        text = reply.text
+        text = "" if TOOL_MARKUP.search(reply.text) else reply.text
         step = TraceStep(
             latency_ms=reply.latency_ms,
             prompt_tokens=reply.prompt_tokens,
@@ -80,6 +91,8 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
             elif call.name in DATA_TOOLS:
                 result, status, needs_data = _run_data_tool(call, request.context.dietary_restrictions), "ok", True
                 looked_up = True
+                if call.name == ToolName.FIND_RECIPES:
+                    searched, found = True, found or bool(result["recipes"] or result.get("excluded"))
             elif error := _diet_block(call, request.context.dietary_restrictions):
                 result, status, had_error = {"error": error}, "error", True
             else:
@@ -97,6 +110,16 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
             pushed_back = True
             messages += [ChatMessage(role="assistant", content=text), ChatMessage(role="user", content=LOOK_FIRST)]
             continue
+        if done and searched and not found and (invented := _invented_dishes(text)):
+            # every search came back empty, yet the answer lists dishes: they come from memory
+            if last or pushed_back:
+                text = _no_match_text()
+                break
+            pushed_back = True
+            messages += [ChatMessage(role="assistant", content=text), ChatMessage(role="user", content=(
+                f"find_recipes returned nothing, so {', '.join(invented)} are not in the knowledge base. "
+                "Tell the user the KB has no such recipe and offer the shapes it covers."))]
+            continue
         if last or (done and (text or actions or force_text)):
             break
         force_text = done  # empty answer: ask once more, without tools
@@ -104,7 +127,7 @@ async def handle_chat(request: ChatRequest, client: ReasoningClient) -> ChatResp
         messages += [ChatMessage(role="assistant", content=reply.text, tool_calls=reply.tool_calls), *tool_messages]
 
     return ChatResponse(
-        text=text or ("" if actions else FALLBACK_TEXT),
+        text=text or ("" if actions else _no_match_text() if searched and not found else FALLBACK_TEXT),
         tool_calls=actions,
         latency_ms=sum(s.latency_ms for s in trace),
         prompt_tokens=_total(trace, "prompt_tokens"),
@@ -152,6 +175,10 @@ def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
         elif excluded:
             out["note"] = ("Every match conflicts with the user's dietary restrictions (see excluded). "
                            "Say so and name the conflicting ingredients; the KB has no compliant match.")
+        else:
+            out["note"] = ("No KB recipe matches. Don't name recipes from memory: broaden the search once, "
+                           "or tell the user the KB has none and offer the shapes it covers.")
+            out["shapes_with_recipes"] = kb.shapes_with_recipes()
         return out
     if call.name == ToolName.GET_RECIPE_DETAILS:
         recipe = kb.get_recipe_details(args["recipe_id"])
@@ -166,6 +193,15 @@ def _run_data_tool(call: ToolCall, restrictions: list) -> dict:
         "options": [o for o in options if not diet.conflicts([{"name": o["replacement"]}], restrictions)["conflicts"]],
         "missing_ingredient": args["missing_ingredient"],
     }
+
+
+def _invented_dishes(text: str) -> list[str]:
+    """Dishes listed in `text` that match no KB recipe title."""
+    def norm(s: str) -> str:
+        return re.sub(r"\W+", "", s.casefold())
+    titles = [norm(t) for t in kb.recipe_titles()]
+    return [name for name in LISTED_DISH.findall(text)
+            if not any(norm(name) in t or t in norm(name) for t in titles)]
 
 
 def _diet_block(call: ToolCall, restrictions: list) -> str | None:

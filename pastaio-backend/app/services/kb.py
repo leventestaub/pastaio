@@ -163,3 +163,13 @@ def resolve_recipe_id(candidate: object) -> str | None:
     tokens = {t for t in cid.split("-") if len(t) >= 3}
     matches = [i for i in ids if len(tokens & {t for t in i.split("-") if len(t) >= 3}) >= 2]
     return matches[0] if len(matches) == 1 else None
+
+
+def recipe_titles() -> list[str]:
+    with _connect() as conn:
+        return [r[0] for r in conn.execute("SELECT title FROM recipes")]
+
+
+def shapes_with_recipes() -> list[str]:
+    with _connect() as conn:
+        return [r[0] for r in conn.execute("SELECT DISTINCT shape_id FROM recipes ORDER BY shape_id")]
