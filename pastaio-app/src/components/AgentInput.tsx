@@ -22,9 +22,9 @@
  * results feed into the assistant's text response which surfaces in
  * ANSWER mode.
  *
- * Spec §5 non-goals preserved: no persistent chat history (sheet still
- * resets on close); no transcript view (each turn shows only the latest
- * response, the chat is implicit in useChat state across follow-ups).
+ * No persistent chat history (the sheet resets on close) and no transcript:
+ * each exchange shows the question, the latest response and, under it, how
+ * Pastaio got there (the backend's per-call trace summaries and guards).
  *
  * Wiring: useChat() runs the multi-turn loop unchanged. We subscribe to
  * its turns/isLoading state. `turnsAtSubmitRef` scopes derivation to
@@ -50,7 +50,7 @@ import { Chip } from '@/components/primitives/Chip';
 import { useSessionStore } from '@/stores/sessionStore';
 import { useChat } from '@/hooks/useChat';
 import { colors, fonts, motion, radii } from '@/constants/theme';
-import type { ToolCall } from '@/services/backendTypes';
+import type { ToolCall, TraceStep } from '@/services/backendTypes';
 
 // CONFIRM auto-dismiss timing. Length-scaled because canned 2.2s was
 // unreadable for anything past 6 words.
@@ -70,6 +70,12 @@ type Phase = 'idle' | 'thinking' | 'confirm' | 'answer';
 interface ExchangeResult {
   phase: 'confirm' | 'answer';
   copy: string;
+  steps: TraceLine[];
+}
+
+interface TraceLine {
+  text: string;
+  guard: boolean;
 }
 
 export function AgentInput() {
@@ -79,6 +85,7 @@ export function AgentInput() {
 
   const { turns, isLoading, error, send, reset } = useChat();
   const [draft, setDraft] = useState('');
+  const [question, setQuestion] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [result, setResult] = useState<ExchangeResult | null>(null);
   const [autoDismissPaused, setAutoDismissPaused] = useState(false);
@@ -96,6 +103,7 @@ export function AgentInput() {
     if (isOpen) {
       reset();
       setDraft('');
+      setQuestion('');
       setPhase('idle');
       setResult(null);
       setAutoDismissPaused(false);
@@ -112,7 +120,7 @@ export function AgentInput() {
     if (!isOpen) return;
 
     if (error) {
-      setResult({ phase: 'confirm', copy: error });
+      setResult({ phase: 'confirm', copy: error, steps: [] });
       setPhase('confirm');
       return;
     }
@@ -142,6 +150,7 @@ export function AgentInput() {
     //     get_substitution_options) — these don't change visible state,
     //     so the model's text summarizing them IS the response.
     const fullText = lastAssistantInExchange?.content?.trim() ?? '';
+    const steps = traceLines(newTurns.flatMap((t) => t.trace ?? []));
     const hasActionTool = exchangeToolCalls.some(
       (tc) => (TOOL_PRIORITY[tc.name] ?? 0) >= 80,
     );
@@ -151,10 +160,10 @@ export function AgentInput() {
         assistantText: fullText,
         toolCalls: exchangeToolCalls,
       });
-      setResult({ phase: 'confirm', copy });
+      setResult({ phase: 'confirm', copy, steps });
       setPhase('confirm');
     } else {
-      setResult({ phase: 'answer', copy: fullText || 'Done.' });
+      setResult({ phase: 'answer', copy: fullText || 'Done.', steps });
       setPhase('answer');
     }
   }, [isOpen, isLoading, error, turns, phase]);
@@ -173,6 +182,7 @@ export function AgentInput() {
     const message = (text ?? draft).trim();
     if (!message || isLoading) return;
     setDraft('');
+    setQuestion(message);
     setPhase('thinking');
     setAutoDismissPaused(false);
     setResult(null);
@@ -277,6 +287,12 @@ export function AgentInput() {
               </View>
             )}
 
+            {phase !== 'idle' && question !== '' && (
+              <Text variant="body" style={styles.question}>
+                {question}
+              </Text>
+            )}
+
             {phase === 'thinking' && (
               <View style={styles.thinkingRow}>
                 <ThinkingDots />
@@ -300,6 +316,7 @@ export function AgentInput() {
                     {result.copy}
                   </Text>
                 </View>
+                <TraceList steps={result.steps} />
 
                 <View style={styles.confirmActions}>
                   <Pressable onPress={handleFollowUp} hitSlop={6}>
@@ -339,6 +356,7 @@ export function AgentInput() {
                       {result.copy}
                     </Text>
                   </View>
+                  <TraceList steps={result.steps} />
                 </ScrollView>
 
                 {/* Persistent follow-up input. Submitting kicks the
@@ -482,6 +500,31 @@ function numArg(args: Record<string, unknown>, key: string): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+// ─── How Pastaio answered ───────────────────────────────────────────
+
+function traceLines(trace: TraceStep[]): TraceLine[] {
+  return trace.flatMap((step) => [
+    ...step.calls.flatMap((c) => (c.summary ? [{ text: c.summary, guard: false }] : [])),
+    ...(step.guard ? [{ text: step.guard, guard: true }] : []),
+  ]);
+}
+
+function TraceList({ steps }: { steps: TraceLine[] }) {
+  if (steps.length === 0) return null;
+  return (
+    <View style={styles.trace}>
+      <Text variant="mono" muted style={{ marginBottom: 6 }}>
+        How Pastaio answered
+      </Text>
+      {steps.map((s, i) => (
+        <Text key={i} variant="meta" style={[styles.traceLine, s.guard && { color: colors.passata }]}>
+          {s.guard ? `Guard: ${s.text}` : s.text}
+        </Text>
+      ))}
+    </View>
+  );
+}
+
 // ─── Per-screen suggestions and labels ──────────────────────────────
 
 function labelForScreen(screen: string | null | undefined): string | null {
@@ -499,7 +542,7 @@ function labelForScreen(screen: string | null | undefined): string | null {
 function suggestionsForScreen(screen: string | null | undefined): string[] {
   switch (screen) {
     case 'recipe':
-      return ['Substitute basil', 'How long does this take?', 'What pairs with this?'];
+      return ['Scale this for 2 people', 'How long does this take?', 'What pairs with this?'];
     case 'cooking':
       return ['Help with this step', 'Set a 10-min timer', "How do I know it's done?"];
     case 'identify':
@@ -509,7 +552,7 @@ function suggestionsForScreen(screen: string | null | undefined): string[] {
     case 'discover':
     case 'home':
     default:
-      return ['What should I cook tonight?', 'Substitute basil', 'Set a 10-min timer'];
+      return ['What should I cook tonight?', 'Anything vegetarian?', 'Set a 10-min timer'];
   }
 }
 
@@ -685,6 +728,30 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.ink,
     lineHeight: 22,
+  },
+  question: {
+    alignSelf: 'flex-end',
+    maxWidth: '85%',
+    backgroundColor: colors.paperHi,
+    borderWidth: 1,
+    borderColor: colors.hairline,
+    borderRadius: radii.md,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 4,
+    color: colors.ink70,
+  },
+  trace: {
+    marginLeft: 38,
+    marginBottom: 6,
+    paddingLeft: 10,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.ink15,
+  },
+  traceLine: {
+    color: colors.ink50,
+    lineHeight: 18,
+    marginBottom: 2,
   },
   confirmActions: {
     flexDirection: 'row',

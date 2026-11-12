@@ -63,12 +63,14 @@ export interface ChatRequest {
   context?: ChatContext;
 }
 
-// One LLM call inside the backend's agent loop (debug/eval only).
+// One LLM call inside the backend's agent loop. `summary` and `guard` are
+// shown under the answer; the rest is for debugging and the eval.
 export interface TraceStep {
   latency_ms: number;
   prompt_tokens: number | null;
   completion_tokens: number | null;
-  calls: Array<{ name: string; arguments: Record<string, unknown>; status: 'ok' | 'error' | 'action'; error: string | null }>;
+  calls: Array<{ name: string; arguments: Record<string, unknown>; status: 'ok' | 'error' | 'action'; error: string | null; summary?: string | null }>;
+  guard?: string | null;
 }
 
 // tool_calls = action tools for the app; data tools already ran on the server.

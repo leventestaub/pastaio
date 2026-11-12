@@ -16,7 +16,7 @@ import { dispatchToolCall } from '@/services/toolDispatcher';
 import { useMemoryStore } from '@/stores/memoryStore';
 import { useSessionStore } from '@/stores/sessionStore';
 import { useCookingStore } from '@/stores/cookingStore';
-import type { ChatMessage, ToolCall } from '@/services/backendTypes';
+import type { ChatMessage, ToolCall, TraceStep } from '@/services/backendTypes';
 import {
   logRequestStart,
   logUserInput,
@@ -30,6 +30,7 @@ export interface ChatTurn {
   role: 'user' | 'assistant' | 'tool';
   content: string;
   toolCalls?: ToolCall[];
+  trace?: TraceStep[];
 }
 
 export interface UseChatResult {
@@ -83,6 +84,7 @@ export function useChat(): UseChatResult {
           role: 'assistant',
           content: response.text,
           toolCalls: response.tool_calls.length > 0 ? response.tool_calls : undefined,
+          trace: response.trace,
         },
       ]);
 
