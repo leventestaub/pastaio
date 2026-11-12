@@ -54,6 +54,7 @@ IDENTIFY_OUTPUT_SCHEMA: dict[str, Any] = {
                 "required": ["shape", "confidence"],
             },
         },
+        "seen": {"type": "string"},
     },
     "required": ["shape", "confidence", "alternatives"],
 }

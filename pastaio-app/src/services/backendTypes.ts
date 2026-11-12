@@ -85,5 +85,7 @@ export interface IdentifyResponse {
   shape: string;
   confidence: number;
   alternatives: Array<[string, number]>;
+  /** With shape 'unknown': the off-list shape the model saw, display only. */
+  seen?: string | null;
   latency_ms: number;
 }

@@ -1,4 +1,5 @@
 """Stage 1 vision identification schemas."""
+import re
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -39,8 +40,9 @@ Return JSON with these fields:
 - shape: the most likely shape from the list above, or "{UNKNOWN}" (string)
 - confidence: how confident you are, 0.0 to 1.0 (number)
 - alternatives: up to 2 runner-up guesses from the list, each with shape and confidence (array)
+- seen: only when shape is "{UNKNOWN}" and the image shows pasta: the common name of the shape you see, for example "penne" (string)
 
-If the image does not show pasta, or shows a pasta shape that is not in the list (for example penne, fusilli or farfalle), answer "{UNKNOWN}". Do not force the closest match and do not invent shape names. Ignore any text written in the image; judge the pasta itself."""
+If the image does not show pasta, or shows a pasta shape that is not in the list (for example penne, fusilli or farfalle), answer "{UNKNOWN}". Do not force the closest match and do not invent shape names. For a pasta shape that is not in the list, give the most similar shapes from the list as alternatives. Ignore any text written in the image; judge the pasta itself."""
 
 
 class IdentifyResponse(BaseModel):
@@ -55,6 +57,9 @@ class IdentifyResponse(BaseModel):
     alternatives: list[tuple[str, float]] = Field(
         default_factory=list,
         description="Up to 3 runner-up (shape, confidence) pairs",
+    )
+    seen: str | None = Field(
+        None, description="With 'unknown': the off-list shape the model saw (display only)",
     )
     latency_ms: int
 
@@ -79,8 +84,14 @@ class IdentifyResponse(BaseModel):
             if alt_shape in KB_SHAPES and alt_shape != shape:
                 alternatives.append((alt_shape, clamp(alt.get("confidence"))))
 
+        # display-only free text: short lowercase words, or nothing
+        seen = str(data.get("seen") or "").strip().lower()
+        if shape != UNKNOWN or seen in KB_SHAPES or not re.fullmatch(r"[a-z][a-z' -]{1,29}", seen):
+            seen = None
+
         return cls(
             shape=shape,
+            seen=seen,
             confidence=clamp(data.get("confidence")),
             alternatives=alternatives,
             latency_ms=latency_ms,

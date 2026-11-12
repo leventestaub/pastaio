@@ -233,17 +233,21 @@ export default function IdentifyScreen() {
               }}
             />
 
-            {state.response.shape !== UNKNOWN_SHAPE && (
+            {state.response.shape !== UNKNOWN_SHAPE ? (
               <Text variant="mono" accent>
                 {Math.round(state.response.confidence * 100)}% match · {(state.response.latency_ms / 1000).toFixed(1)}s
               </Text>
-            )}
+            ) : state.response.seen ? (
+              <Text variant="mono" accent>Not in the cookbook</Text>
+            ) : null}
             <Text
               variant="display"
               style={{ fontSize: 48, lineHeight: 48, marginTop: 4 }}
             >
               {state.response.shape === UNKNOWN_SHAPE
-                ? 'Not sure.'
+                ? state.response.seen
+                  ? `Looks like ${state.response.seen}.`
+                  : 'Not sure.'
                 : state.kbShape?.canonical_name ?? state.response.shape}
             </Text>
 
@@ -261,7 +265,9 @@ export default function IdentifyScreen() {
 
             {state.response.shape === UNKNOWN_SHAPE ? (
               <Text variant="body" muted style={{ marginTop: 8 }}>
-                This doesn't look like one of the shapes in the knowledge base. Try a closer photo of the dry pasta.
+                {state.response.seen
+                  ? `The cookbook covers regional shapes with sourced recipes, and ${state.response.seen} isn't one of them yet.${state.response.alternatives.length > 0 ? ' These are the closest it has.' : ''}`
+                  : "This doesn't look like one of the shapes in the cookbook. Try a closer photo of the dry pasta."}
               </Text>
             ) : !state.kbShape && (
               <Text variant="body" muted style={{ marginTop: 8, fontStyle: 'italic' }}>
@@ -302,7 +308,7 @@ export default function IdentifyScreen() {
             {state.response.alternatives.length > 0 && (
               <>
                 <Text variant="mono" style={{ marginTop: 28, marginBottom: 10 }}>
-                  Or maybe
+                  {state.response.shape === UNKNOWN_SHAPE ? 'Closest in the cookbook' : 'Or maybe'}
                 </Text>
                 <View style={{ gap: 8 }}>
                   {state.response.alternatives.map(([altShape, altConf]) => (
@@ -323,7 +329,10 @@ export default function IdentifyScreen() {
                       })}
                     >
                       <Text variant="h3" style={{ color: colors.ink70 }}>{altShape}</Text>
-                      <Text variant="meta">{Math.round(altConf * 100)}%</Text>
+                      {/* a runner-up score means little once the top answer is "not in the list" */}
+                      {state.response.shape !== UNKNOWN_SHAPE && (
+                        <Text variant="meta">{Math.round(altConf * 100)}%</Text>
+                      )}
                     </Pressable>
                   ))}
                 </View>

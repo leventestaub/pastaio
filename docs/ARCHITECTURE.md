@@ -87,7 +87,7 @@ The response carries the text, the action calls, and a trace: one entry per mode
 The Ollama client and the offline stub implement the same interface (`app/clients/base.py`). The tests use fake clients, so CI runs without any model.
 
 ## 6. Vision
-`POST /identify` sends one image to `qwen3.8-27b` with a prompt that lists the KB's shapes and allows `unknown` for anything else (penne, non-pasta, text in the image). The answer is constrained JSON: shape, confidence, and up to two alternatives that the app shows as "or maybe". Uploads are capped at 4 MB, below Vercel's 4.5 MB body limit.
+`POST /identify` sends one image to `qwen3.8-27b` with a prompt that lists the KB's shapes and allows `unknown` for anything else (penne, non-pasta, text in the image). The answer is constrained JSON: shape, confidence, and up to two alternatives that the app shows as "or maybe". For pasta outside the KB the model also names what it sees (`seen: "penne"`) and gives the closest KB shapes as alternatives, so the app can say "Looks like penne. Not in the cookbook" and offer rigatoni. `seen` is display text only: it is checked to be a short plain name and never reaches the agent. Uploads are capped at 4 MB, below Vercel's 4.5 MB body limit.
 
 ## 7. The app side
 `pastaio-app/src/services/toolDispatcher.ts` runs action tools with the same store actions and router calls the buttons use. When the agent "saves to cookbook", it goes through the same code path as a tap on the bookmark. Memory, the cookbook and cooking history live in on-device SQLite. The app also ships a copy of the KB for browsing, so only chat and vision need the backend.
