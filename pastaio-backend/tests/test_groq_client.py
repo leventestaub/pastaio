@@ -82,3 +82,8 @@ def test_optional_arguments_stay_nullable():
     from app.schemas.tools import TOOL_DEFINITIONS
     params = _to_openai_tool(TOOL_DEFINITIONS[0].model_dump())["function"]["parameters"]
     assert params["properties"]["shape"]["type"] == ["string", "null"]
+
+
+def test_text_only_call_rejected_by_every_model_returns_empty_text():
+    c = _client({}, rejects=MODELS)  # _ask offers no tools
+    assert _ask(c).text == ""  # the agent loop turns this into a text answer, not a 502

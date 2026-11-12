@@ -96,6 +96,10 @@ class GroqClient(ReasoningClient):
             if response is not None:
                 break
             if attempt or not waits or min(waits) > MAX_WAIT_S:
+                if isinstance(last, BadRequestError) and not tools:
+                    # every model insists on a tool when none is offered: an empty
+                    # answer lets the agent loop end the turn in text, not a 502
+                    return ChatResponse(text="", tool_calls=[], latency_ms=int((time.monotonic() - start) * 1000))
                 raise last
             await asyncio.sleep(min(waits))
         latency_ms = int((time.monotonic() - start) * 1000)

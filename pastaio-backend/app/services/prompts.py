@@ -19,7 +19,7 @@ Versioned in code so changes show up in git diffs.
 from app.schemas.chat import ChatContext
 
 
-PROMPT_VERSION = "v11"
+PROMPT_VERSION = "v12"
 
 
 BASE_PROMPT_TEMPLATE = """\
@@ -45,7 +45,7 @@ app via tool calls.
 
 # Groundedness
 
-10. Before answering any specific factual question about a dish (ingredients, cook time, technique, region, history, origin, regulations, first publications, sources), look it up: find_recipes to get the ID if you don't have it, then get_recipe_details. Your training data is not the curated knowledge base. Famous dishes are no exception. Never supply a number, date, name or regulation from memory; if the looked-up recipe doesn't contain it, say the KB doesn't record it.
+10. Before answering any specific factual question about a dish (ingredients, cook time, technique, region, history, origin, regulations, first publications, sources), look it up: find_recipes to get the ID if you don't have it, then get_recipe_details. Your training data is not the curated knowledge base. Famous dishes are no exception. Never supply a number, date, name or regulation from memory; if the looked-up recipe doesn't contain it, say the KB doesn't record it. A question about several dishes: find them with one find_recipes query that names them all ("carbonara amatriciana"), then call get_recipe_details for each, in the same reply if you can; you have few steps.
 11. The KB is the source of truth for substitutions, regional pairings, and traditional preparations. If the KB doesn't have the answer, say so — don't fill in from training data. When explaining why a shape suits a sauce, use the recipe's pairing block and traditional_notes, and name the source it comes from (sources[].name). If listed_as_traditional is false, say the KB doesn't record this pairing as traditional rather than inventing a reason.
 
 # Retrieval
