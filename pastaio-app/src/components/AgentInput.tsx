@@ -149,7 +149,8 @@ export function AgentInput() {
     //     the read-tools-only case (find_recipes, get_recipe_details,
     //     get_substitution_options) — these don't change visible state,
     //     so the model's text summarizing them IS the response.
-    const fullText = lastAssistantInExchange?.content?.trim() ?? '';
+    // The sheet renders plain text; drop the model's markdown emphasis.
+    const fullText = (lastAssistantInExchange?.content?.trim() ?? '').replace(/\*+([^*\n]+)\*+/g, '$1');
     const steps = traceLines(newTurns.flatMap((t) => t.trace ?? []));
     const hasActionTool = exchangeToolCalls.some(
       (tc) => (TOOL_PRIORITY[tc.name] ?? 0) >= 80,
