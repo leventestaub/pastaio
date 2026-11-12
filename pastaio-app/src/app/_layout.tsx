@@ -16,6 +16,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
@@ -78,6 +79,8 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      {/* +html's <title> loses to the empty one Helmet renders first */}
+      <Head><title>Pastaio: AI pasta cooking agent</title></Head>
       <View style={{ flex: 1, backgroundColor: colors.paper }}>
         <SplashGate ready={ready}>
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
