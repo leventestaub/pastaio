@@ -42,7 +42,7 @@ const BASE = process.env.BASE || 'http://localhost:8081';
 
   await ask('How do I know the guanciale is done?');
   await wait(4500);
-  await ask('Set a timer for that.');
+  await ask('Set a timer for this step.');
   await wait(3500); mark('timer');
   await wait(2500);
   mark('end');

@@ -14,6 +14,11 @@
 </p>
 
 <p align="center">
+  <img src="docs/media/walkthrough.gif" width="320" alt="Walkthrough: a photo of raw rigatoni is identified, the agent scales Rigatoni alla Gricia for two, answers a cooking question and sets a 10-minute timer for the step"><br>
+  <sub>Recorded against the real backend: photo → shape → recipe → "scale this for 2" → cooking questions → timer. Only the model waits are sped up (6×).</sub>
+</p>
+
+<p align="center">
   <img src="docs/media/01-home.png" width="200" alt="Home: tonight's recipe, Ask Pastaio, identify a shape">
   <img src="docs/media/03-recipe-detail.png" width="200" alt="Recipe detail with sourced notes per ingredient">
   <img src="docs/media/04-cooking-step.png" width="200" alt="Cooking mode, one step at a time">
@@ -133,4 +138,4 @@ CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the back
 - **Voice input in cooking mode**, for hands-free use.
 
 ## License
-Code: MIT (see `LICENSE`). Fonts: Fraunces and Geist, both under the SIL Open Font License. Recipe facts and citations come from institutional Italian sources (Mipaaf, Accademia Italiana della Cucina, EU regulations) and are credited per recipe.
+Code: MIT (see `LICENSE`). Fonts: Fraunces and Geist, both under the SIL Open Font License. Recipe facts and citations come from institutional Italian sources (Mipaaf, Accademia Italiana della Cucina, EU regulations) and are credited per recipe. The rigatoni photo in the walkthrough is [Rigatoni.jpg](https://commons.wikimedia.org/wiki/File:Rigatoni.jpg) by Popo le Chien (CC0, Wikimedia Commons).
