@@ -139,7 +139,7 @@ CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the back
 - **Voice input in cooking mode**, for hands-free use.
 
 ## History
-Pastaio has been in development since February 2026. Most of the early work wasn't under version control, and the code moved to this repository in November 2026, so the commit history starts with an already working app.
+Pastaio has been in development since March 2026. It began as a private project and moved to this public repository in November 2026, so the history here starts with a working app.
 
 ## License
 Code: MIT (see `LICENSE`). Fonts: Fraunces and Geist, both under the SIL Open Font License. Recipe facts and citations come from institutional Italian sources (Mipaaf, Accademia Italiana della Cucina, EU regulations) and are credited per recipe. The rigatoni photo in the walkthrough is [Rigatoni.jpg](https://commons.wikimedia.org/wiki/File:Rigatoni.jpg) by Popo le Chien (CC0, Wikimedia Commons).
