@@ -5,7 +5,6 @@
 <p align="center"><b>An Italian pasta-cooking app with a tool-calling LLM agent. It answers from a sourced recipe knowledge base, and the rules that must not break are enforced in code.</b></p>
 
 <p align="center">
-  <a href="https://pastaio-rho.vercel.app/health">API</a> ·
   <a href="#guaranteed-in-code-not-by-the-model">What the code guarantees</a> ·
   <a href="#design-decisions">Design decisions</a><br><br>
   <a href="https://github.com/leventestaub/pastaio/actions/workflows/ci.yml"><img src="https://github.com/leventestaub/pastaio/actions/workflows/ci.yml/badge.svg" alt="CI"></a>

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- The chat sheet shows the question above the answer, and under it how Pastaio answered: one line per tool call and the guard that fired, if any.
+- The public web demo is offline; the free-tier quota made it unreliable. The README shows recorded exchanges instead.
+- Substitutions are gone from the home card and suggestion chips until the KB has sourced rules.
+- Bolognese method reworded and credited as adapted from the Accademia's 2023 recipe.
+
 ## v2.0 (2026-11-12)
 The agent moved to the server, the guarantees moved into code, and the app went live.
 
