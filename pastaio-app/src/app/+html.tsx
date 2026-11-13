@@ -27,7 +27,6 @@ const css = `
   }
   .pastaio-caption h1 { font: 600 34px/1.1 Georgia, 'Times New Roman', serif; margin: 0 0 12px; color: #1A1410; }
   .pastaio-caption p { margin: 0 0 12px; }
-  .pastaio-caption small { color: #857B6E; }
   .pastaio-caption a { color: #3F4A26; font-weight: 600; }
 }
 `;
@@ -56,7 +55,6 @@ export default function Root({ children }: PropsWithChildren) {
           <p>
             <a href="https://github.com/leventestaub/pastaio">Source, design notes and tests on GitHub</a>
           </p>
-          <small>Live demo. Replies can occasionally be slow or unavailable.</small>
         </aside>
       </body>
     </html>

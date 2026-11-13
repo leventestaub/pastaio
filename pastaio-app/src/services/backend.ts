@@ -31,7 +31,7 @@ class BackendError extends Error {
 }
 
 const UNREACHABLE =
-  "Couldn't reach the Pastaio server. If the demo has been idle it takes up to a minute to wake up. Try again shortly.";
+  "Couldn't reach the Pastaio server. Check that the backend is running and try again.";
 
 function httpError(path: string, status: number, text: string): BackendError {
   // The backend's 429/502/503 bodies carry a message written for the user.
@@ -59,7 +59,7 @@ async function downscaleForUpload(uri: string, maxSide = 1280): Promise<Blob> {
   );
 }
 
-// Fire-and-forget on app start so a sleeping demo backend starts waking
+// Fire-and-forget on app start so a sleeping hosted backend starts waking
 // before the first real request.
 export function wakeBackend(): void {
   fetch(`${BACKEND_URL}/health`).catch(() => {});
