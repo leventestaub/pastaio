@@ -138,6 +138,8 @@ CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the back
 - **Voice input in cooking mode**, for hands-free use.
 
 ## History
+Pastaio grew out of Pastapp, a first-year university project (2025) in which a CNN told three pasta shapes apart. Pastaio is mainly about the LLM agent, so shape recognition moved to a vision-language model, which was simpler than training and serving a separate classifier.
+
 Pastaio has been in development since March 2026. It began as a private project and moved to this public repository in November 2026, so the history here starts with a working app.
 
 ## License
