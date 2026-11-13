@@ -4,12 +4,10 @@ shape_id: tagliatelle
 region_id: emilia_romagna
 sauce_category_id: meat_based
 description: >
-  The undisputed archetype of Emilian cuisine, utilizing a slow-simmered meat sauce
-  clinging to precisely cut fresh egg ribbons. The ragù relies on browning specific
-  beef cuts and pork belly, deglazing with wine, and slowly simmering with tomato
-  concentrate. Formally re-codified by the Accademia Italiana della Cucina in 2023
-  to reflect modern culinary advancements while protecting historical structural
-  integrity.
+  Bologna's meat ragù served on fresh egg tagliatelle: pancetta and beef cooked
+  down with a soffritto, wine and a little tomato, then simmered for two to three
+  hours. The Accademia Italiana della Cucina deposited an updated version of its
+  recipe in 2023; the method below is adapted from it.
 cook_time_minutes: 180
 serves: 6
 
@@ -18,14 +16,14 @@ ingredients:
     amount: 600
     unit: g
     notes: >
-      Fresh egg pasta; Accademia specifies exactly 8mm width when cooked.
+      Fresh egg pasta, 8 mm wide once cooked (Accademia).
   - name: polpa_di_manzo
     amount: 400
     unit: g
     notes: >
-      Coarsely ground. The 2023 codification advises anterior cuts like shoulder
-      or brisket, replacing the historical cartella (diaphragm). A 60% beef to 40%
-      pork mixture is permitted.
+      Coarsely ground. The traditional cut is the cartella (diaphragm); otherwise
+      collagen-rich front cuts such as shoulder or brisket. About 60% beef and 40%
+      pork is an allowed variant.
   - name: pancetta_fresca
     amount: 150
     unit: g
@@ -35,7 +33,7 @@ ingredients:
     amount: 60
     unit: g
     notes: >
-      Must be finely chopped by hand on a board; food processors are discouraged.
+      Chopped finely by hand; the recipe rules out a food processor.
   - name: carota
     amount: 60
     unit: g
@@ -45,6 +43,8 @@ ingredients:
   - name: vino_rosso_o_bianco
     amount: 100
     unit: ml
+    notes: >
+      One glass, red or white.
   - name: passata_di_pomodoro
     amount: 200
     unit: g
@@ -57,11 +57,11 @@ ingredients:
     amount: 100
     unit: ml
     notes: >
-      Optional in the 2023 update, added halfway through cooking.
+      Optional in the 2023 version; goes in halfway through the simmer.
   - name: brodo_di_carne
     unit: q.b.
     notes: >
-      Light meat or vegetable broth kept simmering to replenish liquid.
+      Light meat or vegetable broth, kept hot for topping up.
   - name: olio_extravergine_di_oliva
     amount: 45
     unit: ml
@@ -80,48 +80,40 @@ substitutions:
 steps:
   - order: 1
     text: >
-      Melt the minced pancetta in a heavy-bottomed casserole (24-26 cm diameter)
-      with the extra virgin olive oil over low heat until the fat renders.
+      Warm the oil in a heavy pot about 25 cm wide and let the chopped pancetta
+      melt into it over low heat.
   - order: 2
     text: >
-      Add the hand-chopped onion, carrot, and celery. Sauté gently over medium-low
-      heat, stirring continuously to prevent the onions from burning.
+      Stir in the onion, carrot and celery and let them soften slowly on
+      medium-low. Keep stirring; the onion must not brown.
   - order: 3
     text: >
-      Increase the heat to medium-high and introduce the coarsely ground meat.
-      Cook thoroughly for approximately 10 minutes, stirring until the moisture
-      evaporates and the meat visibly sizzles in its fat.
+      Turn the heat up, add the beef and keep it moving for about 10 minutes,
+      until its liquid is gone and it starts to sizzle.
   - order: 4
     text: >
-      Pour in the wine. Simmer until the liquid is entirely reduced and the
-      alcoholic aroma dissipates completely.
+      Add the wine and cook until it has evaporated, then stir in the
+      concentrate and the passata.
   - order: 5
     text: >
-      Stir in the tomato puree and the double concentrate. Add one cup of boiling
-      broth, lower the heat to a minimal simmer, and cover the vessel.
+      Add a cup of boiling broth, cover, and keep at the gentlest simmer for
+      about 2 hours (up to 3). Add hot broth whenever it looks dry.
+    timer_seconds: 7200
   - order: 6
     text: >
-      Simmer gently for 2 to 3 hours, periodically replenishing the moisture with
-      hot broth as needed.
-    timer_seconds: 7200
-  - order: 7
-    text: >
-      If utilizing milk, incorporate it halfway through the simmering process.
-      Adjust seasoning with salt and pepper before tossing with cooked tagliatelle.
+      For the milk version, pour it in halfway through and let it cook away.
+      Season with salt and pepper at the end and toss with the cooked
+      tagliatelle.
 
 tags: [emilia_romagna, meat_sauce, sunday_pasta, accademia_codified]
 
 traditional_notes: >
-  The epistemological foundation of this dish underwent a historic shift on April
-  20, 2023, when the Accademia Italiana della Cucina officially superseded its
-  original 1982 notarized deposit. The 1982 orthodoxy mandated the use of the
-  'cartella' (beef diaphragm); however, the 2023 codification officially sanctions
-  anterior cuts (shoulder, brisket). Furthermore, contemporary practice frequently
-  utilizes a 60% beef to 40% pork mix, a variant explicitly approved in the updated
-  text. The inclusion of milk has been downgraded to an optional enrichment. The
-  Camera di Commercio deposit explicitly lists 'Varianti non ammesse' (unacceptable
-  variants): veal, smoked pancetta, garlic, rosemary, parsley, and flour for
-  thickening are all strictly forbidden.
+  On 20 April 2023 the Accademia Italiana della Cucina deposited an updated
+  recipe at the Bologna Chamber of Commerce, replacing its 1982 version. It keeps
+  the cartella as the traditional cut but allows front cuts, lists a 60/40
+  beef-and-pork mix as an allowed variant, and makes milk optional. Not allowed:
+  veal, smoked pancetta, pork alone, garlic, rosemary, parsley or other herbs and
+  spices, brandy in place of wine, and flour to thicken.
 
 evidence_strength: accademia_published
 confidence: directly_stated
