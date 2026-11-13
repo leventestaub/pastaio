@@ -60,7 +60,7 @@ Principle: *reasoning in the cloud, state and action on the device.*
 | Folder | What it is |
 |---|---|
 | `pastaio-app/` | Expo SDK 54, React Native, TypeScript, Zustand, expo-router. Screens, the action dispatcher, and on-device SQLite for memory and the cookbook. Also builds for the web. |
-| `pastaio-backend/` | Python 3.12, FastAPI, Pydantic v2. `/chat` runs the agent loop, `/identify` handles the photo, `/kb/recipes` is for debugging. LLM backends: Groq, Ollama or an offline stub. Deployed on Vercel; a Dockerfile is included. |
+| `pastaio-backend/` | Python 3.11+, FastAPI, Pydantic v2. `/chat` runs the agent loop, `/identify` handles the photo, `/kb/recipes` is for debugging. LLM backends: Groq, Ollama or an offline stub. Deployed on Vercel; a Dockerfile is included. |
 | `pastaio-kb/` | Recipes, regions, shapes, sauces and ingredient classes as YAML. `build.py` validates them with Pydantic and compiles them to SQLite. Sourcing rules are in `RESEARCH_PRINCIPLES.md`. |
 | `pastaio-eval/` | An evaluation harness. It runs multi-turn conversations against `/chat`, mirrors the app's dispatcher in Python so no phone is needed, and scores each turn against assertions. |
 
@@ -79,7 +79,7 @@ A prompt can ask the model to behave, but it can't make it. The behaviours below
 | The loop is bounded: at most 4 model calls per turn, and the last one has no tools, so it must answer in text. | `chat_service.py` | [`test_step_limit`](pastaio-backend/tests/test_agent.py) |
 | The KB the server queries is the KB in the YAML sources. CI fails if the committed database is stale. | `pastaio-kb/build.py` | [`test_committed_db_matches_yaml_sources`](pastaio-backend/tests/test_kb.py) |
 | When a model's quota runs out, or Groq keeps rejecting its tool calls, the client falls back to the next model in the chain. It waits only for short per-minute limits. | `app/clients/groq_client.py` | [`test_groq_client.py`](pastaio-backend/tests/test_groq_client.py) |
-| The public demo is rate-limited, CORS-restricted and caps upload size. A quota error comes back as a clean 503. | `app/main.py`, `app/api/identify.py` | [`test_public_demo.py`](pastaio-backend/tests/test_public_demo.py) |
+| The public backend is rate-limited, CORS-restricted and caps upload size. A quota error comes back as a clean 503. | `app/main.py`, `app/api/identify.py` | [`test_public_demo.py`](pastaio-backend/tests/test_public_demo.py) |
 
 ## Design decisions
 - **The agent can only reach structured tools, no free-text retrieval.** 18 recipes fit in a SQLite file, and the questions are structured: which shape, which ingredient, which step. Typed lookups give exact numbers and sources, and they are easy to test. A vector store would add a dependency and fuzzier answers without making anything better at this size.
@@ -127,7 +127,7 @@ CI (`.github/workflows/ci.yml`) runs on every push: ruff and pytest for the back
 
 ## Limitations
 - **The KB is small:** 18 recipes from five regions (Lazio, Campania, Puglia, Liguria, Emilia-Romagna). The substitutions table has no sourced rules yet, so the agent says it has none rather than invent one.
-- **The demo runs on Groq's free tier** (8k tokens per minute, 200k per day per model). One turn uses about 10k tokens. When the quota runs low, replies slow down or fall back to a smaller model.
+- **The backend runs on Groq's free tier** (8k tokens per minute, 200k per day per model). One turn uses about 10k tokens. When the quota runs low, replies slow down or fall back to a smaller model.
 - **Vision depends on a single model.** When `qwen3.8-27b` reaches its daily cap, identification is unavailable until the next day; browsing and chat keep working.
 - **Dietary checks only cover classified ingredients.** An ingredient without a class counts as unsafe, so restrictions err on the side of excluding.
 
